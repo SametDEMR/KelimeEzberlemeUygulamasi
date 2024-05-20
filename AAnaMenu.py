@@ -24,13 +24,12 @@ class Ana_Pencere123(QWidget):
         self.tiklama = 0
         self.onay = 0
         self.sinav_soru_sayisi = 5
-        self.yedek_sinav_soru_sayisi = 5
-        self.sinav_soru_sayaci = 1
+        self.kullan_soru_sayisi = self.sinav_soru_sayisi
         self.dil = 'ing'
 
-        self.test_dogru_sayisi = 0
-        self.test_yanlis_sayisi = 0
-        self.test_bos_sayisi = 0
+        self.seslendirme_sayaci = 1
+
+        self.sifirla()
 
         self.SinavSiklariKaydet = [[0 for j in range(2)] for i in range(25)]
 
@@ -60,6 +59,12 @@ class Ana_Pencere123(QWidget):
         ShowHide.giris(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    def sifirla(self):
+        self.test_dogru_sayisi = 0
+        self.test_yanlis_sayisi = 0
+        self.test_bos_sayisi = 0
+
     def kontrol(self):
         if os.path.exists("database/KullaniciBilgileri.db"):
             return True
@@ -222,6 +227,7 @@ class Ana_Pencere123(QWidget):
     def sinav(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_sayfasi_once(self)
+        self.sifirla()
 
     def kelime_ekleme(self):
         if self.tiklama == 0:
@@ -265,91 +271,99 @@ class Ana_Pencere123(QWidget):
                 self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def analiz(self):
-        try:
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.sinav_sonu_analiz(self)
+        ShowHide.hepsini_gizleme(self)
+        ShowHide.sinav_sonu_analiz(self)
 
-            for sayac in range(self.sinav_soru_sayisi):
-                if self.SinavSiklariKaydet[sayac][0] == 0:
-                    self.test_bos_sayisi += 1
-                elif self.SinavSiklariKaydet[sayac][1] == self.Sorular[sayac]["cevabı"]:
-                    self.test_dogru_sayisi += 1
+        for sayac in range(self.kullan_soru_sayisi):
+            if self.SinavSiklariKaydet[sayac][0] == 0:
+                self.test_bos_sayisi += 1
+            elif self.SinavSiklariKaydet[sayac][1] == self.Sorular[sayac]["cevabı"]:
+                self.test_dogru_sayisi += 1
 
-                    conn = sqlite3.connect('database/KullaniciBilgileri.db')
-                    cursor = conn.cursor()
-                    cursor.execute('SELECT bilinen, tarih, kelime_id, kelime FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime = ?',
-                                   (self.kullanici_id, self.Sorular[sayac]["kelime"],))
-                    islem = cursor.fetchone()
+                conn = sqlite3.connect('database/KullaniciBilgileri.db')
+                cursor = conn.cursor()
+                cursor.execute(
+                    'SELECT bilinen, tarih, kelime_id, kelime FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime = ?',
+                    (self.kullanici_id, self.Sorular[sayac]["kelime"],))
+                islem = cursor.fetchone()
 
-                    if islem:
-                        bilinen = islem[0]
-                        bilinen += 1
-                        if bilinen == 7:
-                            cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",
-                                           (self.kullanici_id, islem[2], islem[2]))
+                if islem:
+                    bilinen = islem[0]
+                    bilinen += 1
+                    if bilinen == 7:
+                        cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",
+                                       (self.kullanici_id, islem[2], islem[2]))
 
-                            cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
-                                           (self.kullanici_id, islem[2], islem[3]))
-                        else:
-                            tarih = islem[1]
-                            gun, ay, yil = map(int, tarih.split('.'))
-
-                            gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
-                            ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
-                            yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
-                            gun += gun_ekle.get(bilinen, 0)
-                            ay += ay_ekle.get(bilinen, 0)
-                            yil += yil_ekle.get(bilinen, 0)
-
-                            yeni_tarih = f"{gun}.{ay}.{yil}"
-                            cursor.execute(
-                                'UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
-                                (bilinen, yeni_tarih, self.kullanici_id, islem[3]))
-
+                        cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
+                                       (self.kullanici_id, islem[2], islem[3]))
                     else:
-                        tarih = datetime.now().strftime('%x')
+                        tarih = islem[1]
                         gun, ay, yil = map(int, tarih.split('.'))
-                        yeni_tarih = f"{gun + 1}.{ay}.{yil}"
-                        cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
-                                       (self.kullanici_id, self.Sorular[sayac]["id"], 1, self.Sorular[sayac]["kelime"], yeni_tarih))
 
-                    conn.commit()
-                    conn.close()
+                        gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
+                        ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
+                        yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
+                        gun += gun_ekle.get(bilinen, 0)
+                        ay += ay_ekle.get(bilinen, 0)
+                        yil += yil_ekle.get(bilinen, 0)
+
+                        yeni_tarih = f"{gun}.{ay}.{yil}"
+                        cursor.execute(
+                            'UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
+                            (bilinen, yeni_tarih, self.kullanici_id, islem[3]))
 
                 else:
-                    self.test_yanlis_sayisi += 1
+                    tarih = datetime.now().strftime('%x')
+                    gun, ay, yil = map(int, tarih.split('.'))
+                    yeni_tarih = f"{gun + 1}.{ay}.{yil}"
+                    cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
+                                   (self.kullanici_id, self.Sorular[sayac]["id"], 1, self.Sorular[sayac]["kelime"],
+                                    yeni_tarih))
+                conn.commit()
+                conn.close()
 
-            self.yazi_dogru_sayi.setText(str(self.test_dogru_sayisi))
-            self.yazi_yanlis_sayi.setText(str(self.test_yanlis_sayisi))
-            self.yazi_bos_sayi.setText(str(self.test_bos_sayisi))
-            self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
-        except Exception as e:
-            print(e)
+            else:
+                self.test_yanlis_sayisi += 1
+
+        self.yazi_dogru_sayi.setText(str(self.test_dogru_sayisi))
+        self.yazi_yanlis_sayi.setText(str(self.test_yanlis_sayisi))
+        self.yazi_bos_sayi.setText(str(self.test_bos_sayisi))
+        self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
+        
+        self.kullan_soru_sayisi = self.sinav_soru_sayisi
 
     def ayarlar(self):
-        if self.tiklama == 0:
-            self.button_group3.setExclusive(False)
-            self.__dict__[f"{self.dil}"].setChecked(True)
-            self.button_group3.setExclusive(True)
-            self.button_group2.setExclusive(False)
-            self.__dict__[f"_{self.sinav_soru_sayisi}"].setChecked(True)
-            self.button_group2.setExclusive(True)
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.ayarlar(self)
-            self.tiklama += 1
-        else:
-            sender = self.sender()
+        try:
+            if self.tiklama == 0:
+                self.button_group3.setExclusive(False)
+                self.__dict__[f"{self.dil}"].setChecked(True)
+                self.button_group3.setExclusive(True)
 
-            if len(sender.text()) < 3:
-                self.sinav_soru_sayisi = int(sender.text())
-                self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
+                self.button_group2.setExclusive(False)
+                self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
+                self.button_group2.setExclusive(True)
+
+                ShowHide.hepsini_gizleme(self)
+                ShowHide.ayarlar(self)
+                self.tiklama += 1
             else:
-                bilgi = sender.property("bilgi")
-                self.dil = str(bilgi)
+                sender = self.sender()
+
+                if len(sender.text()) < 3:
+                    self.sinav_soru_sayisi = int(sender.text())
+                    self.kullan_soru_sayisi = self.sinav_soru_sayisi
+                    self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
+                else:
+                    bilgi = sender.property("bilgi")
+                    self.dil = str(bilgi)
+        except Exception as e:
+            print(e)
 
     """"""""""""""""""""""""
 
     def SoruOlustur(self):
+        self.Sorular = []
+        self.sinav_soru_sayaci = 1
         try:
             ShowHide.hepsini_gizleme(self)
             ShowHide.sinav_sayfasi_sonra(self)
@@ -372,7 +386,7 @@ class Ana_Pencere123(QWidget):
 
             bugun_yazilacak = ["asd"] * len(bugun_cikacak_kelimeler)
 
-            self.sinav_soru_sayisi += len(bugun_cikacak_kelimeler)
+            self.kullan_soru_sayisi += len(bugun_cikacak_kelimeler)
 
             conn = sqlite3.connect("database/Kelimeler.db")
             cursor = conn.cursor()
@@ -382,17 +396,16 @@ class Ana_Pencere123(QWidget):
                 bugun_yazilacak[sayac] = (bugunkiler[0])
 
             if len(bugun_cikacak_kelimeler) == 0:
-                cursor.execute("SELECT * FROM kelimeler ORDER BY RANDOM() LIMIT ?", (self.sinav_soru_sayisi + 1,))
+                cursor.execute("SELECT * FROM kelimeler ORDER BY RANDOM() LIMIT ?", (self.kullan_soru_sayisi,))
             else:
                 for sayac in range(len(artik_cikmayacak_kelimeler)):
                     çikmaycak = int(artik_cikmayacak_kelimeler[sayac][0])
-                    cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?", (çikmaycak, self.sinav_soru_sayisi + 1,))
+                    cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?", (çikmaycak, self.kullan_soru_sayisi,))
 
             rows = cursor.fetchall()
             conn.close()
             bugun_yazilacak += rows
 
-            self.Sorular = []
             for row in bugun_yazilacak:
                 data = list(row)
                 id, ingilizce, turkce, cumle_ing, cumle_tr, image_path = data
@@ -460,42 +473,8 @@ class Ana_Pencere123(QWidget):
         except Exception as e:
             print("Hata:", e)
 
-    def sonraki_soru(self):
-        try:
-            self.sinav_soru_sayaci += 1
-
-            self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
-            image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
-            pixmap = QPixmap(image)
-            self.label_resim_soru.setPixmap(pixmap)
-            self.label_resim_soru.setScaledContents(True)
-            self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-            self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
-            self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
-            self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
-            self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
-
-            self.secim_kaldir()
-            if str(self.SinavSiklariKaydet[self.sinav_soru_sayaci][0]) != '0':
-                self.button_group1.setExclusive(False)
-                getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
-                self.button_group1.setExclusive(True)
-
-            if self.sinav_soru_sayaci == self.sinav_soru_sayisi:
-                self.buton_sonraki_soru.hide()
-                self.buton_sinav_bitir.show()
-            else:
-                self.buton_sonraki_soru.show()
-                self.buton_sinav_bitir.hide()
-            if self.sinav_soru_sayaci != 1:
-                self.buton_önceki_soru.show()
-            else:
-                self.buton_önceki_soru.hide()
-        except Exception as e:
-            print(e)
-
-    def onceki_soru(self):
-        self.sinav_soru_sayaci -= 1
+    def SoruDegistir(self, degistirme):
+        self.sinav_soru_sayaci += int(degistirme)
 
         self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
         image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
@@ -514,17 +493,16 @@ class Ana_Pencere123(QWidget):
             getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
             self.button_group1.setExclusive(True)
 
-        if self.sinav_soru_sayaci == self.sinav_soru_sayisi:
+        if self.sinav_soru_sayaci == self.kullan_soru_sayisi:
             self.buton_sonraki_soru.hide()
             self.buton_sinav_bitir.show()
         else:
             self.buton_sonraki_soru.show()
             self.buton_sinav_bitir.hide()
-
-        if self.sinav_soru_sayaci + 1 == 1:
-            self.buton_önceki_soru.hide()
-        else:
+        if self.sinav_soru_sayaci != 1:
             self.buton_önceki_soru.show()
+        else:
+            self.buton_önceki_soru.hide()
 
     def resim_sec(self):
         options = QFileDialog.Options()
@@ -566,9 +544,9 @@ class Ana_Pencere123(QWidget):
                 language = 'en'
 
         cikti = gTTS(text=buton_metni, lang=language, slow=False)
-        cikti.save("dosya/ses" + str(self.sayac) + ".mp3")
-        playsound("dosya/ses" + str(self.sayac) + ".mp3")
-        self.sayac += 1
+        cikti.save("dosya/ses" + str(self.seslendirme_sayaci) + ".mp3")
+        playsound("dosya/ses" + str(self.seslendirme_sayaci) + ".mp3")
+        self.seslendirme_sayaci += 1
 
     def yazdir(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
