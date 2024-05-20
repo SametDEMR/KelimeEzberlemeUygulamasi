@@ -238,51 +238,22 @@ class Ana_Pencere123(QWidget):
             random_sayi1 = random.randint(1, 20)
             random_sayi2 = random.randint(1, 20)
 
+
+        options_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
+        text_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
+        random_index = random.randint(0, 2)
+
         if str(self.soru_sik2[self.soru_sayaci][0]) == '0':
-            if random_character == characters[0]:
-                self.A.setText(self.soru_kalip[self.soru_sayaci][2])
-                self.B.setText(self.soru_kalip[random_sayi1][2])
-                self.C.setText(self.soru_kalip[random_sayi2][2])
-                self.cümle_1.setText(f"{self.soru_kalip[self.soru_sayaci][4]}")
-                self.cümle_2.setText(f"{self.soru_kalip[random_sayi1][4]}")
-                self.cümle_3.setText(f"{self.soru_kalip[random_sayi2][4]}")
+            random_indices = [0, 1, 2]
+            random_indices.remove(random_index)
+            random_indices.insert(0, random_index)
 
-                self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[self.soru_sayaci][2]
-                self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[random_sayi1][2]
-                self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[random_sayi2][2]
-                self.soru_sik2[self.soru_sayaci][3] = self.soru_kalip[self.soru_sayaci][4]
-                self.soru_sik2[self.soru_sayaci][4] = self.soru_kalip[random_sayi1][4]
-                self.soru_sik2[self.soru_sayaci][5] = self.soru_kalip[random_sayi2][4]
-
-            if random_character == characters[1]:
-                self.A.setText(self.soru_kalip[random_sayi1][2])
-                self.B.setText(self.soru_kalip[self.soru_sayaci][2])
-                self.C.setText(self.soru_kalip[random_sayi2][2])
-                self.cümle_1.setText(f"{self.soru_kalip[random_sayi1][4]}")
-                self.cümle_2.setText(f"{self.soru_kalip[self.soru_sayaci][4]}")
-                self.cümle_3.setText(f"{self.soru_kalip[random_sayi2][4]}")
-
-                self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[random_sayi1][2]
-                self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[self.soru_sayaci][2]
-                self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[random_sayi2][2]
-                self.soru_sik2[self.soru_sayaci][3] = self.soru_kalip[random_sayi1][4]
-                self.soru_sik2[self.soru_sayaci][4] = self.soru_kalip[self.soru_sayaci][4]
-                self.soru_sik2[self.soru_sayaci][5] = self.soru_kalip[random_sayi2][4]
-
-            if random_character == characters[2]:
-                self.A.setText(self.soru_kalip[random_sayi1][2])
-                self.B.setText(self.soru_kalip[random_sayi2][2])
-                self.C.setText(self.soru_kalip[self.soru_sayaci][2])
-                self.cümle_1.setText(f"{self.soru_kalip[random_sayi1][4]}")
-                self.cümle_2.setText(f"{self.soru_kalip[random_sayi2][4]}")
-                self.cümle_3.setText(f"{self.soru_kalip[self.soru_sayaci][4]}")
-
-                self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[random_sayi1][2]
-                self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[random_sayi2][2]
-                self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[self.soru_sayaci][2]
-                self.soru_sik2[self.soru_sayaci][3] = self.soru_kalip[random_sayi1][4]
-                self.soru_sik2[self.soru_sayaci][4] = self.soru_kalip[random_sayi2][4]
-                self.soru_sik2[self.soru_sayaci][5] = self.soru_kalip[self.soru_sayaci][4]
+            self.A.setText(self.soru_kalip[options_indices[random_indices[0]]][2])
+            self.B.setText(self.soru_kalip[options_indices[random_indices[1]]][2])
+            self.C.setText(self.soru_kalip[options_indices[random_indices[2]]][2])
+            self.cümle_1.setText(self.soru_kalip[text_indices[random_indices[0]]][4])
+            self.cümle_2.setText(self.soru_kalip[text_indices[random_indices[1]]][4])
+            self.cümle_3.setText(self.soru_kalip[text_indices[random_indices[2]]][4])
 
         else:
             self.A.setText(self.soru_sik2[self.soru_sayaci][0])
@@ -291,6 +262,14 @@ class Ana_Pencere123(QWidget):
             self.cümle_1.setText(self.soru_sik2[self.soru_sayaci][3])
             self.cümle_2.setText(self.soru_sik2[self.soru_sayaci][4])
             self.cümle_3.setText(self.soru_sik2[self.soru_sayaci][5])
+
+        options = self.soru_sik2[self.soru_sayaci]
+        options[0] = self.A.text()
+        options[1] = self.B.text()
+        options[2] = self.C.text()
+        options[3] = self.cümle_1.text()
+        options[4] = self.cümle_2.text()
+        options[5] = self.cümle_3.text()
 
         self.sinav_soru.setText(self.soru_kalip[self.soru_sayaci][1])
         image = self.soru_kalip[self.soru_sayaci][0]
@@ -321,12 +300,12 @@ class Ana_Pencere123(QWidget):
 
         self.cümle_soru.setText(f"{self.soru_kalip[self.soru_sayaci][3]}")
 
-        self.A.setText(self.soru_sik2[self.soru_sayaci][0])
-        self.B.setText(self.soru_sik2[self.soru_sayaci][1])
-        self.C.setText(self.soru_sik2[self.soru_sayaci][2])
-        self.cümle_1.setText(self.soru_sik2[self.soru_sayaci][3])
-        self.cümle_2.setText(self.soru_sik2[self.soru_sayaci][4])
-        self.cümle_3.setText(self.soru_sik2[self.soru_sayaci][5])
+        self.A.setText(str(self.soru_sik2[self.soru_sayaci][0]))
+        self.B.setText(str(self.soru_sik2[self.soru_sayaci][1]))
+        self.C.setText(str(self.soru_sik2[self.soru_sayaci][2]))
+        self.cümle_1.setText(str(self.soru_sik2[self.soru_sayaci][3]))
+        self.cümle_2.setText(str(self.soru_sik2[self.soru_sayaci][4]))
+        self.cümle_3.setText(str(self.soru_sik2[self.soru_sayaci][5]))
 
         self.label_resim_soru.setPixmap(QPixmap())
         self.label_resim_soru.setScaledContents(False)
