@@ -6,19 +6,19 @@ import locale
 from AAnaMenu import *
 
 class ButonOlustur(QWidget):
-    def AnaMenuButonlari(self):
+    def GirisMenuButonlari(self):
         self.AnaMenuButonlari = []
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("GirisAnaMenu")},
             {"bilgi": "buton_cikis", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("Cikis")},
 
             {"bilgi": "buton_giriş", "text": "GİRİŞ", "position": (500, 440, 200, 40), "function": self.GirisButonunaBasildi},
             {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("SifreUnuttumMenusu")},
             {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("KayitMenusu")},
-
             {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.SifreGosterGizle},
+
+            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("GirisAnaMenu")},
             {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
             {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
         ]
@@ -90,7 +90,39 @@ class ButonOlustur(QWidget):
                     }
                 """)
 
-    def SinavAnaButonlari(self):
+    def GirisMenuIcIslemButonlari(self):
+        self.AnaMenuButonlari = []
+        self.selected_button = None
+
+        buttons_info = [
+            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("GirisAnaMenu")},
+            {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
+            {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
+        ]
+
+        for button_info in buttons_info:
+            bilgi = button_info["bilgi"]
+            button = QPushButton(button_info["text"], self)
+            button.setGeometry(*button_info["position"])
+            button.clicked.connect(button_info["function"])
+
+            button.setStyleSheet("""
+                QPushButton {
+                    background-color: #FFB347;
+                    border-radius: 20px;
+                    color: #333333;
+                    font-size: 20px;
+                    padding: 0px 0px;
+                }
+                QPushButton:hover {
+                    background-color: #FF6600;
+                }
+            """)
+
+            self.AnaMenuButonlari.append(button)
+            setattr(self, bilgi, button)
+
+    def SinavAnaMenuButonlari(self):
         self.buttons = []
         self.selected_button = None
 
@@ -124,7 +156,7 @@ class ButonOlustur(QWidget):
             self.buttons.append(button)
             setattr(self, bilgi, button)
 
-    def SinavIcButonlari(self):
+    def SinavMenuIcIslemButonlari(self):
         self.buttons = []
         self.selected_button = None
 
@@ -223,7 +255,7 @@ class ButonOlustur(QWidget):
             if bilgi == "sinav_soru":
                 self.sinav_soru.setEnabled(False)
 
-    def SoruSayisiButonlari(self):
+    def AyarlarSoruSayisiSecmeButonlari(self):
         self.button_group2 = QButtonGroup()
         buttons_info = [
             {"bilgi": "_5", "text": "5", "position": (140, 450, 200, 40)},
@@ -259,7 +291,7 @@ class ButonOlustur(QWidget):
             self.button_group2.addButton(button)
 
             setattr(self, bilgi, button)
-    def DilDegistir(self):
+    def SoruDilDegistirButonlari(self):
         self.button_group3 = QButtonGroup()
         buttons_info = [
             {"bilgi": "ing", "text": "İNGİLİZCE", "position": (370, 200, 200, 40)},
@@ -293,7 +325,7 @@ class ButonOlustur(QWidget):
                    """)
 
             setattr(self, bilgi, button)
-    def Seslendirme(self):
+    def MetinleriSeslendirmeButonlari(self):
         self.buttons = []
         self.selected_button = None
 

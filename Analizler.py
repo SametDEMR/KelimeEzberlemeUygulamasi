@@ -8,7 +8,7 @@ import json
 from AAnaMenu import *
 
 class Analizler(QWidget):
-    def SinavSonuSayfasi(self):
+    def SinavSonuAnalizSayfasi(self):
         self.button_group = QButtonGroup()
         buttons_info = [
             {"bilgi": "yazi_dogru", "text": "DOĞRU", "position": (140, 250, 200, 40)},
@@ -43,7 +43,7 @@ class Analizler(QWidget):
 
             setattr(self, bilgi, button)
 
-    def AnalizSayfasi(self):
+    def AnaAnalizSayfasi(self):
         self.button_group = QButtonGroup()
         buttons_info = [
             {"bilgi": "toplam_dogru_yazi", "text": "TOPLAM DOĞRU SAYISI", "position": (130, 214, 300, 40)},

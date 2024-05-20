@@ -27,24 +27,26 @@ class Ana_Pencere123(QWidget):
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setFixedSize(1200, 600)
 
-        MetinselAraclar.Metinler(self)
-        MetinselAraclar.KelimeEkleme(self)
-        MetinselAraclar.GirisKismi(self)
+        MetinselAraclar.UyariMetinGirisleri(self)
+        MetinselAraclar.KelimeEklemeSayfasiMetinGirisleri(self)
+        MetinselAraclar.GirisSayfasiMetinGirisleri(self)
 
-        ButonOlustur.AnaMenuButonlari(self)
-        ButonOlustur.SinavAnaButonlari(self)
-        ButonOlustur.SinavIcButonlari(self)
+        ButonOlustur.GirisMenuButonlari(self)
+        ButonOlustur.GirisMenuIcIslemButonlari(self)
+        ButonOlustur.SinavAnaMenuButonlari(self)
+        ButonOlustur.SinavMenuIcIslemButonlari(self)
         ButonOlustur.SinavSikButonlari(self)
-        ButonOlustur.SoruSayisiButonlari(self)
-        ButonOlustur.Seslendirme(self)
-        ButonOlustur.DilDegistir(self)
+        ButonOlustur.AyarlarSoruSayisiSecmeButonlari(self)
+        ButonOlustur.MetinleriSeslendirmeButonlari(self)
+        ButonOlustur.SoruDilDegistirButonlari(self)
+
         TabloOlustur.Olustur(self)
 
-        Analizler.SinavSonuSayfasi(self)
-        Analizler.AnalizSayfasi(self)
+        Analizler.AnaAnalizSayfasi(self)
+        Analizler.SinavSonuAnalizSayfasi(self)
+
 
         self.SayfalaraYonlendir("GirisAnaMenu")
-
         self.GenelIslemleriSifirla()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -53,6 +55,22 @@ class Ana_Pencere123(QWidget):
         ShowHide.__dict__[f"{SayfaAdi}"](self)
         self.GenelIslemleriSifirla()
 
+        if SayfaAdi == "SinavaBaslamaSonrasi":
+            self.SoruOlustur()
+        if SayfaAdi == "SinavSonuAnaliz":
+            self.SinavSonuAnaliz()
+        if SayfaAdi == "Ayarlar":
+            self.button_group3.setExclusive(False)
+            self.__dict__[f"{self.dil}"].setChecked(True)
+            self.button_group3.setExclusive(True)
+            self.button_group2.setExclusive(False)
+            self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
+            self.button_group2.setExclusive(True)
+            ShowHide.Ayarlar(self)
+        if SayfaAdi == "AnalizKismi":
+            self.AnalizSayfasi()
+        if SayfaAdi == "Kelimeler":
+            self.TabloyaKelimeleriKoy()
     def VeritabaniKontrolEt(self):
         if os.path.exists("database/KullaniciBilgileri.db"):
             return True
@@ -250,12 +268,12 @@ class Ana_Pencere123(QWidget):
 
         for row in bugun_yazilacak:
             data = list(row)
-            id, ingilizce, turkce, cumle_ing, cumle_tr, image_path = data
+            id, ingilizce_kelime, turkce_kelime, cumle_ing, cumle_tr, image_path = data
             if self.dil == 'tr':
-                correct_answer = ingilizce
+                correct_answer = ingilizce_kelime
                 other_answers = [r[1] for r in bugun_yazilacak if r[0] != id]
             else:
-                correct_answer = turkce
+                correct_answer = turkce_kelime
                 other_answers = [r[2] for r in bugun_yazilacak if r[0] != id]
             wrong_answers = random.sample(other_answers, 2)
 
@@ -269,20 +287,20 @@ class Ana_Pencere123(QWidget):
                 question = {
                     "id": id,
                     "image_path": image_path,
-                    "kelime": turkce,
+                    "kelime": turkce_kelime,
                     "cumle": cumle_tr,
                     "choices": choices,
-                    "cevabı": ingilizce
+                    "cevabı": ingilizce_kelime
                 }
             else:
                 self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
                 question = {
                     "id": id,
                     "image_path": image_path,
-                    "kelime": ingilizce,
+                    "kelime": ingilizce_kelime,
                     "cumle": cumle_ing,
                     "choices": choices,
-                    "cevabı": turkce
+                    "cevabı": turkce_kelime
                 }
             self.Sorular.append(question)
 
@@ -362,15 +380,15 @@ class Ana_Pencere123(QWidget):
 
     ### SİNAV MENÜSÜ İÇ İŞLEMLERİ
     def KelimeEklemeButonuBasildi(self):
-        ingilizce = self.line_edit_kelime_ingilizce.text()
-        turkce = self.line_edit_kelime_turkce.text()
-        cumle1 = self.line_edit_ingilizce_cümle.text()
-        cumle2 = self.line_edit_türkçe_cümle.text()
+        ingilizce_kelime = self.line_edit_kelime_ingilizce.text()
+        turkce_kelime = self.line_edit_kelime_turkce.text()
+        ingilizce_cumle = self.line_edit_ingilizce_cümle.text()
+        turkce_cumle = self.line_edit_türkçe_cümle.text()
 
-        if ingilizce and turkce and cumle1 and cumle2:
+        if ingilizce_kelime and turkce_kelime and ingilizce_cumle and turkce_cumle:
             conn = sqlite3.connect('database/Kelimeler.db')
             cursor = conn.cursor()
-            ingilizce_lower = ingilizce.lower()
+            ingilizce_lower = ingilizce_kelime.lower()
 
             cursor.execute("SELECT * FROM Kelimeler WHERE LOWER(ingilizce_kelime) = ?", (ingilizce_lower,))
             existing_word = cursor.fetchone()
@@ -381,13 +399,13 @@ class Ana_Pencere123(QWidget):
                 if self.ResimSecmeYapilmasi == 0:
                     self.label_kelime_ekle.setText("Lütfen Resim Seçiniz.")
                 else:
-                    self.resim_dosya_yolu = 'resim/' + f"{ingilizce}" + '.png'
-                    self.resim = cv2.resize(self.resim, (100, 100))
-                    cv2.imwrite(self.resim_dosya_yolu, self.resim)
+                    self.ResimDosyaYolu = 'resim/' + f"{ingilizce_kelime}" + '.png'
+                    self.KaydedilecekResim = cv2.resize(self.KaydedilecekResim, (100, 100))
+                    cv2.imwrite(self.ResimDosyaYolu, self.KaydedilecekResim)
 
                     cursor.execute(
                         "INSERT INTO Kelimeler (ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2, resim) VALUES (?, ?, ?, ?, ?)",
-                        (ingilizce, turkce, cumle1, cumle2, self.resim_dosya_yolu))
+                        (ingilizce_kelime, turkce_kelime, ingilizce_cumle, turkce_cumle, self.ResimDosyaYolu))
 
                     conn.commit()
 
@@ -395,12 +413,14 @@ class Ana_Pencere123(QWidget):
                     self.ResimSecmeYapilmasi = 0
         else:
             self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+        self.GenelIslemleriSifirla()
+
     def SinavSonuAnaliz(self):
         for sayac in range(self.kullan_soru_sayisi):
             if self.SinavSiklariKaydet[sayac][0] == 0:
-                self.test_bos_sayisi += 1
+                self.test_bos_cevap_sayisi += 1
             elif str(self.SinavSiklariKaydet[sayac][1]) == str(self.Sorular[sayac]["cevabı"]):
-                self.test_dogru_sayisi += 1
+                self.test_dogru_cevap_sayisi += 1
 
                 conn = sqlite3.connect('database/KullaniciBilgileri.db')
                 cursor = conn.cursor()
@@ -451,22 +471,22 @@ class Ana_Pencere123(QWidget):
                 conn.commit()
                 conn.close()
             else:
-                self.test_yanlis_sayisi += 1
+                self.test_yanlis_cevap_sayisi += 1
 
         conn = sqlite3.connect('database/KullaniciBilgileri.db')
         cursor = conn.cursor()
         cursor.execute('''UPDATE Kullaniciİstatistik 
                 SET dogru_cevaplar = dogru_cevaplar + ?, yanlis_cevaplar = yanlis_cevaplar + ?, bos_cevaplar = bos_cevaplar + ?, toplam_sorular = toplam_sorular + ?
                 WHERE kullanici_id = ?''', (
-            self.test_dogru_sayisi, self.test_yanlis_sayisi, self.test_bos_sayisi, self.sinav_soru_sayaci,
+            self.test_dogru_cevap_sayisi, self.test_yanlis_cevap_sayisi, self.test_bos_cevap_sayisi, self.sinav_soru_sayaci,
             self.kullanici_id))
 
         conn.commit()
         conn.close()
 
-        self.yazi_dogru_sayi.setText(str(self.test_dogru_sayisi))
-        self.yazi_yanlis_sayi.setText(str(self.test_yanlis_sayisi))
-        self.yazi_bos_sayi.setText(str(self.test_bos_sayisi))
+        self.yazi_dogru_sayi.setText(str(self.test_dogru_cevap_sayisi))
+        self.yazi_yanlis_sayi.setText(str(self.test_yanlis_cevap_sayisi))
+        self.yazi_bos_sayi.setText(str(self.test_bos_cevap_sayisi))
         self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
 
         self.kullan_soru_sayisi = self.sinav_soru_sayisi
@@ -489,12 +509,6 @@ class Ana_Pencere123(QWidget):
 
         c.drawString(25, 530, "Ezberlenmis")
 
-        stars = ["★" * i for i in range(7, 0, -1)]
-        y_pos = 500
-        for star in stars:
-            c.drawString(25, y_pos, star)
-            y_pos -= 30
-
         c.drawString(180, 530, self._ezber_yazi.text())
 
         yeni_metinler = []
@@ -503,19 +517,27 @@ class Ana_Pencere123(QWidget):
             yeni_metin = metin.replace("\n", "      ")
             yeni_metinler.append(yeni_metin)
 
+        yıldızlar = ["★" * i for i in range(6, 0, -1)]
         y_pos = 500
-        for metin in reversed(yeni_metinler):
-            c.drawString(180, y_pos, metin)
+        for yıldız, metin in zip(yıldızlar, reversed(yeni_metinler)):
+            c.drawString(25, y_pos, yıldız)
+            c.drawString(180, y_pos, self.TrIngTranslate(metin))
             y_pos -= 30
 
         c.save()
 
+    def TrIngTranslate(self, metin):
+        turkce_karakterler = "çÇğĞıİöÖşŞüÜ"
+        ingilizce_karakterler = "cCgGiIoOsSuU"
+        ceviri_tablosu = str.maketrans(turkce_karakterler, ingilizce_karakterler)
+        return metin.translate(ceviri_tablosu)
+
     def ResimSecmeButonuBasildi(self):
         options = QFileDialog.Options()
-        self.file_name, _ = QFileDialog.getOpenFileName(self, "Resim Seç", "","Resim Dosyaları (*.jpg *.png *.jpeg *.bmp *.gif)", options=options)
-        self.resim = cv2.imread(self.file_name)
-        if self.file_name:
-            pixmap = QPixmap(self.file_name)
+        self.DosyaAdi, _ = QFileDialog.getOpenFileName(self, "Resim Seç", "","Resim Dosyaları (*.jpg *.png *.jpeg *.bmp *.gif)", options=options)
+        self.KaydedilecekResim = cv2.imread(self.DosyaAdi)
+        if self.DosyaAdi:
+            pixmap = QPixmap(self.DosyaAdi)
             self.label_ekleme_resim.setPixmap(pixmap.scaled(self.label_ekleme_resim.size(), aspectRatioMode=True))
             self.label_ekleme_resim.setScaledContents(True)
             self.ResimSecmeYapilmasi = 1
@@ -553,9 +575,9 @@ class Ana_Pencere123(QWidget):
 
     ### GENEL FONKSİYONLAR
     def GenelIslemleriSifirla(self):
-        self.test_dogru_sayisi = 0
-        self.test_yanlis_sayisi = 0
-        self.test_bos_sayisi = 0
+        self.test_dogru_cevap_sayisi = 0
+        self.test_yanlis_cevap_sayisi = 0
+        self.test_bos_cevap_sayisi = 0
 
         self.label_giris.setText("")
         self.label_sinav_sayac.setText("")

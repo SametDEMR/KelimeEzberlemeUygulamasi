@@ -5,7 +5,7 @@ from PyQt5.QtGui import QFont, QPalette, QColor
 
 
 class MetinselAraclar(QWidget):
-    def GirisKismi(self):
+    def GirisSayfasiMetinGirisleri(self):
         self.line_edits = []
         line_edit_info = [
             {"bilgi": "line_edit_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 180, 200, 40)},
@@ -48,7 +48,7 @@ class MetinselAraclar(QWidget):
             if bilgi == "line_edit_sifre":
                 line_edit.setEchoMode(QLineEdit.Password)
 
-    def KelimeEkleme(self):
+    def KelimeEklemeSayfasiMetinGirisleri(self):
         self.line_edits = []
         line_edit_info = [
             {"bilgi": "line_edit_kelime_ingilizce", "placeholder": "KELİMENİN İNGİLİZCESİ", "position": (450, 60, 200, 40)},
@@ -84,7 +84,7 @@ class MetinselAraclar(QWidget):
             self.line_edits.append(line_edit)
             setattr(self, bilgi, line_edit)
 
-    def Metinler(self):
+    def UyariMetinGirisleri(self):
         self.labels = []
         labels_info = [
             {"bilgi": "label_giris", "text": "", "position": (200, 400, 800, 40)},
