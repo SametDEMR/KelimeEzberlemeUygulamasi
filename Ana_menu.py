@@ -11,8 +11,10 @@ class Ana_Pencere1(QWidget):
         self.setWindowTitle("Depo Yönetim Sistemi")
         self.setFixedSize(1200, 600)
 
+
         Buton_Olustur_Modul.createButtons(self)
-        Gizle_Modul.buton1_gizle(self)
+
+        Gizle_Modul.hepsini_gizle(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -27,21 +29,24 @@ class Ana_Pencere1(QWidget):
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def menu1Function(self):
-        Gizle_Modul.buton1_gizle(self)
-        Goster_Modul.buton1_goster(self)
+    def sinavSayfasi(self):
+        Gizle_Modul.hepsini_gizle(self)
+        Goster_Modul.sinav_sayfasi_goster(self)
 
-    def menu2Function(self):
-        Goster_Modul.buton2_goster(self)
+    def raporSayfasi(self):
+        Gizle_Modul.hepsini_gizle(self)
+        Goster_Modul.rapor_sayfasi_goster(self)
 
-    def menu3Function(self):
-        Goster_Modul.buton3_goster(self)
+    def kelimeEkleme(self):
+        Gizle_Modul.hepsini_gizle(self)
+        Goster_Modul.kelime_ekleme_goster(self)
 
-    def exitFunction(self):
+    def ayarlar(self):
+        Gizle_Modul.hepsini_gizle(self)
+        Goster_Modul.ayarlar_goster(self)
+
+    def exit(self):
         sys.exit(app.exec_())
-
-    def ayarlarFunction(self):
-        print("ayarlar")
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 

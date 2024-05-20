@@ -6,11 +6,5 @@ from Buton_oluşturma import *
 from Ana_menu import *
 
 class Gizle_Modul(QWidget):
-    def buton1_gizle(self):
-        self.button.hide()
-
-    def buton2_gizle(self):
-        print("2 hariç gizle")
-
-    def buton3_gizle(self):
-        print("3 hariç gizle")
+    def hepsini_gizle(self):
+        print("hepsini gizle")

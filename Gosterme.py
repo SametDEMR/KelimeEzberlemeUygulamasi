@@ -5,14 +5,14 @@ import locale
 from Ana_menu import *
 
 class Goster_Modul(QWidget):
-    def hepsini_goster(self):
-        self.button.show()
+    def sinav_sayfasi_goster(self):
+        print("sınav sayfası goster")
 
-    def buton1_goster(self):
-        print("1 göster")
+    def rapor_sayfasi_goster(self):
+        print("rapor sayfası goster")
 
-    def buton2_goster(self):
-        print("2 göster")
+    def kelime_ekleme_goster(self):
+        print("kelime ekleme goster")
 
-    def buton3_goster(self):
-        print("3 göster")
+    def ayarlar_goster(self):
+        print("ayarlar goster")
