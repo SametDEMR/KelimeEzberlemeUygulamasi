@@ -228,16 +228,8 @@ class Ana_Pencere123(QWidget):
 
         self.cümle_soru.setText(f"{self.soru_kalip[self.soru_sayaci][3]}")
 
-        characters = ['A', 'B', 'C']
-        random_character = random.choice(characters)
         random_sayi1 = random.randint(1, 20)
         random_sayi2 = random.randint(1, 20)
-
-
-        while str(self.soru_kalip[random_sayi1][2]) == str(self.soru_kalip[random_sayi2][2]) == str(self.soru_kalip[self.soru_sayaci][2]):
-            random_sayi1 = random.randint(1, 20)
-            random_sayi2 = random.randint(1, 20)
-
 
         options_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
         text_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
@@ -248,9 +240,14 @@ class Ana_Pencere123(QWidget):
             random_indices.remove(random_index)
             random_indices.insert(0, random_index)
 
-            self.A.setText(self.soru_kalip[options_indices[random_indices[0]]][2])
-            self.B.setText(self.soru_kalip[options_indices[random_indices[1]]][2])
-            self.C.setText(self.soru_kalip[options_indices[random_indices[2]]][2])
+            options_texts = [self.soru_kalip[options_indices[i]][2] for i in random_indices]
+            while len(set(options_texts)) != 3:
+                random_index = random.randint(0, 2)
+                options_texts[random_index] = self.soru_kalip[random_sayi1 + random_index][2]
+
+            self.A.setText(options_texts[0])
+            self.B.setText(options_texts[1])
+            self.C.setText(options_texts[2])
             self.cümle_1.setText(self.soru_kalip[text_indices[random_indices[0]]][4])
             self.cümle_2.setText(self.soru_kalip[text_indices[random_indices[1]]][4])
             self.cümle_3.setText(self.soru_kalip[text_indices[random_indices[2]]][4])
