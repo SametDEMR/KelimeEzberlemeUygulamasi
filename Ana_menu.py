@@ -20,9 +20,7 @@ from tkinter import filedialog
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
-
 locale.setlocale(locale.LC_ALL, 'turkish')
-
 
 class Ana_Pencere123(QWidget):
     def __init__(self):
@@ -219,7 +217,6 @@ class Ana_Pencere123(QWidget):
         else:
             self.line_edit_sifre.setEchoMode(QLineEdit.Password)
 
-
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def geri_sinav(self):
@@ -361,7 +358,8 @@ class Ana_Pencere123(QWidget):
 
                         if islem:
                             bilinen = islem[0]
-                            if bilinen == 6:
+                            bilinen += 1
+                            if bilinen == 7:
                                 cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",(self.kullanici_id, kelime_id, kelime))
 
                                 cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
@@ -370,9 +368,9 @@ class Ana_Pencere123(QWidget):
                                 tarih = islem[1]
                                 gun, ay, yil = map(int, tarih.split('.'))
 
-                                gun_ekle = {0: 1, 1: 3, 2: 7, 3: 0, 4: 0, 5: 0, 6: 0}
-                                ay_ekle = {0: 0, 1: 0, 2: 0, 3: 1, 4: 6, 5: 0, 6: 0}
-                                yil_ekle = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 1, 6: 0}
+                                gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
+                                ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
+                                yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
                                 gun += gun_ekle.get(bilinen, 0)
                                 ay += ay_ekle.get(bilinen, 0)
                                 yil += yil_ekle.get(bilinen, 0)
@@ -384,7 +382,7 @@ class Ana_Pencere123(QWidget):
                         else:
                             tarih = datetime.now().strftime('%x')
                             gun, ay, yil = map(int, tarih.split('.'))
-                            yeni_tarih = f"{gun}.{ay}.{yil}"
+                            yeni_tarih = f"{gun + 1}.{ay}.{yil}"
                             cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
                                                (self.kullanici_id, kelime_id, 1, kelime, yeni_tarih))
 
