@@ -7,35 +7,40 @@
 - Kullanıcı adı ve şifre doğrulaması yapılır.
 - Şifresini unutan kullanıcılar için şifre hatırlatma fonksiyonu mevcuttur.
 
-### 2. Veritabanı İşlemleri
-- Kullanıcı bilgileri ve kelime bilgileri SQLite veritabanlarında saklanır.
-- Kullanıcıların doğru, yanlış ve boş cevap sayıları gibi istatistiksel veriler kaydedilir.
+![Kelime Ezberleme Modülü](GitHubResim/KelimeEzberlemeUygulamasiAnaMenu.png)
 
-### 3. Sınav Modülü
+### 2. Sınav Modülü
 - Kullanıcılar belirli sayıda kelimeden oluşan sınavlar yapabilirler.
 - Sınavlar sırasında rastgele seçilen kelimeler ve bu kelimelere ait seçenekler görüntülenir.
 - Sınav tamamlandığında kullanıcıya doğru, yanlış ve boş cevap sayıları gösterilir ve istatistikler güncellenir.
+
+### 3. Seslendirme ve Görsel Destek
+- Kelimeler ve cümleler sesli olarak okunabilir.
+- Kelimelere ait görseller görüntülenebilir.
+
+![Kelime Ezberleme Modülü](GitHubResim/KelimeEzberlemeUygulamasiSinav1.png)
+
+![Kelime Ezberleme Modülü](GitHubResim/KelimeEzberlemeUygulamasiSinav2.png)
 
 ### 4. Analiz ve İstatistik
 - Kullanıcılar, geçmiş sınavlarına ait istatistikleri ve analizleri görüntüleyebilirler.
 - İstatistikler; doğru, yanlış ve boş cevap sayıları ile toplam soru sayısı ve başarı oranını içerir.
 
-### 5. Seslendirme ve Görsel Destek
-- Kelimeler ve cümleler sesli olarak okunabilir.
-- Kelimelere ait görseller görüntülenebilir.
-
-### 6. Kelime Seviyeleri ve Ezberleme
+### 5. Kelime Seviyeleri ve Ezberleme
 - Kullanıcıların bildiği kelimeler seviyelere göre sınıflandırılır.
 - Belirli bir seviyeyi geçen kelimeler kalıcı olarak öğrenilmiş kabul edilir ve ayrı bir tabloya taşınır.
 
-### 7. PDF Raporlama
+![Kelime Ezberleme Modülü](GitHubResim/KelimeEzberlemeUygulamasiAnaliz.png)
+
+### 6. PDF Raporlama
 - Kullanıcılar, sınav sonuçlarını ve analizlerini PDF formatında kaydedebilirler.
+
+![Kelime Ezberleme Modülü](GitHubResim/KelimeEzberlemeUygulamasiAnalizPDF.png)
+
+### 7. Veritabanı İşlemleri
+- Kullanıcı bilgileri ve kelime bilgileri SQLite veritabanlarında saklanır.
+- Kullanıcıların doğru, yanlış ve boş cevap sayıları gibi istatistiksel veriler kaydedilir.
 
 ## Kullanım Amacı
 Bu uygulama, dil öğrenen kullanıcıların kelime ezberlemesini kolaylaştırmak ve öğrenme süreçlerini takip etmelerine yardımcı olmak için tasarlanmıştır. Kullanıcılar, kelime bilgilerini sınavlar aracılığıyla test edebilir, öğrenme süreçlerini analiz edebilir ve başarılarını takip edebilirler. Uygulama ayrıca sesli ve görsel destek sunarak kelime ezberleme sürecini daha etkili hale getirir.
 
-
-![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiAnaMenu.png)
-![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiSinav1.png)
-![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiSinav2.png)
-![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiAnaliz.png)
