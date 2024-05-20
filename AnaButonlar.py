@@ -17,10 +17,6 @@ class ButonOlustur(QWidget):
             {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("SifreUnuttumMenusu")},
             {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("KayitMenusu")},
             {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.SifreGosterGizle},
-
-            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("GirisAnaMenu")},
-            {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
-            {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
         ]
 
         for button_info in buttons_info:

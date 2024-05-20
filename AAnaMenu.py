@@ -356,7 +356,7 @@ class Ana_Pencere123(QWidget):
         TiklananSik = self.sender()
         TiklananSikMetni = TiklananSik.property("bilgi")
 
-        self.SinavSiklariKaydet[self.sinav_soru_sayaci - 1] = (str(self.sinav_soru.text()), str(getattr(self, TiklananSikMetni).text()), str(TiklananSikMetni))
+        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.sinav_soru.text()), str(getattr(self, TiklananSikMetni).text()), str(TiklananSikMetni))
 
     def SinavMetinleriniSeslendirma(self, pos):
         ButonPozisyonu = pos - QPoint(160, 0)
