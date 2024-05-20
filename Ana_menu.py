@@ -310,9 +310,6 @@ class Ana_Pencere123(QWidget):
             else:
                 self.ortalama_sayi.setText("%" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
 
-
-
-
             conn = sqlite3.connect('database/KullaniciBilgileri.db')
             cursor = conn.cursor()
             cursor.execute('SELECT kelime, bilinen FROM KullaniciBilinen WHERE kullanici_id = ?;',
@@ -346,60 +343,55 @@ class Ana_Pencere123(QWidget):
             ShowHide.sinav_sonu_analiz(self)
             self.temizle()
 
-            for sayac in range(self.sinav_soru_sayisi):
+            for sayac in range(self.toplam_goster_soru):
                 if str(self.sikler_kayit[sayac + 1][0]) == '0':
                     self.bos_sayisi += 1
                 else:
-                    try:
-                        if str(self.sikler_kayit[sayac + 1][1]) == str(self.soru_kalip[sayac + 1][2]):
-                            self.dogru_sayisi += 1
+                     if str(self.sikler_kayit[sayac + 1][1]) == str(self.soru_kalip[sayac + 1][2]):
+                        self.dogru_sayisi += 1
 
-                            kelime_id = str(self.sikler_kayit[sayac + 1][2])
-                            kelime = str(self.sikler_kayit[sayac + 1][3])
+                        kelime_id = str(self.sikler_kayit[sayac + 1][2])
+                        kelime = str(self.sikler_kayit[sayac + 1][3])
 
-                            conn = sqlite3.connect('database/KullaniciBilgileri.db')
-                            cursor = conn.cursor()
-                            cursor.execute(
-                                'SELECT bilinen, tarih FROM KullaniciBilinen WHERE kelime_id = ? AND kullanici_id = ?',
+                        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+                        cursor = conn.cursor()
+                        cursor.execute('SELECT bilinen, tarih FROM KullaniciBilinen WHERE kelime_id = ? AND kullanici_id = ?',
                                 (kelime_id, self.kullanici_id))
-                            islem = cursor.fetchone()
+                        islem = cursor.fetchone()
 
-                            if islem:
-                                bilinen = islem[0]
-                                bilinen += 1
-                                if bilinen == 7:
-                                    cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",(self.kullanici_id, kelime_id, kelime))
+                        if islem:
+                            bilinen = islem[0]
+                            if bilinen == 6:
+                                cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",(self.kullanici_id, kelime_id, kelime))
 
-                                    cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
+                                cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
                                             (self.kullanici_id, kelime_id))
-                                else:
-                                    tarih = islem[1]
-                                    gun, ay, yil = map(int, tarih.split('.'))
+                            else:
+                                tarih = islem[1]
+                                gun, ay, yil = map(int, tarih.split('.'))
 
-                                    gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
-                                    ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
-                                    yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
-                                    gun += gun_ekle.get(bilinen, 0)
-                                    ay += ay_ekle.get(bilinen, 0)
-                                    yil += yil_ekle.get(bilinen, 0)
+                                gun_ekle = {0: 1, 1: 3, 2: 7, 3: 0, 4: 0, 5: 0, 6: 0}
+                                ay_ekle = {0: 0, 1: 0, 2: 0, 3: 1, 4: 6, 5: 0, 6: 0}
+                                yil_ekle = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 1, 6: 0}
+                                gun += gun_ekle.get(bilinen, 0)
+                                ay += ay_ekle.get(bilinen, 0)
+                                yil += yil_ekle.get(bilinen, 0)
 
-                                    yeni_tarih = f"{gun}.{ay}.{yil}"
-                                    cursor.execute('UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
+                                yeni_tarih = f"{gun}.{ay}.{yil}"
+                                cursor.execute('UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
                                             (bilinen, yeni_tarih, self.kullanici_id, kelime_id))
 
-                            else:
-                                tarih = datetime.now().strftime('%x')
-                                gun, ay, yil = map(int, tarih.split('.'))
-                                yeni_tarih = f"{gun}.{ay}.{yil}"
-                                cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
+                        else:
+                            tarih = datetime.now().strftime('%x')
+                            gun, ay, yil = map(int, tarih.split('.'))
+                            yeni_tarih = f"{gun}.{ay}.{yil}"
+                            cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
                                                (self.kullanici_id, kelime_id, 1, kelime, yeni_tarih))
 
-                            conn.commit()
-                            conn.close()
-                    except Exception as e:
-                        print(e)
-                    else:
-                        self.yanlis_sayisi += 1
+                        conn.commit()
+                        conn.close()
+                     else:
+                         self.yanlis_sayisi += 1
 
                 sayac += 1
 
