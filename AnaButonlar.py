@@ -18,7 +18,7 @@ class ButonOlustur(QWidget):
             {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("SifreUnuttum")},
             {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("Kayit")},
 
-            {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.SifreGosterGizle},
+            {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": lambda: self.SayfalaraYonlendir("SifreGosterGizle")},
             {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
             {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
         ]
@@ -74,7 +74,7 @@ class ButonOlustur(QWidget):
                 }
                 """)
                 button.setCheckable(True)
-                button.clicked.connect(self.SifreGosterGizle)
+                button.clicked.connect(lambda: self.SayfalaraYonlendir("SifreGosterGizle"))
 
             if bilgi == "buton_cikis":
                 button.setStyleSheet("""
@@ -97,8 +97,9 @@ class ButonOlustur(QWidget):
         buttons_info = [
             {"bilgi": "buton_sinav", "text": "SINAV", "position": (500, 100, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavBaslamaOncesi")},
             {"bilgi": "buton_analiz", "text": "ANALİZ", "position": (500, 160, 200, 40), "function": lambda: self.SayfalaraYonlendir("AnalizKismi")},
-            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 220, 200, 40), "function": lambda: self.SayfalaraYonlendir("SoruEkleme")},
-            {"bilgi": "buton_ayarlar", "text": "AYARLAR", "position": (500, 280, 200, 40), "function": lambda: self.SayfalaraYonlendir("Ayarlar")},
+            {"bilgi": "buton_kelimeler", "text": "KELİMELER", "position": (500, 220, 200, 40), "function": lambda: self.SayfalaraYonlendir("KelimelerTablosu")},
+            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 280, 200, 40), "function": lambda: self.SayfalaraYonlendir("SoruEkleme")},
+            {"bilgi": "buton_ayarlar", "text": "AYARLAR", "position": (500, 340, 200, 40), "function": lambda: self.SayfalaraYonlendir("Ayarlar")},
         ]
 
         for button_info in buttons_info:

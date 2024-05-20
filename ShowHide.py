@@ -15,6 +15,7 @@ class ShowHide():
 
         self.buton_sinav.hide()
         self.buton_soru_ekleme.hide()
+        self.buton_kelimeler.hide()
         self.buton_analiz.hide()
         self.buton_ayarlar.hide()
         self.buton_cikis.hide()
@@ -27,6 +28,8 @@ class ShowHide():
 
         self.buton_kelime_ekle_ekle.hide()
         self.buton_resim_sec.hide()
+
+        self.KelimelerTablosu.hide()
 
         self.yazi_dogru.hide()
         self.yazi_yanlis.hide()
@@ -154,6 +157,7 @@ class ShowHide():
     def SinavUygulamasiAnaMenu(self):
         self.buton_sinav.show()
         self.buton_soru_ekleme.show()
+        self.buton_kelimeler.show()
         self.buton_analiz.show()
         self.buton_cikis.show()
         self.buton_ayarlar.show()
@@ -269,3 +273,7 @@ class ShowHide():
         self.yazi_yanlis_sayi.show()
         self.yazi_bos_sayi.show()
         self.yazi_toplam_sayi.show()
+
+    def Kelimeler(self):
+        self.buton_geri_sinav.show()
+        self.KelimelerTablosu.show()

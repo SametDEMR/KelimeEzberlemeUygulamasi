@@ -2,6 +2,7 @@ from AnaButonlar import *
 from MetinselAraclar import *
 from ShowHide import *
 from Analizler import *
+from TabloOlustur import *
 
 from gtts import gTTS
 from playsound import playsound
@@ -37,6 +38,7 @@ class Ana_Pencere123(QWidget):
         ButonOlustur.SoruSayisiButonlari(self)
         ButonOlustur.Seslendirme(self)
         ButonOlustur.DilDegistir(self)
+        TabloOlustur.Olustur(self)
 
         Analizler.SinavSonuSayfasi(self)
         Analizler.AnalizSayfasi(self)
@@ -47,56 +49,68 @@ class Ana_Pencere123(QWidget):
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     def SayfalaraYonlendir(self, sayfa):
-        ShowHide.TumAraclariGizle(self)
+        if sayfa == "SifreGosterGizle":
+            sender = self.sender()
+            if sender.isChecked():
+                self.line_edit_sifre.setEchoMode(QLineEdit.Normal)
+            else:
+                self.line_edit_sifre.setEchoMode(QLineEdit.Password)
+        else:
+            ShowHide.TumAraclariGizle(self)
+
+            if sayfa == "Giris":
+                ShowHide.GirisAnaMenu(self)
+
+            if sayfa == "Cikis":
+                QApplication.quit()
+
+            if sayfa == "SifreUnuttum":
+                ShowHide.SifreUnuttumMenusu(self)
+
+            if sayfa == "Kayit":
+                ShowHide.KayitMenusu(self)
+
+            if sayfa == "SinavAnaMenu":
+                ShowHide.SinavUygulamasiAnaMenu(self)
+
+            if sayfa == "SinavBaslamaOncesi":
+                ShowHide.SinavaBaslamaOncesi(self)
+
+            if sayfa == "SinavBaslamaSonrasi":
+                self.SoruOlustur()
+                ShowHide.SinavaBaslamaSonrasi(self)
+
+            if sayfa == "SoruEkleme":
+                ShowHide.SoruEklemeKismi(self)
+
+            if sayfa == "Ayarlar":
+                self.button_group3.setExclusive(False)
+                self.__dict__[f"{self.dil}"].setChecked(True)
+                self.button_group3.setExclusive(True)
+                self.button_group2.setExclusive(False)
+                self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
+                self.button_group2.setExclusive(True)
+                ShowHide.Ayarlar(self)
+
+            if sayfa == "SinavSonuAnaliz":
+                self.SinavSonuAnaliz()
+                ShowHide.SinavSonuAnaliz(self)
+
+            if sayfa == "AnalizKismi":
+                ShowHide.AnalizKismi(self)
+
+            if sayfa == "Sayisal":
+                ShowHide.AnalizSayisal(self)
+                self.AnalizSayfasi()
+
+            if sayfa == "Sozel":
+                ShowHide.AnalizSozel(self)
+                self.AnalizSayfasi()
+            if sayfa == "KelimelerTablosu":
+                ShowHide.Kelimeler(self)
+                self.TabloyaKelimeleriKoy()
+
         self.GenelIslemleriSifirla()
-        if sayfa == "Giris" :
-            ShowHide.GirisAnaMenu(self)
-
-        if sayfa == "Cikis":
-            QApplication.quit()
-
-        if sayfa == "SifreUnuttum":
-            ShowHide.SifreUnuttumMenusu(self)
-
-        if sayfa == "Kayit":
-            ShowHide.KayitMenusu(self)
-
-        if sayfa == "SinavAnaMenu":
-            ShowHide.SinavUygulamasiAnaMenu(self)
-
-        if sayfa == "SinavBaslamaOncesi":
-            ShowHide.SinavaBaslamaOncesi(self)
-
-        if sayfa == "SinavBaslamaSonrasi":
-            self.SoruOlustur()
-            ShowHide.SinavaBaslamaSonrasi(self)
-
-        if sayfa == "SoruEkleme":
-            ShowHide.SoruEklemeKismi(self)
-
-        if sayfa == "Ayarlar":
-            self.button_group3.setExclusive(False)
-            self.__dict__[f"{self.dil}"].setChecked(True)
-            self.button_group3.setExclusive(True)
-            self.button_group2.setExclusive(False)
-            self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
-            self.button_group2.setExclusive(True)
-            ShowHide.Ayarlar(self)
-
-        if sayfa == "SinavSonuAnaliz":
-            self.SinavSonuAnaliz()
-            ShowHide.SinavSonuAnaliz(self)
-
-        if sayfa == "AnalizKismi":
-            ShowHide.AnalizKismi(self)
-
-        if sayfa == "Sayisal":
-            ShowHide.AnalizSayisal(self)
-            self.AnalizSayfasi()
-
-        if sayfa == "Sozel":
-            ShowHide.AnalizSozel(self)
-            self.AnalizSayfasi()
 
     def VeritabaniKontrolEt(self):
         if os.path.exists("database/KullaniciBilgileri.db"):
@@ -135,7 +149,7 @@ class Ana_Pencere123(QWidget):
             else:
                 self.label_giris.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
         else:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz. ★")
+            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz.")
 
     def SifreUnuttumButonunaBasildi(self):
         username = self.line_edit_sifre_kullanici_adi.text()
@@ -161,34 +175,30 @@ class Ana_Pencere123(QWidget):
         kullaniciadi = self.line_edit_kaydol_kullanici_adi.text()
         sifre = self.line_edit_kaydol_sifre.text()
 
-        conn = sqlite3.connect('database/KullaniciBilgileri.db')
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi=?", (kullaniciadi,))
-        kullanici = cursor.fetchone()
-
-        if kullanici:
-            self.label_giris.setText("Bu Kullanıcı Adı Zaten Kullanımda. Farklı Bir Kullanıcı Adı Giriniz.")
+        # Kayıt için gerekli olan bilgilerin eksiksiz olup olmadığını ve şifrenin uzunluğunu kontrol edin
+        if not isim or not soyisim or not kullaniciadi or not sifre:
+            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz.")
+        elif len(sifre) < 10:
+            self.label_giris.setText("Şifre en az 10 karakter uzunluğunda olmalıdır.")
         else:
-            cursor.execute("INSERT INTO kullanicilar (isim, soyisim, kullaniciadi, sifre) VALUES (?, ?, ?, ?)",
-                           (isim, soyisim, kullaniciadi, sifre))
-            cursor.execute(
-                "INSERT INTO Kullaniciİstatistik (dogru_cevaplar, yanlis_cevaplar, bos_cevaplar, toplam_sorular) VALUES (0, 0, 0, 0)")
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
 
-            conn.commit()
-            conn.close()
+            cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi=?", (kullaniciadi,))
+            kullanici = cursor.fetchone()
 
-            if isim and soyisim and sifre and kullaniciadi:
-                self.label_giris.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
+            if kullanici:
+                self.label_giris.setText("Bu Kullanıcı Adı Zaten Kullanımda. Farklı Bir Kullanıcı Adı Giriniz.")
             else:
-                self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+                cursor.execute("INSERT INTO kullanicilar (isim, soyisim, kullaniciadi, sifre) VALUES (?, ?, ?, ?)",
+                               (isim, soyisim, kullaniciadi, sifre))
+                cursor.execute(
+                    "INSERT INTO Kullaniciİstatistik (dogru_cevaplar, yanlis_cevaplar, bos_cevaplar, toplam_sorular) VALUES (0, 0, 0, 0)")
 
-    def SifreGosterGizle(self):
-        sender = self.sender()
-        if sender.isChecked():
-            self.line_edit_sifre.setEchoMode(QLineEdit.Normal)
-        else:
-            self.line_edit_sifre.setEchoMode(QLineEdit.Password)
+                conn.commit()
+                conn.close()
+
+                self.label_giris.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     ### SİNAV MENÜSÜ İÇERİKLERİ
@@ -562,6 +572,38 @@ class Ana_Pencere123(QWidget):
             self.label_ekleme_resim.setScaledContents(True)
             self.ResimSecmeYapilmasi = 1
 
+    def TabloyaKelimeleriKoy(self):
+        conn = sqlite3.connect('database/Kelimeler.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2, resim FROM Kelimeler")
+        veriler = cursor.fetchall()
+
+        if veriler:
+            row_count = len(veriler)
+            column_count = len(veriler[0])
+
+            self.KelimelerTablosu.setRowCount(row_count)
+            self.KelimelerTablosu.setColumnCount(column_count)
+
+            for row_index, row_data in enumerate(veriler):
+                for column_index, data in enumerate(row_data):
+                    if column_index == 4:
+                        label = QLabel()
+                        pixmap = QPixmap(data)
+                        if not pixmap.isNull():
+                            pixmap = pixmap.scaled(200, 200, Qt.KeepAspectRatio)
+                            label.setPixmap(pixmap)
+                        label.setAlignment(Qt.AlignCenter)
+                        self.KelimelerTablosu.setCellWidget(row_index, column_index, label)
+                    else:
+                        item = QTableWidgetItem(str(data))
+                        item.setTextAlignment(Qt.AlignCenter)
+                        self.KelimelerTablosu.setItem(row_index, column_index, item)
+                self.KelimelerTablosu.setRowHeight(row_index, 120)
+
+        conn.close()
+
     ### GENEL FONKSİYONLAR
     def GenelIslemleriSifirla(self):
         self.test_dogru_sayisi = 0
@@ -587,7 +629,6 @@ class Ana_Pencere123(QWidget):
         self.line_edit_kelime_turkce.clear()
         self.line_edit_ingilizce_cümle.clear()
         self.line_edit_türkçe_cümle.clear()
-
     def BaslatilmaIslemleri(self):
         self.ResimSecmeYapilmasi = 0
         self.sinav_soru_sayisi = 5
