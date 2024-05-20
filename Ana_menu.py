@@ -31,9 +31,18 @@ class Ana_Pencere123(QWidget):
         self.tiklama = 0
         self.onay = 0
         self.sinav_soru_sayisi = 5
-        self.gosterilecek_sorular = 0
+        self.toplam_goster_soru = 0
         self.onceki_soru_sayisi = 0
         self.dil = 'ing'
+
+        self.bilinen_kelimeler = {
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: []
+        }
 
         self.sifirla()
         self.kontrol()
@@ -88,7 +97,7 @@ class Ana_Pencere123(QWidget):
 
         self.soru_kalip = [[0 for j in range(5)] for i in range(50)]
         self.soru_siklari = [[0 for j in range(6)] for i in range(50)]
-        self.sikler_kayit = [[0 for j in range(3)] for i in range(50)]
+        self.sikler_kayit = [[0 for j in range(4)] for i in range(50)]
 
     def cikis(self):
         QApplication.quit()
@@ -220,6 +229,18 @@ class Ana_Pencere123(QWidget):
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_ana_menu(self)
 
+    def analiz_geri(self):
+        ShowHide.hepsini_gizleme(self)
+        ShowHide.analiz(self)
+
+    def analiz_sayisal(self):
+        ShowHide.hepsini_gizleme(self)
+        ShowHide.sayisal(self)
+
+    def analiz_sozel(self):
+        ShowHide.hepsini_gizleme(self)
+        ShowHide.sozel(self)
+
     def sinav(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_sayfasi_once(self)
@@ -289,36 +310,36 @@ class Ana_Pencere123(QWidget):
             else:
                 self.ortalama_sayi.setText("ORTALAMA : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
 
-            conn_kullanici = sqlite3.connect('database/KullaniciBilgileri.db')
-            cursor_kullanici = conn_kullanici.cursor()
-            cursor_kullanici.execute('SELECT bilinen, kelime_id FROM KullaniciBilinen WHERE kullanici_id = ?',
-                                         (self.kullanici_id,))
-            bilinen_kelimeler = cursor_kullanici.fetchall()
-            conn_kullanici.close()
 
-            yazilacak = []
 
-            conn_kelimeler = sqlite3.connect('database/Kelimeler.db')
-            cursor_kelimeler = conn_kelimeler.cursor()
-            for bilinen, kelime_id in bilinen_kelimeler:
-                cursor_kelimeler.execute('SELECT ingilizce_kelime FROM Kelimeler WHERE kelime_id = ?', (kelime_id,))
-                kelime_isim = cursor_kelimeler.fetchone()[0]
-                yazilacak.append([kelime_isim, bilinen])
-            conn_kelimeler.close()
 
-            listeler = {
-                1: [],
-                2: [],
-                3: [],
-                4: [],
-                5: [],
-                6: []
-            }
-            for item, index in yazilacak:
-                listeler[index].append(item)
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT kelime, bilinen FROM KullaniciBilinen WHERE kullanici_id = ?;',
+                           (self.kullanici_id,))
+            kullanici_bilinen = cursor.fetchall()
 
-            for index, liste in listeler.items():
-                getattr(self, f'_{index}lik_yazi').setText('\n'.join(liste))
+
+
+            bilinen_sozluk = {1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+
+            for kelime, bilinen in kullanici_bilinen:
+                if bilinen in bilinen_sozluk:
+                    bilinen_sozluk[bilinen].append(kelime)
+
+            for bilinen_seviye, kelime_listesi in bilinen_sozluk.items():
+                label = getattr(self, f"_{bilinen_seviye}lik_yazi", None)
+                label.setText("\n".join(kelime_listesi))
+
+
+            cursor.execute('SELECT kelime FROM KaliciBilinen WHERE kullanici_id = ?;',(self.kullanici_id,))
+            kalici_bilinen = cursor.fetchall()
+
+            if kalici_bilinen:
+                metin = "      ".join(k[0] for k in kalici_bilinen)
+                self._ezber_yazi.setText(metin)
+
+            conn.close()
 
         else:
             ShowHide.hepsini_gizleme(self)
@@ -329,44 +350,54 @@ class Ana_Pencere123(QWidget):
                 if str(self.sikler_kayit[sayac + 1][0]) == '0':
                     self.bos_sayisi += 1
                 else:
-                    if str(self.sikler_kayit[sayac + 1][1]) == str(self.soru_kalip[sayac + 1][2]):
-                        self.dogru_sayisi += 1
+                    try:
+                        if str(self.sikler_kayit[sayac + 1][1]) == str(self.soru_kalip[sayac + 1][2]):
+                            self.dogru_sayisi += 1
 
-                        kelime_id = str(self.sikler_kayit[sayac + 1][2])
-                        conn = sqlite3.connect('database/KullaniciBilgileri.db')
-                        cursor = conn.cursor()
+                            kelime_id = str(self.sikler_kayit[sayac + 1][2])
+                            kelime = str(self.sikler_kayit[sayac + 1][3])
 
-                        cursor.execute(
-                            'SELECT bilinen, tarih FROM KullaniciBilinen WHERE kelime_id = ? AND kullanici_id = ?',
-                            (kelime_id, self.kullanici_id))
-                        islem = cursor.fetchone()
+                            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+                            cursor = conn.cursor()
+                            cursor.execute(
+                                'SELECT bilinen, tarih FROM KullaniciBilinen WHERE kelime_id = ? AND kullanici_id = ?',
+                                (kelime_id, self.kullanici_id))
+                            islem = cursor.fetchone()
 
-                        if islem:
-                            bilinen = islem[0]
-                            tarih = islem[1]
-                            gun, ay, yil = map(int, tarih.split('.'))
+                            if islem:
+                                bilinen = islem[0]
+                                bilinen += 1
+                                if bilinen == 7:
+                                    cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",(self.kullanici_id, kelime_id, kelime))
 
-                            gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 6, 6: 0}
-                            ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 0, 6: 0}
-                            yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
-                            gun += gun_ekle.get(bilinen, 0)
-                            ay += ay_ekle.get(bilinen, 0)
-                            yil += yil_ekle.get(bilinen, 0)
+                                    cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
+                                            (self.kullanici_id, kelime_id))
+                                else:
+                                    tarih = islem[1]
+                                    gun, ay, yil = map(int, tarih.split('.'))
 
-                            bilinen += 1
-                            yeni_tarih = f"{gun}.{ay}.{yil}"
-                            cursor.execute('UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
-                                    (bilinen, yeni_tarih, self.kullanici_id, kelime_id))
+                                    gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
+                                    ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
+                                    yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
+                                    gun += gun_ekle.get(bilinen, 0)
+                                    ay += ay_ekle.get(bilinen, 0)
+                                    yil += yil_ekle.get(bilinen, 0)
 
-                        else:
-                            tarih = datetime.now().strftime('%x')
-                            gun, ay, yil = map(int, tarih.split('.'))
-                            yeni_tarih = f"{gun}.{ay}.{yil}"
-                            cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?)',
-                                           (self.kullanici_id, kelime_id, 1, yeni_tarih))
+                                    yeni_tarih = f"{gun}.{ay}.{yil}"
+                                    cursor.execute('UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
+                                            (bilinen, yeni_tarih, self.kullanici_id, kelime_id))
 
-                        conn.commit()
-                        conn.close()
+                            else:
+                                tarih = datetime.now().strftime('%x')
+                                gun, ay, yil = map(int, tarih.split('.'))
+                                yeni_tarih = f"{gun}.{ay}.{yil}"
+                                cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
+                                               (self.kullanici_id, kelime_id, 1, kelime, yeni_tarih))
+
+                            conn.commit()
+                            conn.close()
+                    except Exception as e:
+                        print(e)
                     else:
                         self.yanlis_sayisi += 1
 
@@ -386,7 +417,7 @@ class Ana_Pencere123(QWidget):
             self.toplam_dogru_sayisi += int(self.dogru_sayisi) + kullanici_verileri[1]
             self.toplam_yanlis_sayisi += int(self.yanlis_sayisi) + kullanici_verileri[2]
             self.toplam_bos_sayisi += int(self.bos_sayisi) + kullanici_verileri[3]
-            self.toplam_soru_sayisi += int(self.gosterilecek_sorular) + kullanici_verileri[4]
+            self.toplam_soru_sayisi += int(self.toplam_goster_soru) + kullanici_verileri[4]
 
             conn = sqlite3.connect('database/KullaniciBilgileri.db')
             cursor = conn.cursor()
@@ -430,7 +461,7 @@ class Ana_Pencere123(QWidget):
             ShowHide.hepsini_gizleme(self)
             ShowHide.sinav_sayfasi_sonra(self)
 
-            self.gosterilecek_sorular = self.sinav_soru_sayisi
+            self.toplam_goster_soru = self.sinav_soru_sayisi
 
             tarih = datetime.now().strftime('%x')
             gun, ay, yil = map(int, tarih.split('.'))
@@ -440,6 +471,8 @@ class Ana_Pencere123(QWidget):
             cursor = conn.cursor()
             cursor.execute('SELECT kelime_id FROM KullaniciBilinen WHERE kullanici_id = ? AND tarih = ?', (self.kullanici_id, tarih,))
             bilinen_kelimeler = cursor.fetchall()
+            cursor.execute('SELECT kelime_id FROM KaliciBilinen')
+            kalici_bilinen = cursor.fetchall()
             conn.commit()
             conn.close()
 
@@ -450,21 +483,18 @@ class Ana_Pencere123(QWidget):
                 cursor.execute('SELECT resim, ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2 FROM Kelimeler WHERE kelime_id = ?',
                         (kelime_id[0],))
                 kelime_bilgisi = cursor.fetchone()
-                if kelime_bilgisi:
-                        kelime_bilgileri.append(kelime_bilgisi)
-            conn.commit()
-            conn.close()
-
-            self.gosterilecek_sorular += int(len(kelime_bilgileri))
-
-            conn = sqlite3.connect('database/Kelimeler.db')
-            cursor = conn.cursor()
-            cursor.execute('SELECT resim, ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2 FROM Kelimeler')
+                kelime_bilgileri.append(kelime_bilgisi)
+            if len(kalici_bilinen) == 0:
+                cursor.execute('SELECT resim, ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2 FROM Kelimeler')
+            else:
+                for sayac in range(len(kalici_bilinen)):
+                    cursor.execute('SELECT resim, ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2 FROM Kelimeler WHERE NOT kelime_id = ?', (kalici_bilinen[sayac][0],))
             soru_kalip = cursor.fetchall()
-            random_kalip = random.sample(soru_kalip, 40)
+            random_kalip = random.sample(soru_kalip, 25)
             conn.commit()
             conn.close()
 
+            self.toplam_goster_soru += int(len(bilinen_kelimeler))
             kelime_bilgileri += random_kalip
 
             self.sayac = 1
@@ -524,14 +554,14 @@ class Ana_Pencere123(QWidget):
             self.button_group1.setExclusive(False)
             getattr(self, self.sikler_kayit[self.soru_sayaci][0]).setChecked(True)
             self.button_group1.setExclusive(True)
-        if self.soru_sayaci == self.gosterilecek_sorular:
+        if self.soru_sayaci == self.toplam_goster_soru:
             self.buton_sonraki_soru.hide()
             self.buton_sinav_bitir.show()
         if self.soru_sayaci > 1:
             self.buton_önceki_soru.show()
         """sonraki önceki buton gösterme gizleme metni yazma"""
 
-        self.yazi_toplam_sayi.setText(str(self.gosterilecek_sorular))
+        self.yazi_toplam_sayi.setText(str(self.toplam_goster_soru))
 
     def onceki_soru(self):
         self.soru_sayaci -= 1
@@ -595,7 +625,7 @@ class Ana_Pencere123(QWidget):
         arama = getattr(self, bilgi).text()
         conn = sqlite3.connect('database/Kelimeler.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT kelime_id FROM Kelimeler WHERE türkçe_kelime = ? OR ingilizce_kelime = ? COLLATE NOCASE',
+        cursor.execute('SELECT kelime_id, ingilizce_kelime FROM Kelimeler WHERE türkçe_kelime = ? OR ingilizce_kelime = ? COLLATE NOCASE',
                        (arama,arama,))
 
         işlemler = cursor.fetchall()
@@ -605,8 +635,7 @@ class Ana_Pencere123(QWidget):
         self.sikler_kayit[self.soru_sayaci][0] = str(bilgi)
         self.sikler_kayit[self.soru_sayaci][1] = getattr(self, bilgi).text()
         self.sikler_kayit[self.soru_sayaci][2] = işlemler[0][0]
-
-        print(işlemler[0][0])
+        self.sikler_kayit[self.soru_sayaci][3] = işlemler[0][1]
 
     def seslendirme(self, pos):
         corrected_pos = pos - QPoint(160, 0)
@@ -633,7 +662,6 @@ class Ana_Pencere123(QWidget):
     def yazdir(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
 
-
         conn = sqlite3.connect('database/KullaniciBilgileri.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
@@ -642,25 +670,43 @@ class Ana_Pencere123(QWidget):
         conn.close()
 
         c = canvas.Canvas(file_path, pagesize=letter)
-        c.
 
-        c.drawString(306, 630, "- ANALİZ -")
+        c.drawString(250, 750, "- ANALIZ -")
 
         c.setFont("Helvetica", 16)
-        c.drawString(15, 750, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
-        c.drawString(115, 720, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
+        c.drawString(15, 720, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
+        c.drawString(115, 690, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
 
-        c.drawString(25, 630, "★★★★★★")
+        c.drawString(25, 530, "EZBERLENMIS")
+        c.drawString(25, 500, "★★★★★★")
+        c.drawString(25, 470, "★★★★★")
+        c.drawString(25, 440, "★★★★")
+        c.drawString(25, 410, "★★★")
+        c.drawString(25, 380, "★★")
+        c.drawString(25, 350, "★")
 
-        c.drawString(25, 630, "★★★★★★")
-        c.drawString(225,630, "★★★★★")
-        c.drawString(425,630, "★★★★")
-        c.drawString(25, 400, "★★★")
-        c.drawString(225,400, "★★")
-        c.drawString(425,400, "★")
+        metin1 = self._1lik_yazi.text()
+        yeni_metin1 = metin1.replace("\n", "      ")
+        metin2 = self._2lik_yazi.text()
+        yeni_metin2 = metin2.replace("\n", "      ")
+        metin3 = self._3lik_yazi.text()
+        yeni_metin3 = metin3.replace("\n", "      ")
+        metin4 = self._4lik_yazi.text()
+        yeni_metin4 = metin4.replace("\n", "      ")
+        metin5 = self._5lik_yazi.text()
+        yeni_metin5 = metin5.replace("\n", "      ")
+        metin6 = self._6lik_yazi.text()
+        yeni_metin6 = metin6.replace("\n", "      ")
+        c.drawString(180, 500, yeni_metin1)
+        c.drawString(180, 470, yeni_metin2)
+        c.drawString(180, 440, yeni_metin3)
+        c.drawString(180, 410, yeni_metin4)
+        c.drawString(180, 380, yeni_metin5)
+        c.drawString(180, 350, yeni_metin6)
+
 
         c.save()
-        print("Belge başarıyla oluşturuldu ve kaydedildi:", file_path)
+        print(file_path)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

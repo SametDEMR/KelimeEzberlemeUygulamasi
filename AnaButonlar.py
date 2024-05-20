@@ -42,6 +42,9 @@ class ButonOlustur(QWidget):
             {"bilgi": "buton_resim_sec", "text": "RESİM SEÇ", "position": (500, 240, 200, 40), "function": self.resim_sec},
 
             {"bilgi": "yazdir", "text": "YAZDIR", "position": (450, 520, 300, 40), "function": self.yazdir},
+            {"bilgi": "analiz_geri", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.analiz_geri},
+            {"bilgi": "analiz_sayisal", "text": "SAYISAL ANALİZ", "position": (500, 160, 200, 40), "function": self.analiz_sayisal},
+            {"bilgi": "analiz_sozel", "text": "KELİME ANALİZ", "position": (500, 220, 200, 40), "function": self.analiz_sozel},
         ]
 
         for button_info in buttons_info:

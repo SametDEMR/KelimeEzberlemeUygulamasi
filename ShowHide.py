@@ -101,6 +101,12 @@ class ShowHide(QWidget):
         self._2lik_yazi.hide()
         self._1lik_yazi.hide()
 
+        self.analiz_geri.hide()
+        self.analiz_sayisal.hide()
+        self.analiz_sozel.hide()
+
+        self._ezber_yazi.hide()
+        self._ezber.hide()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -191,12 +197,28 @@ class ShowHide(QWidget):
     def analiz(self):
         self.buton_geri_sinav.show()
 
+        self.analiz_sayisal.hide()
+        self.analiz_sayisal.show()
+        self.analiz_sozel.show()
+
         self.yazdir.show()
+
+    def sayisal(self):
+        self.analiz_geri.show()
+        self.yazdir.show()
+
         self.toplam_dogru_sayi.show()
         self.toplam_yanlis_sayi.show()
         self.toplam_bos_sayi.show()
         self.toplam_soru_sayi.show()
         self.ortalama_sayi.show()
+
+    def sozel(self):
+        self.analiz_geri.show()
+        self.yazdir.show()
+
+        self._ezber_yazi.show()
+        self._ezber.show()
 
         self._6lik.show()
         self._5lik.show()
