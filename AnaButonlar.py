@@ -11,14 +11,14 @@ class ButonOlustur(QWidget):
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("Giris")},
+            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("GirisAnaMenu")},
             {"bilgi": "buton_cikis", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("Cikis")},
 
             {"bilgi": "buton_giriş", "text": "GİRİŞ", "position": (500, 440, 200, 40), "function": self.GirisButonunaBasildi},
-            {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("SifreUnuttum")},
-            {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("Kayit")},
+            {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("SifreUnuttumMenusu")},
+            {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": lambda: self.SayfalaraYonlendir("KayitMenusu")},
 
-            {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": lambda: self.SayfalaraYonlendir("SifreGosterGizle")},
+            {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.SifreGosterGizle},
             {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
             {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
         ]
@@ -74,7 +74,7 @@ class ButonOlustur(QWidget):
                 }
                 """)
                 button.setCheckable(True)
-                button.clicked.connect(lambda: self.SayfalaraYonlendir("SifreGosterGizle"))
+                button.clicked.connect(lambda: self.SifreGosterGizle)
 
             if bilgi == "buton_cikis":
                 button.setStyleSheet("""
@@ -95,10 +95,10 @@ class ButonOlustur(QWidget):
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_sinav", "text": "SINAV", "position": (500, 100, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavBaslamaOncesi")},
+            {"bilgi": "buton_sinav", "text": "SINAV", "position": (500, 100, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavaBaslamaOncesi")},
             {"bilgi": "buton_analiz", "text": "ANALİZ", "position": (500, 160, 200, 40), "function": lambda: self.SayfalaraYonlendir("AnalizKismi")},
-            {"bilgi": "buton_kelimeler", "text": "KELİMELER", "position": (500, 220, 200, 40), "function": lambda: self.SayfalaraYonlendir("KelimelerTablosu")},
-            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 280, 200, 40), "function": lambda: self.SayfalaraYonlendir("SoruEkleme")},
+            {"bilgi": "buton_kelimeler", "text": "KELİMELER", "position": (500, 220, 200, 40), "function": lambda: self.SayfalaraYonlendir("Kelimeler")},
+            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 280, 200, 40), "function": lambda: self.SayfalaraYonlendir("SoruEklemeKismi")},
             {"bilgi": "buton_ayarlar", "text": "AYARLAR", "position": (500, 340, 200, 40), "function": lambda: self.SayfalaraYonlendir("Ayarlar")},
         ]
 
@@ -129,9 +129,9 @@ class ButonOlustur(QWidget):
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_geri_sinav", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavAnaMenu")},
+            {"bilgi": "buton_geri_sinav", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavUygulamasiAnaMenu")},
 
-            {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavBaslamaSonrasi")},
+            {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavaBaslamaSonrasi")},
             {"bilgi": "buton_sonraki_soru", "text": "SONRAKİ SORU", "position": (960, 540, 200, 40), "function": lambda: self.SoruDegistir(1)},
             {"bilgi": "buton_önceki_soru", "text": "ÖNCEKİ SORU", "position": (20, 540, 200, 40), "function": lambda: self.SoruDegistir(-1)},
             {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavSonuAnaliz")},
@@ -141,8 +141,8 @@ class ButonOlustur(QWidget):
 
             {"bilgi": "yazdir", "text": "YAZDIR", "position": (450, 520, 300, 40), "function": self.AnalizleriYazdir},
             {"bilgi": "analiz_geri", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("AnalizKismi")},
-            {"bilgi": "analiz_sayisal", "text": "SAYISAL ANALİZ", "position": (500, 160, 200, 40), "function": lambda: self.SayfalaraYonlendir("Sayisal")},
-            {"bilgi": "analiz_sozel", "text": "KELİME ANALİZ", "position": (500, 220, 200, 40), "function": lambda: self.SayfalaraYonlendir("Sozel")},
+            {"bilgi": "analiz_sayisal", "text": "SAYISAL ANALİZ", "position": (500, 160, 200, 40), "function": lambda: self.SayfalaraYonlendir("AnalizSayisal")},
+            {"bilgi": "analiz_sozel", "text": "KELİME ANALİZ", "position": (500, 220, 200, 40), "function": lambda: self.SayfalaraYonlendir("AnalizSozel")},
         ]
 
         for button_info in buttons_info:

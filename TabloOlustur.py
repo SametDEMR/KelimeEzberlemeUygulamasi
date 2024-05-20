@@ -7,7 +7,7 @@ class TabloOlustur(QWidget):
 
         self.KelimelerTablosu.setColumnCount(5)
         self.KelimelerTablosu.setHorizontalHeaderLabels(
-            ["İNGİLİZCE", "TÜRKÇE", "İNGİLİZCE CÜMLE", "TÜRKÇE CÜMLE", "resim"])
+            ["İNGİLİZCE", "TÜRKÇE", "İNGİLİZCE CÜMLE", "TÜRKÇE CÜMLE", "RESİM"])
 
         self.KelimelerTablosu.setColumnWidth(0, 120)
         self.KelimelerTablosu.setColumnWidth(1, 120)
