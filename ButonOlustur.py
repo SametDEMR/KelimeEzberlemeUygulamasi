@@ -39,7 +39,7 @@ class ButonOlustur(QWidget):
 
 
             {"bilgi": "buton_kelime_ekle_ekle", "text": "KELİME EKLE", "position": (500, 500, 200, 40), "function": self.soru_ekle},
-            {"bilgi": "buton_resim_sec", "text": "RESİM SEÇ", "position": (500, 300, 200, 40), "function": self.resim_sec},
+            {"bilgi": "buton_resim_sec", "text": "RESİM SEÇ", "position": (500, 240, 200, 40), "function": self.resim_sec},
         ]
 
         for button_info in buttons_info:

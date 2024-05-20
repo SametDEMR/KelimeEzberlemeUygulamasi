@@ -46,6 +46,22 @@ class Ana_Pencere123(QWidget):
 
         ShowHide.hepsini_gizleme(self)
 
+        pixmap = QPixmap("program/kapalı2.png")
+        self.label_resim_soru.setPixmap(pixmap)
+        self.label_resim_soru.setScaledContents(True)
+
+        pixmap = QPixmap("program/açık1.png")
+        self.label_resim_A.setPixmap(pixmap)
+        self.label_resim_A.setScaledContents(True)
+
+        pixmap = QPixmap("program/açık2.png")
+        self.label_resim_B.setPixmap(pixmap)
+        self.label_resim_B.setScaledContents(True)
+
+        pixmap = QPixmap("program/kapalı1.png")
+        self.label_resim_C.setPixmap(pixmap)
+        self.label_resim_C.setScaledContents(True)
+
         ShowHide.giris(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -80,6 +96,7 @@ class Ana_Pencere123(QWidget):
         self.temizle()
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_ana_menu(self)
+
         """username = self.line_edit_kullanici_adi.text()
         password = self.line_edit_sifre.text()
 
@@ -206,7 +223,7 @@ class Ana_Pencere123(QWidget):
         self.sikler = [0] * 21
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_sayfasi_sonra(self)
-        self.label_sinav.setText(f"{self.soru_sayaci}")
+        self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
 
     def sonraki_soru(self):
         if self.soru_sayaci < self.sinav_soru_sayisi:
@@ -224,7 +241,7 @@ class Ana_Pencere123(QWidget):
                 self.buton_önceki_soru.show()
 
             self.soru_sayaci += 1
-            self.label_sinav.setText(f"{self.soru_sayaci}")
+            self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
 
     def onceki_soru(self):
         if self.soru_sayaci > 1:
@@ -242,7 +259,7 @@ class Ana_Pencere123(QWidget):
                 self.buton_sinav_bitir.hide()
 
             self.soru_sayaci -= 1
-            self.label_sinav.setText(f"{self.soru_sayaci}")
+            self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
 
     def soru_ekle(self):
         ingilizce = self.line_edit_kelime_ingilizce.text()
@@ -251,17 +268,17 @@ class Ana_Pencere123(QWidget):
         cumle2 = self.line_edit_cümle2.text()
 
         if ingilizce and turkce and cumle1 and cumle2:
-            self.label_sinav.setText("Başarıyla eklenmiştir.")
+            self.label_sinav_sayac.setText("Başarıyla eklenmiştir.")
         else:
-            self.label_sinav.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+            self.label_sinav_sayac.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def resim_sec(self):
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getOpenFileName(self, "Resim Seç", "","Resim Dosyaları (*.jpg *.png *.jpeg *.bmp *.gif)", options=options)
         if file_name:
             pixmap = QPixmap(file_name)
-            self.label_resim.setPixmap(pixmap.scaled(self.label_resim.size(), aspectRatioMode=True))
-            self.label_resim.setScaledContents(True)
+            self.label_ekleme_resim.setPixmap(pixmap.scaled(self.label_ekleme_resim.size(), aspectRatioMode=True))
+            self.label_ekleme_resim.setScaledContents(True)
 
     def sinav_sonu_analiz(self):
         ShowHide.hepsini_gizleme(self)
@@ -279,9 +296,9 @@ class Ana_Pencere123(QWidget):
 
     def temizle(self):
         self.label_giris.setText("")
-        self.label_sinav.setText("")
-        self.label_resim.setPixmap(QPixmap())
-        self.label_resim.setScaledContents(False)
+        self.label_sinav_sayac.setText("")
+        self.label_ekleme_resim.setPixmap(QPixmap())
+        self.label_ekleme_resim.setScaledContents(False)
 
         self.line_edit_kullanici_adi.clear()
         self.line_edit_sifre.clear()
@@ -296,7 +313,6 @@ class Ana_Pencere123(QWidget):
         self.A.setChecked(False)
         self.B.setChecked(False)
         self.C.setChecked(False)
-        self.D.setChecked(False)
         self.button_group1.setExclusive(True)
 
     def siklari_kaydet(self):

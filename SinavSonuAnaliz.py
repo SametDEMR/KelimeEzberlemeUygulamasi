@@ -11,10 +11,9 @@ class SinavSonuAnaliz(QWidget):
     def Olustur(self):
         self.button_group = QButtonGroup()
         buttons_info = [
-            {"bilgi": "cümle_1", "text": "CÜMLE 1", "position": (40, 300, 400, 40)},
-            {"bilgi": "cümle_2", "text": "CÜMLE 2", "position": (40, 540, 400, 40)},
-            {"bilgi": "cümle_3", "text": "CÜMLE 3", "position": (760, 300, 400, 40)},
-            {"bilgi": "cümle_4", "text": "CÜMLE 4", "position": (760, 540, 400, 40)},
+            {"bilgi": "cümle_1", "text": "CÜMLE 1", "position": (40, 500, 400, 40)},
+            {"bilgi": "cümle_2", "text": "CÜMLE 2", "position": (400, 440, 400, 40)},
+            {"bilgi": "cümle_3", "text": "CÜMLE 3", "position": (760, 500, 400, 40)},
 
             {"bilgi": "yazi_dogru", "text": "DOĞRU", "position": (140, 250, 200, 40)},
             {"bilgi": "yazi_yanlis", "text": "YANLIŞ", "position": (380, 250, 200, 40)},

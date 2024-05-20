@@ -20,8 +20,8 @@ class TextBoxOlustur(QWidget):
 
             {"bilgi": "line_edit_kelime_ingilizce", "placeholder": "KELİMENİN İNGİLİZCESİ", "position": (450, 60, 200, 40)},
             {"bilgi": "line_edit_kelime_turkcesi", "placeholder": "KELİMENİN TÜRKÇESİ", "position": (450, 120, 200, 40)},
-            {"bilgi": "line_edit_cümle1", "placeholder": "CÜMLE 1", "position": (450, 180, 200, 40)},
-            {"bilgi": "line_edit_cümle2", "placeholder": "CÜMLE 2", "position": (450, 240, 200, 40)},
+            {"bilgi": "line_edit_cümle1", "placeholder": "CÜMLE 1", "position": (290, 180, 200, 40)},
+            {"bilgi": "line_edit_cümle2", "placeholder": "CÜMLE 2", "position": (610, 180, 200, 40)},
         ]
 
         for edit_info in line_edit_info:

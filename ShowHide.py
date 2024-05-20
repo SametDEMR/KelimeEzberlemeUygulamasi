@@ -39,7 +39,6 @@ class ShowHide(QWidget):
         self.A.hide()
         self.B.hide()
         self.C.hide()
-        self.D.hide()
 
         self._5.hide()
         self._10.hide()
@@ -50,12 +49,10 @@ class ShowHide(QWidget):
         self.ses_A.hide()
         self.ses_B.hide()
         self.ses_C.hide()
-        self.ses_D.hide()
 
         self.cümle_1.hide()
         self.cümle_2.hide()
         self.cümle_3.hide()
-        self.cümle_4.hide()
 
         self.line_edit_kullanici_adi.hide()
         self.line_edit_sifre.hide()
@@ -72,9 +69,16 @@ class ShowHide(QWidget):
         self.line_edit_cümle1.hide()
         self.line_edit_cümle2.hide()
 
+        self.label_giris.hide()
+        self.label_sinav_sayac.hide()
         self.label_metin.hide()
-
         self.label_ayarlar.hide()
+        self.label_ekleme_resim.hide()
+
+        """self.label_resim_soru.hide()
+        self.label_resim_A.hide()
+        self.label_resim_B.hide()
+        self.label_resim_C.hide()"""
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -88,6 +92,8 @@ class ShowHide(QWidget):
         self.line_edit_kullanici_adi.show()
         self.line_edit_sifre.show()
 
+        self.label_giris.show()
+
     def kayit(self):
         self.buton_geri_giris.show()
 
@@ -98,12 +104,16 @@ class ShowHide(QWidget):
         self.line_edit_kaydol_sifre.show()
         self.line_edit_kaydol_kullanici_adi.show()
 
+        self.label_giris.show()
+
     def sifre_unuttum(self):
         self.buton_geri_giris.show()
 
         self.buton_sifre_getir.show()
 
         self.line_edit_sifre_kullanici_adi.show()
+
+        self.label_giris.show()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     def sinav_ana_menu(self):
@@ -124,21 +134,25 @@ class ShowHide(QWidget):
 
         self.label_metin.show()
 
+        self.ses_soru.show()
+
         self.A.show()
         self.B.show()
         self.C.show()
-        self.D.show()
-
-        self.ses_soru.show()
         self.ses_A.show()
         self.ses_B.show()
         self.ses_C.show()
-        self.ses_D.show()
-
         self.cümle_1.show()
         self.cümle_2.show()
         self.cümle_3.show()
-        self.cümle_4.show()
+
+        self.label_metin.show()
+        self.label_sinav_sayac.show()
+
+        self.label_resim_soru.show()
+        self.label_resim_A.show()
+        self.label_resim_B.show()
+        self.label_resim_C.show()
 
     def soru_ekleme(self):
         self.buton_geri_sinav.show()
@@ -151,6 +165,9 @@ class ShowHide(QWidget):
         self.line_edit_cümle2.show()
 
         self.buton_resim_sec.show()
+
+        self.label_ekleme_resim.show()
+        self.label_kelime_ekle.show()
 
     def analiz(self):
         self.buton_geri_sinav.show()
