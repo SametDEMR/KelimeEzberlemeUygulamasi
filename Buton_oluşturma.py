@@ -2,17 +2,21 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import locale
+
 from Ana_menu import *
 
 class Buton_Olustur_Modul(QWidget):
     def createButtons(self):
         buttons_info = [
-            {"text": "<-- ÇIKIŞ -->", "position": (10, 560, 150, 30), "function": self.exitFunction},
-            {"text": "<-- AYARLAR -->", "position": (10, 520, 150, 30), "function": self.ayarlarFunction},
-            {"text": "<-- MENÜ 1 -->", "position": (10, 80, 180, 30), "function": self.menu1Function},
-            {"text": "<-- MENÜ 2 -->", "position": (10, 120, 180, 30), "function": self.menu2Function},
-            {"text": "<-- MENÜ 3 -->", "position": (10, 160, 180, 30), "function": self.menu3Function},
-            {"text": "<-- MENÜ 4 -->", "position": (10, 200, 180, 30), "function": self.menu4Function},
+            {"bilgi": "1", "text": "ÇIKIŞ", "position": (10, 560, 180, 30), "function": self.exitFunction},
+            {"bilgi": "2", "text": "AYARLAR", "position": (10, 520, 180, 30), "function": self.ayarlarFunction},
+            {"bilgi": "3", "text": "SINAV SAYFASI", "position": (10, 80, 180, 30), "function": self.menu1Function},
+            {"bilgi": "4", "text": "RAPOR SAYFASI", "position": (10, 120, 180, 30), "function": self.menu2Function},
+            {"bilgi": "5", "text": "KELİME EKLEME", "position": (10, 160, 180, 30), "function": self.menu3Function},
+
+            {"bilgi": "6", "text": "SINAVA BAŞLA", "position": (610, 285, 180, 30), "function": self.baslaFunction},
+            {"bilgi": "7", "text": "SONRAKİ SORU", "position": (1010, 560, 180, 30), "function": self.sonrakisoruFunction},
+            {"bilgi": "8", "text": "ÖNCEKİ SORU", "position": (200, 560, 180, 30), "function": self.oncekisoruFunction},
         ]
 
         for button_info in buttons_info:

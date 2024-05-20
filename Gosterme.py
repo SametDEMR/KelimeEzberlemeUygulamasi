@@ -6,7 +6,7 @@ from Ana_menu import *
 
 class Goster_Modul(QWidget):
     def hepsini_goster(self):
-        print("hepsini göster")
+        self.button.show()
 
     def buton1_goster(self):
         print("1 göster")
@@ -16,6 +16,3 @@ class Goster_Modul(QWidget):
 
     def buton3_goster(self):
         print("3 göster")
-
-    def buton4_goster(self):
-        print("4 göster")
