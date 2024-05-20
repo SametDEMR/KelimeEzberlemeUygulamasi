@@ -2,32 +2,32 @@ from AnaButonlar import *
 from AAnaMenu import *
 class ShowHide():
     def TumAraclariGizle(self):
-        self.buton_geri_giris.hide()
-        self.buton_geri_sinav.hide()
+        self.GirisSayfasiGeriGitme.hide()
+        self.SinavAnaMenuGeriGitme.hide()
 
-        self.buton_giriş.hide()
-        self.buton_sifreunuttum.hide()
-        self.buton_kayit.hide()
-        self.buton_sifre_goster.hide()
+        self.GirisButonu.hide()
+        self.SifremiUnuttumButonu.hide()
+        self.KayitOlmaButonu.hide()
+        self.SifreGosterGizleButonu.hide()
 
-        self.buton_kaydol.hide()
-        self.buton_sifre_getir.hide()
+        self.KaydolButonu.hide()
+        self.SifremiGetirButonu.hide()
 
-        self.buton_sinav.hide()
-        self.buton_soru_ekleme.hide()
-        self.buton_kelimeler.hide()
-        self.buton_analiz.hide()
-        self.buton_ayarlar.hide()
-        self.buton_cikis.hide()
+        self.SinavSayfasiButonu.hide()
+        self.SoruEklemeSayfasiButonu.hide()
+        self.KelimelerSayfasiButonu.hide()
+        self.AnalizSayfasiButonu.hide()
+        self.AyarlarSayfasiButonu.hide()
+        self.CikisButonu.hide()
 
-        self.buton_sinav_basla.hide()
-        self.sinav_soru.hide()
-        self.buton_sonraki_soru.hide()
-        self.buton_önceki_soru.hide()
-        self.buton_sinav_bitir.hide()
+        self.SinavaBaslaButonu.hide()
+        self.SoruKelimeYeri.hide()
+        self.SonrakiSoruButonu.hide()
+        self.ÖncekiSoruButonu.hide()
+        self.SinavBitirButonu.hide()
 
-        self.buton_kelime_ekle_ekle.hide()
-        self.buton_resim_sec.hide()
+        self.KelimeyiEkleButonu.hide()
+        self.ResimSecmeButonu.hide()
 
         self.KelimelerTablosu.hide()
 
@@ -52,40 +52,48 @@ class ShowHide():
         self._15.hide()
         self._20.hide()
 
-        self.ses_soru.hide()
-        self.ses_soru_cümle.hide()
+        self.SoruKelimeMetniSeslendirme.hide()
+        self.SoruCumleMetniSeslendirme.hide()
         self.ses_A.hide()
         self.ses_B.hide()
         self.ses_C.hide()
 
-        self.cümle_soru.hide()
+        self.SoruCümleKismi.hide()
 
-        self.line_edit_kullanici_adi.hide()
-        self.line_edit_sifre.hide()
+        self.GirisKismiKullaniciAdi.hide()
+        self.GirisKismiSifre.hide()
 
-        self.line_edit_isim.hide()
-        self.line_edit_soyisim.hide()
-        self.line_edit_kaydol_sifre.hide()
-        self.line_edit_kaydol_kullanici_adi.hide()
+        self.KayitKismiIsim.hide()
+        self.KayitKismiSoyisim.hide()
+        self.KayitKismiSifre.hide()
+        self.KayitKismiKullaniciAdi.hide()
 
-        self.line_edit_sifre_kullanici_adi.hide()
+        self.SifremiUnuttumKismiKullaniciAdi.hide()
 
-        self.line_edit_kelime_ingilizce.hide()
-        self.line_edit_kelime_turkce.hide()
-        self.line_edit_ingilizce_cümle.hide()
-        self.line_edit_türkçe_cümle.hide()
+        self.SoruEklemeIngilizce.hide()
+        self.SoruEklemeTurkce.hide()
+        self.SoruEklemeIngilizceCumle.hide()
+        self.SoruEklemeTurkceCumle.hide()
 
-        self.label_giris.hide()
-        self.label_sinav_sayac.hide()
-        self.label_soru_metin.hide()
-        self.label_ayarlar_sayi.hide()
-        self.label_ayarlar_dil.hide()
+        self.GirisKismiUyariMesaji.hide()
+        self.SinavSayaci.hide()
+        self.SoruAciklamasi.hide()
+        self.AyarlarSoruSayisiKismi.hide()
+        self.AyarlarDilKismi.hide()
 
-        self.label_ekleme_resim.hide()
-        self.label_kelime_ekle.hide()
-        self.label_resim_soru.hide()
+        self.KelimeEklemeResimKismi.hide()
+        self.KelimeEklemeUyariMesaji.hide()
+        self.SoruResimKismi.hide()
 
-        self.yazdir.hide()
+        self.AnalizleriYazdir.hide()
+
+        self.Yildiz1Tablosu.hide()
+        self.Yildiz2Tablosu.hide()
+        self.Yildiz3Tablosu.hide()
+        self.Yildiz4Tablosu.hide()
+        self.Yildiz5Tablosu.hide()
+        self.Yildiz6Tablosu.hide()
+        self.EzberlenmisTablosu.hide()
 
         self.toplam_dogru_yazi.hide()
         self.toplam_yanlis_yazi.hide()
@@ -98,124 +106,98 @@ class ShowHide():
         self.toplam_soru_sayi.hide()
         self.ortalama_sayi.hide()
 
-        self._6lik.hide()
-        self._5lik.hide()
-        self._4lik.hide()
-        self._3lik.hide()
-        self._2lik.hide()
-        self._1lik.hide()
-        self._6lik_yazi.hide()
-        self._5lik_yazi.hide()
-        self._4lik_yazi.hide()
-        self._3lik_yazi.hide()
-        self._2lik_yazi.hide()
-        self._1lik_yazi.hide()
-
-        self.analiz_geri.hide()
-        self.analiz_sayisal.hide()
-        self.analiz_sozel.hide()
-
-        self._ezber_yazi.hide()
-        self._ezber.hide()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def GirisAnaMenu(self):
-        self.buton_giriş.show()
-        self.buton_sifreunuttum.show()
-        self.buton_kayit.show()
-        self.buton_sifre_goster.show()
-        self.buton_cikis.show()
+        self.GirisButonu.show()
+        self.SifremiUnuttumButonu.show()
+        self.KayitOlmaButonu.show()
+        self.SifreGosterGizleButonu.show()
+        self.CikisButonu.show()
 
-        self.line_edit_kullanici_adi.show()
-        self.line_edit_sifre.show()
+        self.GirisKismiKullaniciAdi.show()
+        self.GirisKismiSifre.show()
 
-        self.label_giris.show()
+        self.GirisKismiUyariMesaji.show()
 
     def KayitMenusu(self):
-        self.buton_geri_giris.show()
+        self.GirisSayfasiGeriGitme.show()
 
-        self.buton_kaydol.show()
+        self.KaydolButonu.show()
 
-        self.line_edit_isim.show()
-        self.line_edit_soyisim.show()
-        self.line_edit_kaydol_sifre.show()
-        self.line_edit_kaydol_kullanici_adi.show()
+        self.KayitKismiIsim.show()
+        self.KayitKismiSoyisim.show()
+        self.KayitKismiSifre.show()
+        self.KayitKismiKullaniciAdi.show()
 
-        self.label_giris.show()
+        self.GirisKismiUyariMesaji.show()
 
     def SifreUnuttumMenusu(self):
-        self.buton_geri_giris.show()
+        self.GirisSayfasiGeriGitme.show()
 
-        self.buton_sifre_getir.show()
+        self.SifremiGetirButonu.show()
 
-        self.line_edit_sifre_kullanici_adi.show()
+        self.SifremiUnuttumKismiKullaniciAdi.show()
 
-        self.label_giris.show()
+        self.GirisKismiUyariMesaji.show()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     def SinavUygulamasiAnaMenu(self):
-        self.buton_sinav.show()
-        self.buton_soru_ekleme.show()
-        self.buton_kelimeler.show()
-        self.buton_analiz.show()
-        self.buton_cikis.show()
-        self.buton_ayarlar.show()
+        self.SinavSayfasiButonu.show()
+        self.SoruEklemeSayfasiButonu.show()
+        self.KelimelerSayfasiButonu.show()
+        self.AnalizSayfasiButonu.show()
+        self.CikisButonu.show()
+        self.AyarlarSayfasiButonu.show()
 
     def SinavaBaslamaOncesi(self):
-        self.buton_geri_sinav.show()
+        self.SinavAnaMenuGeriGitme.show()
 
-        self.buton_sinav_basla.show()
+        self.SinavaBaslaButonu.show()
 
     def SinavaBaslamaSonrasi(self):
-        self.buton_sonraki_soru.show()
-        self.sinav_soru.show()
+        self.SonrakiSoruButonu.show()
+        self.SoruKelimeYeri.show()
 
-        self.label_soru_metin.show()
+        self.SoruAciklamasi.show()
 
-        self.ses_soru.show()
+        self.SoruKelimeMetniSeslendirme.show()
 
         self.A.show()
         self.B.show()
         self.C.show()
-        self.ses_soru.show()
-        self.ses_soru_cümle.show()
+        self.SoruKelimeMetniSeslendirme.show()
+        self.SoruCumleMetniSeslendirme.show()
         self.ses_A.show()
         self.ses_B.show()
         self.ses_C.show()
 
-        self.cümle_soru.show()
+        self.SoruCümleKismi.show()
 
-        self.label_soru_metin.show()
-        self.label_sinav_sayac.show()
-        self.label_resim_soru.show()
+        self.SoruAciklamasi.show()
+        self.SinavSayaci.show()
+        self.SoruResimKismi.show()
 
     def SoruEklemeKismi(self):
-        self.buton_geri_sinav.show()
+        self.SinavAnaMenuGeriGitme.show()
 
-        self.buton_kelime_ekle_ekle.show()
+        self.KelimeyiEkleButonu.show()
 
-        self.line_edit_kelime_ingilizce.show()
-        self.line_edit_kelime_turkce.show()
-        self.line_edit_ingilizce_cümle.show()
-        self.line_edit_türkçe_cümle.show()
+        self.SoruEklemeIngilizce.show()
+        self.SoruEklemeTurkce.show()
+        self.SoruEklemeIngilizceCumle.show()
+        self.SoruEklemeTurkceCumle.show()
 
-        self.buton_resim_sec.show()
+        self.ResimSecmeButonu.show()
 
-        self.label_ekleme_resim.show()
-        self.label_kelime_ekle.show()
+        self.KelimeEklemeResimKismi.show()
+        self.KelimeEklemeUyariMesaji.show()
 
-    def AnalizKismi(self):
-        self.buton_geri_sinav.show()
+    def AnalizSayfasi(self):
+        self.SinavAnaMenuGeriGitme.show()
 
-        self.analiz_sayisal.hide()
-        self.analiz_sayisal.show()
-        self.analiz_sozel.show()
-
-        self.yazdir.show()
-
-    def AnalizSayisal(self):
-        self.analiz_geri.show()
+        self.AnalizleriYazdir.show()
 
         self.toplam_dogru_yazi.show()
         self.toplam_yanlis_yazi.show()
@@ -229,27 +211,16 @@ class ShowHide():
         self.toplam_soru_sayi.show()
         self.ortalama_sayi.show()
 
-    def AnalizSozel(self):
-        self.analiz_geri.show()
-
-        self._ezber_yazi.show()
-        self._ezber.show()
-
-        self._6lik.show()
-        self._5lik.show()
-        self._4lik.show()
-        self._3lik.show()
-        self._2lik.show()
-        self._1lik.show()
-        self._6lik_yazi.show()
-        self._5lik_yazi.show()
-        self._4lik_yazi.show()
-        self._3lik_yazi.show()
-        self._2lik_yazi.show()
-        self._1lik_yazi.show()
+        self.Yildiz1Tablosu.show()
+        self.Yildiz2Tablosu.show()
+        self.Yildiz3Tablosu.show()
+        self.Yildiz4Tablosu.show()
+        self.Yildiz5Tablosu.show()
+        self.Yildiz6Tablosu.show()
+        self.EzberlenmisTablosu.show()
 
     def Ayarlar(self):
-        self.buton_geri_sinav.show()
+        self.SinavAnaMenuGeriGitme.show()
 
         self.ing.show()
         self.tr.show()
@@ -259,11 +230,11 @@ class ShowHide():
         self._15.show()
         self._20.show()
 
-        self.label_ayarlar_sayi.show()
-        self.label_ayarlar_dil.show()
+        self.AyarlarSoruSayisiKismi.show()
+        self.AyarlarDilKismi.show()
 
     def SinavSonuAnaliz(self):
-        self.buton_geri_sinav.show()
+        self.SinavAnaMenuGeriGitme.show()
 
         self.yazi_dogru.show()
         self.yazi_yanlis.show()
@@ -275,5 +246,5 @@ class ShowHide():
         self.yazi_toplam_sayi.show()
 
     def Kelimeler(self):
-        self.buton_geri_sinav.show()
+        self.SinavAnaMenuGeriGitme.show()
         self.KelimelerTablosu.show()

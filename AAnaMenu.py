@@ -30,6 +30,8 @@ class Ana_Pencere123(QWidget):
         MetinselAraclar.UyariMetinGirisleri(self)
         MetinselAraclar.KelimeEklemeSayfasiMetinGirisleri(self)
         MetinselAraclar.GirisSayfasiMetinGirisleri(self)
+        MetinselAraclar.SoruMetinGirisleri(self)
+        MetinselAraclar.BilgilendirmeMetinGirisleri(self)
 
         ButonOlustur.GirisMenuButonlari(self)
         ButonOlustur.GirisMenuIcIslemButonlari(self)
@@ -40,7 +42,14 @@ class Ana_Pencere123(QWidget):
         ButonOlustur.MetinleriSeslendirmeButonlari(self)
         ButonOlustur.SoruDilDegistirButonlari(self)
 
-        TabloOlustur.Olustur(self)
+        TabloOlustur.KelimelerTablosu(self)
+        TabloOlustur.Yildiz1TablosuOlustur(self)
+        TabloOlustur.Yildiz2TablosuOlustur(self)
+        TabloOlustur.Yildiz3TablosuOlustur(self)
+        TabloOlustur.Yildiz4TablosuOlustur(self)
+        TabloOlustur.Yildiz5TablosuOlustur(self)
+        TabloOlustur.Yildiz6TablosuOlustur(self)
+        TabloOlustur.EzberlenmisTablosuOlustur(self)
 
         Analizler.AnaAnalizSayfasi(self)
         Analizler.SinavSonuAnalizSayfasi(self)
@@ -53,8 +62,8 @@ class Ana_Pencere123(QWidget):
     def SayfalaraYonlendir(self, SayfaAdi):
         ShowHide.TumAraclariGizle(self)
         ShowHide.__dict__[f"{SayfaAdi}"](self)
-        self.GenelIslemleriSifirla()
 
+        self.GenelIslemleriSifirla()
         if SayfaAdi == "SinavaBaslamaSonrasi":
             self.SoruOlustur()
         if SayfaAdi == "SinavSonuAnaliz":
@@ -67,7 +76,7 @@ class Ana_Pencere123(QWidget):
             self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
             self.button_group2.setExclusive(True)
             ShowHide.Ayarlar(self)
-        if SayfaAdi == "AnalizKismi":
+        if SayfaAdi == "AnalizSayfasi":
             self.AnalizSayfasi()
         if SayfaAdi == "Kelimeler":
             self.TabloyaKelimeleriKoy()
@@ -89,11 +98,14 @@ class Ana_Pencere123(QWidget):
             conn.commit()
             conn.close()
 
+    def Cikis(self):
+        QApplication.quit()
+
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     ###GİRİŞ MENÜSÜNÜN İÇERİKLERİ
     def GirisButonunaBasildi(self):
-        username = self.line_edit_kullanici_adi.text()
-        password = self.line_edit_sifre.text()
+        username = self.GirisKismiKullaniciAdi.text()
+        password = self.GirisKismiSifre.text()
 
         if username and password:
             conn = sqlite3.connect("database/KullaniciBilgileri.db")
@@ -107,12 +119,12 @@ class Ana_Pencere123(QWidget):
                 ShowHide.TumAraclariGizle(self)
                 ShowHide.SinavUygulamasiAnaMenu(self)
             else:
-                self.label_giris.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
+                self.GirisKismiUyariMesaji.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
         else:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz.")
+            self.GirisKismiUyariMesaji.setText("Lütfen Bilgileri Eksiksiz Giriniz.")
 
     def SifreUnuttumButonunaBasildi(self):
-        username = self.line_edit_sifre_kullanici_adi.text()
+        username = self.SifremiUnuttumKismiKullaniciAdi.text()
 
         if username:
             conn = sqlite3.connect("database/KullaniciBilgileri.db")
@@ -121,24 +133,24 @@ class Ana_Pencere123(QWidget):
             row = cursor.fetchone()
 
             if row:
-                self.label_giris.setText("Şifreniz = \" " + row[0] + " \"")
+                self.GirisKismiUyariMesaji.setText("Şifreniz = \" " + row[0] + " \"")
             else:
-                self.label_giris.setText("Kullanıcı Bulunamadı. Tekrar Deneyiniz.")
+                self.GirisKismiUyariMesaji.setText("Kullanıcı Bulunamadı. Tekrar Deneyiniz.")
 
             conn.close()
         else:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+            self.GirisKismiUyariMesaji.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def KayitButonunaBasildi(self):
-        isim = self.line_edit_isim.text()
-        soyisim = self.line_edit_soyisim.text()
-        kullaniciadi = self.line_edit_kaydol_kullanici_adi.text()
-        sifre = self.line_edit_kaydol_sifre.text()
+        isim = self.KayitKismiIsim.text()
+        soyisim = self.KayitKismiSoyisim.text()
+        kullaniciadi = self.KayitKismiKullaniciAdi.text()
+        sifre = self.KayitKismiSifre.text()
 
         if not isim or not soyisim or not kullaniciadi or not sifre:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz.")
-        elif len(sifre) < 10:
-            self.label_giris.setText("Şifre en az 10 karakter uzunluğunda olmalıdır.")
+            self.GirisKismiUyariMesaji.setText("Lütfen Bilgileri Eksiksiz Giriniz.")
+        elif len(sifre) < 8:
+            self.GirisKismiUyariMesaji.setText("Şifre en az 10 karakter uzunluğunda olmalıdır.")
         else:
             conn = sqlite3.connect('database/KullaniciBilgileri.db')
             cursor = conn.cursor()
@@ -147,7 +159,7 @@ class Ana_Pencere123(QWidget):
             kullanici = cursor.fetchone()
 
             if kullanici:
-                self.label_giris.setText("Bu Kullanıcı Adı Zaten Kullanımda. Farklı Bir Kullanıcı Adı Giriniz.")
+                self.GirisKismiUyariMesaji.setText("Bu Kullanıcı Adı Zaten Kullanımda. Farklı Bir Kullanıcı Adı Giriniz.")
             else:
                 cursor.execute("INSERT INTO kullanicilar (isim, soyisim, kullaniciadi, sifre) VALUES (?, ?, ?, ?)",
                                (isim, soyisim, kullaniciadi, sifre))
@@ -157,14 +169,15 @@ class Ana_Pencere123(QWidget):
                 conn.commit()
                 conn.close()
 
-                self.label_giris.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
+        self.GenelIslemleriSifirla()
+        self.GirisKismiUyariMesaji.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
 
     def SifreGosterGizle(self):
         SifreGosterGizleButonu = self.sender()
         if SifreGosterGizleButonu.isChecked():
-            self.line_edit_sifre.setEchoMode(QLineEdit.Normal)
+            self.GirisKismiSifre.setEchoMode(QLineEdit.Normal)
         else:
-            self.line_edit_sifre.setEchoMode(QLineEdit.Password)
+            self.GirisKismiSifre.setEchoMode(QLineEdit.Password)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     ### SİNAV MENÜSÜ İÇERİKLERİ
@@ -177,6 +190,7 @@ class Ana_Pencere123(QWidget):
         else:
             bilgi = TiklananButon.property("bilgi")
             self.dil = str(bilgi)
+
     def AnalizSayfasi(self):
         conn = sqlite3.connect('database/KullaniciBilgileri.db')
         cursor = conn.cursor()
@@ -208,21 +222,36 @@ class Ana_Pencere123(QWidget):
             if bilinen in bilinen_sozluk:
                 bilinen_sozluk[bilinen].append(kelime)
 
+        # Döngü başlamadan önce tabloyu temizle
         for bilinen_seviye, kelime_listesi in bilinen_sozluk.items():
-            label = getattr(self, f"_{bilinen_seviye}lik_yazi", None)
-            label.setText("\n".join(kelime_listesi))
+            Tablo = getattr(self, f"Yildiz{bilinen_seviye}Tablosu", None)
+            Tablo.setRowCount(0)
+            current_row_count = 0
+            Tablo.setRowCount(current_row_count + len(kelime_listesi))
+            for index, kelime in enumerate(kelime_listesi):
+                item = QTableWidgetItem(str(kelime))
+                item.setTextAlignment(Qt.AlignCenter)
+                Tablo.setItem(current_row_count + index, 0, item)
 
         cursor.execute('SELECT kelime FROM KaliciBilinen WHERE kullanici_id = ?;', (self.kullanici_id,))
         kalici_bilinen = cursor.fetchall()
 
         if kalici_bilinen:
-            metin = "      ".join(k[0] for k in kalici_bilinen)
-            self._ezber_yazi.setText(metin)
+            self.EzberlenmisTablosu.setRowCount(0)
+            current_row_count = 0
+            self.EzberlenmisTablosu.setRowCount(len(kalici_bilinen))
+            for index, kelime in enumerate(kalici_bilinen):
+                item = QTableWidgetItem(str(kelime[0]))
+                item.setTextAlignment(Qt.AlignCenter)
+                self.EzberlenmisTablosu.setItem(current_row_count + index, 0, item)
+        else:
+            self.EzberlenmisTablosu.setRowCount(0)
 
         conn.close()
 
     ### SİNAV SORULARI İŞLEMLERİ
     def SoruOlustur(self):
+        self.SinavSiklariSeciminiKaldir()
         self.SinavSiklariKaydet = [[0 for j in range(2)] for i in range(25)]
         self.Sorular = []
         self.sinav_soru_sayaci = 1
@@ -283,7 +312,7 @@ class Ana_Pencere123(QWidget):
             choices["A"], choices["B"], choices["C"] = answers
 
             if self.dil == 'tr':
-                self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN İNGİLİZCESİ NEDİR?")
+                self.SoruAciklamasi.setText("YUKARIDAKİ KELİMENİN İNGİLİZCESİ NEDİR?")
                 question = {
                     "id": id,
                     "image_path": image_path,
@@ -293,7 +322,7 @@ class Ana_Pencere123(QWidget):
                     "cevabı": ingilizce_kelime
                 }
             else:
-                self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
+                self.SoruAciklamasi.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
                 question = {
                     "id": id,
                     "image_path": image_path,
@@ -304,13 +333,13 @@ class Ana_Pencere123(QWidget):
                 }
             self.Sorular.append(question)
 
-        self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
+        self.SinavSayaci.setText(str(self.sinav_soru_sayaci))
         image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
         pixmap = QPixmap(image)
-        self.label_resim_soru.setPixmap(pixmap)
-        self.label_resim_soru.setScaledContents(True)
-        self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-        self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
+        self.SoruResimKismi.setPixmap(pixmap)
+        self.SoruResimKismi.setScaledContents(True)
+        self.SoruKelimeYeri.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
+        self.SoruCümleKismi.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
         self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
         self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
         self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
@@ -318,13 +347,13 @@ class Ana_Pencere123(QWidget):
     def SoruDegistir(self, degistirme):
         self.sinav_soru_sayaci += int(degistirme)
 
-        self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
+        self.SinavSayaci.setText(str(self.sinav_soru_sayaci))
         image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
         pixmap = QPixmap(image)
-        self.label_resim_soru.setPixmap(pixmap)
-        self.label_resim_soru.setScaledContents(True)
-        self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-        self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
+        self.SoruResimKismi.setPixmap(pixmap)
+        self.SoruResimKismi.setScaledContents(True)
+        self.SoruKelimeYeri.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
+        self.SoruCümleKismi.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
         self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
         self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
         self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
@@ -336,15 +365,15 @@ class Ana_Pencere123(QWidget):
             self.button_group1.setExclusive(True)
 
         if self.sinav_soru_sayaci == self.kullan_soru_sayisi:
-            self.buton_sonraki_soru.hide()
-            self.buton_sinav_bitir.show()
+            self.SonrakiSoruButonu.hide()
+            self.SinavBitirButonu.show()
         else:
-            self.buton_sonraki_soru.show()
-            self.buton_sinav_bitir.hide()
+            self.SonrakiSoruButonu.show()
+            self.SinavBitirButonu.hide()
         if self.sinav_soru_sayaci != 1:
-            self.buton_önceki_soru.show()
+            self.ÖncekiSoruButonu.show()
         else:
-            self.buton_önceki_soru.hide()
+            self.ÖncekiSoruButonu.hide()
     def SinavSiklariSeciminiKaldir(self):
         self.button_group1.setExclusive(False)
         self.A.setChecked(False)
@@ -356,7 +385,7 @@ class Ana_Pencere123(QWidget):
         TiklananSik = self.sender()
         TiklananSikMetni = TiklananSik.property("bilgi")
 
-        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.sinav_soru.text()), str(getattr(self, TiklananSikMetni).text()), str(TiklananSikMetni))
+        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.SoruKelimeYeri.text()), str(getattr(self, TiklananSikMetni).text()), str(TiklananSikMetni))
 
     def SinavMetinleriniSeslendirma(self, pos):
         ButonPozisyonu = pos - QPoint(160, 0)
@@ -380,10 +409,10 @@ class Ana_Pencere123(QWidget):
 
     ### SİNAV MENÜSÜ İÇ İŞLEMLERİ
     def KelimeEklemeButonuBasildi(self):
-        ingilizce_kelime = self.line_edit_kelime_ingilizce.text()
-        turkce_kelime = self.line_edit_kelime_turkce.text()
-        ingilizce_cumle = self.line_edit_ingilizce_cümle.text()
-        turkce_cumle = self.line_edit_türkçe_cümle.text()
+        ingilizce_kelime = self.SoruEklemeIngilizce.text()
+        turkce_kelime = self.SoruEklemeTurkce.text()
+        ingilizce_cumle = self.SoruEklemeIngilizceCumle.text()
+        turkce_cumle = self.SoruEklemeTurkceCumle.text()
 
         if ingilizce_kelime and turkce_kelime and ingilizce_cumle and turkce_cumle:
             conn = sqlite3.connect('database/Kelimeler.db')
@@ -394,13 +423,13 @@ class Ana_Pencere123(QWidget):
             existing_word = cursor.fetchone()
 
             if existing_word:
-                self.label_kelime_ekle.setText("Bu Kelime Zaten Mevcut. Başka Bir Kelime Deneyiniz.")
+                self.KelimeEklemeUyariMesaji.setText("Bu Kelime Zaten Mevcut. Başka Bir Kelime Deneyiniz.")
             else:
                 if self.ResimSecmeYapilmasi == 0:
-                    self.label_kelime_ekle.setText("Lütfen Resim Seçiniz.")
+                    self.KelimeEklemeUyariMesaji.setText("Lütfen Resim Seçiniz.")
                 else:
                     self.ResimDosyaYolu = 'resim/' + f"{ingilizce_kelime}" + '.png'
-                    self.KaydedilecekResim = cv2.resize(self.KaydedilecekResim, (100, 100))
+                    self.KaydedilecekResim = cv2.resize(self.KaydedilecekResim, (400, 400))
                     cv2.imwrite(self.ResimDosyaYolu, self.KaydedilecekResim)
 
                     cursor.execute(
@@ -409,85 +438,86 @@ class Ana_Pencere123(QWidget):
 
                     conn.commit()
 
-                    self.label_kelime_ekle.setText("Başarıyla Eklenmiştir.")
+                    self.KelimeEklemeUyariMesaji.setText("Başarıyla Eklenmiştir.")
                     self.ResimSecmeYapilmasi = 0
         else:
-            self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+            self.KelimeEklemeUyariMesaji.setText("Lütfen Bilgileri Eksiksiz Giriniz")
         self.GenelIslemleriSifirla()
 
     def SinavSonuAnaliz(self):
         for sayac in range(self.kullan_soru_sayisi):
-            if self.SinavSiklariKaydet[sayac][0] == 0:
+            if self.SinavSiklariKaydet[sayac + 1][0] == 0:
                 self.test_bos_cevap_sayisi += 1
-            elif str(self.SinavSiklariKaydet[sayac][1]) == str(self.Sorular[sayac]["cevabı"]):
-                self.test_dogru_cevap_sayisi += 1
-
-                conn = sqlite3.connect('database/KullaniciBilgileri.db')
-                cursor = conn.cursor()
-                cursor.execute(
-                    'SELECT bilinen, tarih, kelime_id, kelime FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime = ?',
-                    (self.kullanici_id, self.Sorular[sayac]["kelime"],))
-                islem = cursor.fetchone()
-
-                if islem:
-                    bilinen = islem[0]
-                    bilinen += 1
-                    if bilinen == 7:
-                        cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",
-                                       (self.kullanici_id, islem[2], islem[4]))
-
-                        cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
-                                       (self.kullanici_id, islem[2], islem[3]))
-                    else:
-                        tarih = islem[1]
-
-                        gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
-                        ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
-                        yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
-                        gun, ay, yil = map(int, tarih.split('.'))
-                        gun += gun_ekle.get(bilinen, 0)
-                        ay += ay_ekle.get(bilinen, 0)
-                        yil += yil_ekle.get(bilinen, 0)
-
-                        while gun > 30:
-                            gun -= 30
-                            ay += 1
-                        while ay > 12:
-                            ay -= 12
-                            yil += 1
-
-                        yeni_tarih = (f"{gun}.{ay}.{yil}")
-                        cursor.execute(
-                            'UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
-                            (bilinen, yeni_tarih, self.kullanici_id, islem[2]))
-
-                else:
-                    tarih = datetime.now().strftime('%x')
-                    gun, ay, yil = map(int, tarih.split('.'))
-                    yeni_tarih = f"{gun + 1}.{ay}.{yil}"
-                    cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
-                                   (self.kullanici_id, self.Sorular[sayac]["id"], 1, self.Sorular[sayac]["kelime"],
-                                    yeni_tarih))
-                conn.commit()
-                conn.close()
             else:
-                self.test_yanlis_cevap_sayisi += 1
+                if str(self.SinavSiklariKaydet[sayac + 1][1]) == str(self.Sorular[sayac]["cevabı"]):
+                    self.test_dogru_cevap_sayisi += 1
+
+                    conn = sqlite3.connect('database/KullaniciBilgileri.db')
+                    cursor = conn.cursor()
+                    cursor.execute(
+                        'SELECT bilinen, tarih, kelime_id, kelime FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime = ?',
+                        (self.kullanici_id, self.Sorular[sayac]["kelime"],))
+                    islem = cursor.fetchone()
+
+                    if islem:
+                        bilinen = islem[0]
+                        bilinen += 1
+                        if bilinen == 7:
+                            cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",
+                                           (self.kullanici_id, islem[2], islem[4]))
+
+                            cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
+                                           (self.kullanici_id, islem[2], islem[3]))
+                        else:
+                            tarih = islem[1]
+
+                            gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
+                            ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
+                            yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
+                            gun, ay, yil = map(int, tarih.split('.'))
+                            gun += gun_ekle.get(bilinen, 0)
+                            ay += ay_ekle.get(bilinen, 0)
+                            yil += yil_ekle.get(bilinen, 0)
+
+                            while gun > 30:
+                                gun -= 30
+                                ay += 1
+                            while ay > 12:
+                                ay -= 12
+                                yil += 1
+
+                            yeni_tarih = (f"{gun}.{ay}.{yil}")
+                            cursor.execute(
+                                'UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
+                                (bilinen, yeni_tarih, self.kullanici_id, islem[2]))
+                    else:
+                        tarih = datetime.now().strftime('%x')
+                        gun, ay, yil = map(int, tarih.split('.'))
+                        yeni_tarih = f"{gun + 1}.{ay}.{yil}"
+                        cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
+                                       (self.kullanici_id, self.Sorular[sayac]["id"], 1, self.Sorular[sayac]["kelime"],
+                                        yeni_tarih))
+                    conn.commit()
+                    conn.close()
+                else:
+                    self.test_yanlis_cevap_sayisi += 1
+
+        self.yazi_dogru_sayi.setText(str(self.test_dogru_cevap_sayisi))
+        self.yazi_yanlis_sayi.setText(str(self.test_yanlis_cevap_sayisi))
+        self.yazi_bos_sayi.setText(str(self.test_bos_cevap_sayisi))
+        self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
 
         conn = sqlite3.connect('database/KullaniciBilgileri.db')
         cursor = conn.cursor()
         cursor.execute('''UPDATE Kullaniciİstatistik 
                 SET dogru_cevaplar = dogru_cevaplar + ?, yanlis_cevaplar = yanlis_cevaplar + ?, bos_cevaplar = bos_cevaplar + ?, toplam_sorular = toplam_sorular + ?
                 WHERE kullanici_id = ?''', (
-            self.test_dogru_cevap_sayisi, self.test_yanlis_cevap_sayisi, self.test_bos_cevap_sayisi, self.sinav_soru_sayaci,
+            self.test_dogru_cevap_sayisi, self.test_yanlis_cevap_sayisi, self.test_bos_cevap_sayisi,
+            self.sinav_soru_sayaci,
             self.kullanici_id))
 
         conn.commit()
         conn.close()
-
-        self.yazi_dogru_sayi.setText(str(self.test_dogru_cevap_sayisi))
-        self.yazi_yanlis_sayi.setText(str(self.test_yanlis_cevap_sayisi))
-        self.yazi_bos_sayi.setText(str(self.test_bos_cevap_sayisi))
-        self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
 
         self.kullan_soru_sayisi = self.sinav_soru_sayisi
 
@@ -538,8 +568,8 @@ class Ana_Pencere123(QWidget):
         self.KaydedilecekResim = cv2.imread(self.DosyaAdi)
         if self.DosyaAdi:
             pixmap = QPixmap(self.DosyaAdi)
-            self.label_ekleme_resim.setPixmap(pixmap.scaled(self.label_ekleme_resim.size(), aspectRatioMode=True))
-            self.label_ekleme_resim.setScaledContents(True)
+            self.KelimeEklemeResimKismi.setPixmap(pixmap.scaled(self.KelimeEklemeResimKismi.size(), aspectRatioMode=True))
+            self.KelimeEklemeResimKismi.setScaledContents(True)
             self.ResimSecmeYapilmasi = 1
 
     def TabloyaKelimeleriKoy(self):
@@ -579,25 +609,25 @@ class Ana_Pencere123(QWidget):
         self.test_yanlis_cevap_sayisi = 0
         self.test_bos_cevap_sayisi = 0
 
-        self.label_giris.setText("")
-        self.label_sinav_sayac.setText("")
+        self.GirisKismiUyariMesaji.setText("")
+        self.SinavSayaci.setText("")
         self.yazi_dogru_sayi.setText("")
         self.yazi_yanlis_sayi.setText("")
-        self.label_ekleme_resim.setPixmap(QPixmap())
-        self.label_ekleme_resim.setScaledContents(False)
+        self.KelimeEklemeResimKismi.setPixmap(QPixmap())
+        self.KelimeEklemeResimKismi.setScaledContents(False)
 
-        self.line_edit_kullanici_adi.clear()
-        self.line_edit_sifre.clear()
-        self.line_edit_isim.clear()
-        self.line_edit_soyisim.clear()
-        self.line_edit_kaydol_kullanici_adi.clear()
-        self.line_edit_kaydol_sifre.clear()
-        self.line_edit_sifre_kullanici_adi.clear()
+        self.GirisKismiKullaniciAdi.clear()
+        self.GirisKismiSifre.clear()
+        self.KayitKismiIsim.clear()
+        self.KayitKismiSoyisim.clear()
+        self.KayitKismiKullaniciAdi.clear()
+        self.KayitKismiSifre.clear()
+        self.SifremiUnuttumKismiKullaniciAdi.clear()
 
-        self.line_edit_kelime_ingilizce.clear()
-        self.line_edit_kelime_turkce.clear()
-        self.line_edit_ingilizce_cümle.clear()
-        self.line_edit_türkçe_cümle.clear()
+        self.SoruEklemeIngilizce.clear()
+        self.SoruEklemeTurkce.clear()
+        self.SoruEklemeIngilizceCumle.clear()
+        self.SoruEklemeTurkceCumle.clear()
     def BaslatilmaIslemleri(self):
         self.ResimSecmeYapilmasi = 0
         self.sinav_soru_sayisi = 5
