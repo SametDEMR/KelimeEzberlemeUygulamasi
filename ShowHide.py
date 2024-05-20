@@ -1,4 +1,4 @@
-from ButonOlustur import *
+from AnaButonlar import *
 class ShowHide(QWidget):
     def hepsini_gizleme(self):
         self.buton_geri_giris.hide()
@@ -36,6 +36,9 @@ class ShowHide(QWidget):
         self.yazi_bos_sayi.hide()
         self.yazi_toplam_sayi.hide()
 
+        self.ing.hide()
+        self.tr.hide()
+
         self.A.hide()
         self.B.hide()
         self.C.hide()
@@ -46,14 +49,12 @@ class ShowHide(QWidget):
         self._20.hide()
 
         self.ses_soru.hide()
+        self.ses_soru_cümle.hide()
         self.ses_A.hide()
         self.ses_B.hide()
         self.ses_C.hide()
 
         self.cümle_soru.hide()
-        self.cümle_1.hide()
-        self.cümle_2.hide()
-        self.cümle_3.hide()
 
         self.line_edit_kullanici_adi.hide()
         self.line_edit_sifre.hide()
@@ -73,7 +74,9 @@ class ShowHide(QWidget):
         self.label_giris.hide()
         self.label_sinav_sayac.hide()
         self.label_metin.hide()
-        self.label_ayarlar.hide()
+        self.label_ayarlar_sayi.hide()
+        self.label_ayarlar_dil.hide()
+
         self.label_ekleme_resim.hide()
         self.label_kelime_ekle.hide()
         self.label_resim_soru.hide()
@@ -84,6 +87,19 @@ class ShowHide(QWidget):
         self.toplam_bos_sayi.hide()
         self.toplam_soru_sayi.hide()
         self.ortalama_sayi.hide()
+
+        self._6lik.hide()
+        self._5lik.hide()
+        self._4lik.hide()
+        self._3lik.hide()
+        self._2lik.hide()
+        self._1lik.hide()
+        self._6lik_yazi.hide()
+        self._5lik_yazi.hide()
+        self._4lik_yazi.hide()
+        self._3lik_yazi.hide()
+        self._2lik_yazi.hide()
+        self._1lik_yazi.hide()
 
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -145,14 +161,13 @@ class ShowHide(QWidget):
         self.A.show()
         self.B.show()
         self.C.show()
+        self.ses_soru.show()
+        self.ses_soru_cümle.show()
         self.ses_A.show()
         self.ses_B.show()
         self.ses_C.show()
 
         self.cümle_soru.show()
-        self.cümle_1.show()
-        self.cümle_2.show()
-        self.cümle_3.show()
 
         self.label_metin.show()
         self.label_sinav_sayac.show()
@@ -183,14 +198,32 @@ class ShowHide(QWidget):
         self.toplam_soru_sayi.show()
         self.ortalama_sayi.show()
 
+        self._6lik.show()
+        self._5lik.show()
+        self._4lik.show()
+        self._3lik.show()
+        self._2lik.show()
+        self._1lik.show()
+        self._6lik_yazi.show()
+        self._5lik_yazi.show()
+        self._4lik_yazi.show()
+        self._3lik_yazi.show()
+        self._2lik_yazi.show()
+        self._1lik_yazi.show()
+
     def ayarlar(self):
         self.buton_geri_sinav.show()
+
+        self.ing.show()
+        self.tr.show()
+
         self._5.show()
         self._10.show()
         self._15.show()
         self._20.show()
 
-        self.label_ayarlar.show()
+        self.label_ayarlar_sayi.show()
+        self.label_ayarlar_dil.show()
 
     def sinav_sonu_analiz(self):
         self.buton_geri_sinav.show()

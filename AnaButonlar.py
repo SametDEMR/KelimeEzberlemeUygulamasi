@@ -21,13 +21,13 @@ class ButonOlustur(QWidget):
             {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.sifre_goster_gizle},
 
 
-            {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.kaydol},
-            {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.sifre_getir},
+            {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.kayit},
+            {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.sifre_unuttum},
 
 
             {"bilgi": "buton_sinav", "text": "SINAV", "position": (500, 100, 200, 40), "function": self.sinav},
             {"bilgi": "buton_analiz", "text": "ANALİZ", "position": (500, 160, 200, 40), "function": self.analiz},
-            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 220, 200, 40), "function": self.soru_ekleme},
+            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 220, 200, 40), "function": self.kelime_ekleme},
             {"bilgi": "buton_ayarlar", "text": "AYARLAR", "position": (500, 280, 200, 40), "function": self.ayarlar},
             {"bilgi": "buton_cikis", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": self.cikis},
 
@@ -35,13 +35,13 @@ class ButonOlustur(QWidget):
             {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": self.sonraki_soru},
             {"bilgi": "buton_sonraki_soru", "text": "SONRAKİ SORU", "position": (960, 540, 200, 40), "function": self.sonraki_soru},
             {"bilgi": "buton_önceki_soru", "text": "ÖNCEKİ SORU", "position": (20, 540, 200, 40), "function": self.onceki_soru},
-            {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": self.sinav_sonu_analiz},
+            {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": self.analiz},
 
 
-            {"bilgi": "buton_kelime_ekle_ekle", "text": "KELİME EKLE", "position": (500, 500, 200, 40), "function": self.kelime_ekle},
+            {"bilgi": "buton_kelime_ekle_ekle", "text": "KELİME EKLE", "position": (500, 500, 200, 40), "function": self.kelime_ekleme},
             {"bilgi": "buton_resim_sec", "text": "RESİM SEÇ", "position": (500, 240, 200, 40), "function": self.resim_sec},
 
-            {"bilgi": "yazdir", "text": "YAZDIR", "position": (450, 500, 300, 40), "function": self.yazdir},
+            {"bilgi": "yazdir", "text": "YAZDIR", "position": (450, 520, 300, 40), "function": self.yazdir},
         ]
 
         for button_info in buttons_info:

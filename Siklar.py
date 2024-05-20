@@ -11,9 +11,9 @@ class SiklarOlustur(QWidget):
         buttons_info = [
             {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (400, 40, 400, 40), "function": self.cikis},
 
-            {"bilgi": "A", "text": "Buton 1", "position": (240, 350, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "B", "text": "Buton 2", "position": (240, 410, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "C", "text": "Buton 3", "position": (240, 470, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "A", "text": "Buton 1", "position": (250, 400, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "B", "text": "Buton 2", "position": (500, 400, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "C", "text": "Buton 3", "position": (750, 400, 200, 40), "function": self.siklari_kaydet},
         ]
 
         for button_info in buttons_info:

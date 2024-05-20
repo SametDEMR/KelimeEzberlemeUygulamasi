@@ -6,10 +6,10 @@ class SiklikOlustur(QWidget):
     def Olustur(self):
         self.button_group2 = QButtonGroup()
         buttons_info = [
-            {"bilgi": "_5", "text": "5", "position": (140, 350, 200, 40)},
-            {"bilgi": "_10", "text": "10", "position": (380, 350, 200, 40)},
-            {"bilgi": "_15", "text": "15", "position": (620, 350, 200, 40)},
-            {"bilgi": "_20", "text": "20", "position": (860, 350, 200, 40)},
+            {"bilgi": "_5", "text": "5", "position": (140, 450, 200, 40)},
+            {"bilgi": "_10", "text": "10", "position": (380, 450, 200, 40)},
+            {"bilgi": "_15", "text": "15", "position": (620, 450, 200, 40)},
+            {"bilgi": "_20", "text": "20", "position": (860, 450, 200, 40)},
         ]
 
         for button_info in buttons_info:
@@ -17,7 +17,7 @@ class SiklikOlustur(QWidget):
             button = QPushButton(button_info["text"], self)
             button.setGeometry(*button_info["position"])
 
-            button.clicked.connect(self.soru_sayi_degistir)
+            button.clicked.connect(self.ayarlar_degistir)
 
             button.setStyleSheet("""
                 QPushButton {

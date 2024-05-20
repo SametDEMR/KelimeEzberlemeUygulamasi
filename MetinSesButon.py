@@ -12,10 +12,11 @@ class MetinSesButonOlustur(QWidget):
 
         buttons_info = [
             {"bilgi": "ses_soru", "text": "", "position": (760, 40, 40, 40)},
+            {"bilgi": "ses_soru_cümle", "text": "", "position": (910, 100, 40, 40)},
 
-            {"bilgi": "ses_A", "text": "", "position": (400, 350, 40, 40)},
-            {"bilgi": "ses_B", "text": "", "position": (400, 410, 40, 40)},
-            {"bilgi": "ses_C", "text": "", "position": (400, 470, 40, 40)},
+            {"bilgi": "ses_A", "text": "", "position": (410, 400, 40, 40)},
+            {"bilgi": "ses_B", "text": "", "position": (660, 400, 40, 40)},
+            {"bilgi": "ses_C", "text": "", "position": (910, 400, 40, 40)},
         ]
 
         for button_info in buttons_info:
