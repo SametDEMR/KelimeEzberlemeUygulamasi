@@ -20,41 +20,12 @@ class Ana_Pencere1(QWidget):
         self.setFixedSize(1200, 600)
         self.setWindowFlag(Qt.FramelessWindowHint)
 
-        self.paintEvent(self)
-
         self.createButtons()
-        self.createTextInput()
-        Gizle_Modul.hepsini_gizle(self)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        font = QFont("Script MT Bold", 20)
-        painter.setFont(font)
-        painter.setPen(QColor(0, 127, 255))
-        painter.drawText(10, 30, "Kelime Ezberleme Modülü")
-
-    def createButtons(self):
-        Buton_Olustur_Modul.createButtons(self)
-
-    def createTextInput(self):
-        texts_info = [
-            {"özellik": "1", "text": "<-- 1 -->", "position": (300, 300, 150, 30)},
-            {"özellik": "2", "text": "<-- 2 -->", "position": (300, 350, 150, 30)},
-            {"özellik": "3", "text": "<-- 3 -->", "position": (300, 400, 150, 30)},
-            {"özellik": "4", "text": "<-- 4 -->", "position": (300, 450, 150, 30)},
-        ]
-
-        for text_info in texts_info:
-            text_input = QLineEdit(self)
-            text_input.setGeometry(*text_info["position"])
-            sayi = text_info["özellik"]
-            setattr(self, f"text{sayi}_label", text_input)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def exitFunction(self):
-        sys.exit(app.exec_())
+    def createButtons(self):
+        Buton_Olustur_Modul.createButtons(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -73,6 +44,12 @@ class Ana_Pencere1(QWidget):
     def menu4Function(self):
         Gizle_Modul.buton4_gizle(self)
         Goster_Modul.buton4_goster(self)
+
+    def exitFunction(self):
+        sys.exit(app.exec_())
+
+    def ayarlarFunction(self):
+        print("ayarlar")
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 

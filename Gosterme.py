@@ -6,19 +6,16 @@ from Ana_menu import *
 
 class Goster_Modul(QWidget):
     def hepsini_goster(self):
-        self.text1_label.show()
-        self.text2_label.show()
-        self.text3_label.show()
-        self.text4_label.show()
+        print("hepsini göster")
 
     def buton1_goster(self):
-        self.text1_label.show()
+        print("1 göster")
 
     def buton2_goster(self):
-        self.text2_label.show()
+        print("2 göster")
 
     def buton3_goster(self):
-        self.text3_label.show()
+        print("3 göster")
 
     def buton4_goster(self):
-        self.text4_label.show()
+        print("4 göster")

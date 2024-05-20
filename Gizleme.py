@@ -6,28 +6,17 @@ from Ana_menu import *
 
 class Gizle_Modul(QWidget):
     def hepsini_gizle(self):
-        self.text1_label.hide()
-        self.text2_label.hide()
-        self.text3_label.hide()
-        self.text4_label.hide()
+        print("gizle hepsini")
 
     def buton1_gizle(self):
-        self.text2_label.hide()
-        self.text3_label.hide()
-        self.text4_label.hide()
+        print("1 hariç gizle")
 
     def buton2_gizle(self):
-        self.text1_label.hide()
-        self.text3_label.hide()
-        self.text4_label.hide()
+        print("2 hariç gizle")
 
     def buton3_gizle(self):
-        self.text1_label.hide()
-        self.text2_label.hide()
-        self.text4_label.hide()
+        print("3 hariç gizle")
 
     def buton4_gizle(self):
-        self.text1_label.hide()
-        self.text2_label.hide()
-        self.text3_label.hide()
+        print("4 hariç gizle")
 

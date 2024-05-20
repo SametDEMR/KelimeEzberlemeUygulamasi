@@ -8,6 +8,7 @@ class Buton_Olustur_Modul(QWidget):
     def createButtons(self):
         buttons_info = [
             {"text": "<-- ÇIKIŞ -->", "position": (10, 560, 150, 30), "function": self.exitFunction},
+            {"text": "<-- AYARLAR -->", "position": (10, 520, 150, 30), "function": self.ayarlarFunction},
             {"text": "<-- MENÜ 1 -->", "position": (10, 80, 180, 30), "function": self.menu1Function},
             {"text": "<-- MENÜ 2 -->", "position": (10, 120, 180, 30), "function": self.menu2Function},
             {"text": "<-- MENÜ 3 -->", "position": (10, 160, 180, 30), "function": self.menu3Function},
