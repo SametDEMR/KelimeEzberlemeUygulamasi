@@ -29,11 +29,11 @@ class Ana_Pencere123(QWidget):
 
         self.seslendirme_sayaci = 1
 
-        self.sifirla()
+        self.DegerleriSifirla()
 
         self.SinavSiklariKaydet = [[0 for j in range(2)] for i in range(25)]
 
-        self.kontrol()
+        self.VeritabaniKontrolEt()
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
         self.setStyleSheet("background-color: #1E468F")
@@ -55,17 +55,17 @@ class Ana_Pencere123(QWidget):
         Analizler.SinavSonuSayfasi(self)
         Analizler.AnalizSayfasi(self)
 
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.giris(self)
+        ShowHide.TumAraclariGizle(self)
+        ShowHide.GirisAnaMenu(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def sifirla(self):
+    def DegerleriSifirla(self):
         self.test_dogru_sayisi = 0
         self.test_yanlis_sayisi = 0
         self.test_bos_sayisi = 0
 
-    def kontrol(self):
+    def VeritabaniKontrolEt(self):
         if os.path.exists("database/KullaniciBilgileri.db"):
             return True
         else:
@@ -83,10 +83,10 @@ class Ana_Pencere123(QWidget):
             conn.commit()
             conn.close()
 
-    def cikis(self):
+    def Cikis(self):
         QApplication.quit()
 
-    def temizle(self):
+    def YaziYerleriniTemizle(self):
         self.label_giris.setText("")
         self.label_sinav_sayac.setText("")
         self.yazi_dogru_sayi.setText("")
@@ -109,14 +109,14 @@ class Ana_Pencere123(QWidget):
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def geri_giris(self):
+    def GirisKismiGeriButonu(self):
         self.tiklama = 0
-        self.temizle()
-        ShowHide.hepsini_gizleme(self)
+        self.YaziYerleriniTemizle()
+        ShowHide.TumAraclariGizle(self)
 
-        ShowHide.giris(self)
+        ShowHide.GirisAnaMenu(self)
 
-    def giris(self):
+    def GirisButonunaBasildi(self):
         username = self.line_edit_kullanici_adi.text()
         password = self.line_edit_sifre.text()
 
@@ -129,19 +129,19 @@ class Ana_Pencere123(QWidget):
 
             if user:
                 self.kullanici_id = user[0]
-                self.temizle()
-                ShowHide.hepsini_gizleme(self)
-                ShowHide.sinav_ana_menu(self)
+                self.YaziYerleriniTemizle()
+                ShowHide.TumAraclariGizle(self)
+                ShowHide.SinavUygulamasiAnaMenu(self)
             else:
                 self.label_giris.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
         else:
             self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz. ★")
 
-    def sifre_unuttum(self):
+    def SifreUnuttumButonunaBasildi(self):
         if self.tiklama == 0:
-            self.temizle()
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.sifre_unuttum(self)
+            self.YaziYerleriniTemizle()
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.SifreUnuttumMenusu(self)
             self.tiklama += 1
         else:
             username = self.line_edit_sifre_kullanici_adi.text()
@@ -161,11 +161,11 @@ class Ana_Pencere123(QWidget):
             else:
                 self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
-    def kayit(self):
+    def KayitButonunaBasildi(self):
         if self.tiklama == 0:
-            self.temizle()
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.kayit(self)
+            self.YaziYerleriniTemizle()
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.KayitMenusu(self)
             self.tiklama += 1
         else:
             isim = self.line_edit_isim.text()
@@ -191,12 +191,12 @@ class Ana_Pencere123(QWidget):
                 conn.close()
 
                 if isim and soyisim and sifre and kullaniciadi:
-                    self.temizle()
+                    self.YaziYerleriniTemizle()
                     self.label_giris.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
                 else:
                     self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
-    def sifre_goster_gizle(self):
+    def SifreGosterGizle(self):
         sender = self.sender()
         if sender.isChecked():
             self.line_edit_sifre.setEchoMode(QLineEdit.Normal)
@@ -205,34 +205,17 @@ class Ana_Pencere123(QWidget):
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def geri_sinav(self):
+    def SinavMenusuGeriButonu(self):
         self.tiklama = 0
-        self.temizle()
+        self.YaziYerleriniTemizle()
 
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sinav_ana_menu(self)
+        ShowHide.TumAraclariGizle(self)
+        ShowHide.SinavUygulamasiAnaMenu(self)
 
-    def analiz_geri(self):
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.analiz(self)
-
-    def analiz_sayisal(self):
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sayisal(self)
-
-    def analiz_sozel(self):
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sozel(self)
-
-    def sinav(self):
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sinav_sayfasi_once(self)
-        self.sifirla()
-
-    def kelime_ekleme(self):
+    def KelimeEklemeButonuBasildi(self):
         if self.tiklama == 0:
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.soru_ekleme(self)
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.SoruEklemeKismi(self)
             self.tiklama += 1
         else:
             ingilizce = self.line_edit_kelime_ingilizce.text()
@@ -265,15 +248,40 @@ class Ana_Pencere123(QWidget):
                         conn.commit()
 
                         self.label_kelime_ekle.setText("Başarıyla Eklenmiştir.")
-                        self.temizle()
+                        self.YaziYerleriniTemizle()
                         self.onay = 0
             else:
                 self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
-    def analiz(self):
+    def Ayarlar(self):
         if self.tiklama == 0:
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.analiz(self)
+            self.button_group3.setExclusive(False)
+            self.__dict__[f"{self.dil}"].setChecked(True)
+            self.button_group3.setExclusive(True)
+
+            self.button_group2.setExclusive(False)
+            self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
+            self.button_group2.setExclusive(True)
+
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.Ayarlar(self)
+            self.tiklama += 1
+        else:
+            sender = self.sender()
+
+            if len(sender.text()) < 3:
+                self.sinav_soru_sayisi = int(sender.text())
+                self.kullan_soru_sayisi = self.sinav_soru_sayisi
+                self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
+            else:
+                bilgi = sender.property("bilgi")
+                self.dil = str(bilgi)
+
+
+    def AnalizKismi(self):
+        if self.tiklama == 0:
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.AnalizKismi(self)
 
             conn = sqlite3.connect('database/KullaniciBilgileri.db')
             cursor = conn.cursor()
@@ -319,8 +327,8 @@ class Ana_Pencere123(QWidget):
             conn.close()
 
         else:
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.sinav_sonu_analiz(self)
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.SinavSonuAnaliz(self)
 
             for sayac in range(self.kullan_soru_sayisi):
                 if self.SinavSiklariKaydet[sayac][0] == 0:
@@ -397,38 +405,84 @@ class Ana_Pencere123(QWidget):
 
             self.kullan_soru_sayisi = self.sinav_soru_sayisi
 
-    def ayarlar(self):
-        if self.tiklama == 0:
-            self.button_group3.setExclusive(False)
-            self.__dict__[f"{self.dil}"].setChecked(True)
-            self.button_group3.setExclusive(True)
+    def AnalizKismiGeriButonu(self):
+        ShowHide.TumAraclariGizle(self)
+        ShowHide.AnalizKismi(self)
 
-            self.button_group2.setExclusive(False)
-            self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
-            self.button_group2.setExclusive(True)
-
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.ayarlar(self)
-            self.tiklama += 1
+    def AnalizSayfaYonlendir(self, deger):
+        if deger == "Sayisal":
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.AnalizSayisal(self)
         else:
-            sender = self.sender()
+            ShowHide.TumAraclariGizle(self)
+            ShowHide.AnalizSozel(self)
 
-            if len(sender.text()) < 3:
-                self.sinav_soru_sayisi = int(sender.text())
-                self.kullan_soru_sayisi = self.sinav_soru_sayisi
-                self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
-            else:
-                bilgi = sender.property("bilgi")
-                self.dil = str(bilgi)
+    def AnalizleriYazdir(self):
+        file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
+
+        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
+        kullanici_verileri = cursor.fetchone()
+        conn.commit()
+        conn.close()
+
+        c = canvas.Canvas(file_path, pagesize=letter)
+
+        c.drawString(250, 750, "- ANALIZ -")
+
+        c.setFont("Helvetica", 16)
+        c.drawString(15, 720, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
+        c.drawString(115, 690, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
+
+        c.drawString(25, 530, "EZBERLENMIS")
+        c.drawString(25, 500, "★★★★★★")
+        c.drawString(25, 470, "★★★★★")
+        c.drawString(25, 440, "★★★★")
+        c.drawString(25, 410, "★★★")
+        c.drawString(25, 380, "★★")
+        c.drawString(25, 350, "★")
+
+        c.drawString(180, 530, self._ezber_yazi.text())
+
+
+        metin1 = self._1lik_yazi.text()
+        yeni_metin1 = metin1.replace("\n", "      ")
+        metin2 = self._2lik_yazi.text()
+        yeni_metin2 = metin2.replace("\n", "      ")
+        metin3 = self._3lik_yazi.text()
+        yeni_metin3 = metin3.replace("\n", "      ")
+        metin4 = self._4lik_yazi.text()
+        yeni_metin4 = metin4.replace("\n", "      ")
+        metin5 = self._5lik_yazi.text()
+        yeni_metin5 = metin5.replace("\n", "      ")
+        metin6 = self._6lik_yazi.text()
+        yeni_metin6 = metin6.replace("\n", "      ")
+        c.drawString(180, 500, yeni_metin1)
+        c.drawString(180, 470, yeni_metin2)
+        c.drawString(180, 440, yeni_metin3)
+        c.drawString(180, 410, yeni_metin4)
+        c.drawString(180, 380, yeni_metin5)
+        c.drawString(180, 350, yeni_metin6)
+
+
+        c.save()
+
+
+    def SinavEkraninaGit(self):
+        ShowHide.TumAraclariGizle(self)
+        ShowHide.SinavaBaslamaOncesi(self)
+        self.DegerleriSifirla()
 
     """"""""""""""""""""""""
 
     def SoruOlustur(self):
+        self.SinavSiklariKaydet = [[0 for j in range(2)] for i in range(25)]
         self.tiklama = 1
         self.Sorular = []
         self.sinav_soru_sayaci = 1
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sinav_sayfasi_sonra(self)
+        ShowHide.TumAraclariGizle(self)
+        ShowHide.SinavaBaslamaSonrasi(self)
 
         tarih = datetime.now().strftime('%x')
         gun, ay, yil = map(int, tarih.split('.'))
@@ -532,7 +586,7 @@ class Ana_Pencere123(QWidget):
         self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
         self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
 
-        self.secim_kaldir()
+        self.SinavSiklariSeciminiKaldir()
         if str(self.SinavSiklariKaydet[self.sinav_soru_sayaci][0]) != '0':
             self.button_group1.setExclusive(False)
             getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
@@ -549,7 +603,7 @@ class Ana_Pencere123(QWidget):
         else:
             self.buton_önceki_soru.hide()
 
-    def resim_sec(self):
+    def ResimSecmeButonuBasildi(self):
         options = QFileDialog.Options()
         self.file_name, _ = QFileDialog.getOpenFileName(self, "Resim Seç", "","Resim Dosyaları (*.jpg *.png *.jpeg *.bmp *.gif)", options=options)
         self.resim = cv2.imread(self.file_name)
@@ -560,20 +614,20 @@ class Ana_Pencere123(QWidget):
             self.onay = 1
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    def secim_kaldir(self):
+    def SinavSiklariSeciminiKaldir(self):
         self.button_group1.setExclusive(False)
         self.A.setChecked(False)
         self.B.setChecked(False)
         self.C.setChecked(False)
         self.button_group1.setExclusive(True)
 
-    def siklari_kaydet(self):
+    def SinavSiklariniKaydet(self):
         sender_button = self.sender()
         bilgi = sender_button.property("bilgi")
 
         self.SinavSiklariKaydet[self.sinav_soru_sayaci - 1] = (str(self.sinav_soru.text()), str(getattr(self, bilgi).text()), str(bilgi))
 
-    def seslendirme(self, pos):
+    def SinavMetinleriniSeslendirma(self, pos):
         corrected_pos = pos - QPoint(160, 0)
         buton_metni = self.childAt(corrected_pos).text()
 
@@ -593,56 +647,7 @@ class Ana_Pencere123(QWidget):
         playsound("dosya/ses" + str(self.seslendirme_sayaci) + ".mp3")
         self.seslendirme_sayaci += 1
 
-    def yazdir(self):
-        file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
 
-        conn = sqlite3.connect('database/KullaniciBilgileri.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
-        kullanici_verileri = cursor.fetchone()
-        conn.commit()
-        conn.close()
-
-        c = canvas.Canvas(file_path, pagesize=letter)
-
-        c.drawString(250, 750, "- ANALIZ -")
-
-        c.setFont("Helvetica", 16)
-        c.drawString(15, 720, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
-        c.drawString(115, 690, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
-
-        c.drawString(25, 530, "EZBERLENMIS")
-        c.drawString(25, 500, "★★★★★★")
-        c.drawString(25, 470, "★★★★★")
-        c.drawString(25, 440, "★★★★")
-        c.drawString(25, 410, "★★★")
-        c.drawString(25, 380, "★★")
-        c.drawString(25, 350, "★")
-
-        c.drawString(180, 530, self._ezber_yazi.text())
-
-
-        metin1 = self._1lik_yazi.text()
-        yeni_metin1 = metin1.replace("\n", "      ")
-        metin2 = self._2lik_yazi.text()
-        yeni_metin2 = metin2.replace("\n", "      ")
-        metin3 = self._3lik_yazi.text()
-        yeni_metin3 = metin3.replace("\n", "      ")
-        metin4 = self._4lik_yazi.text()
-        yeni_metin4 = metin4.replace("\n", "      ")
-        metin5 = self._5lik_yazi.text()
-        yeni_metin5 = metin5.replace("\n", "      ")
-        metin6 = self._6lik_yazi.text()
-        yeni_metin6 = metin6.replace("\n", "      ")
-        c.drawString(180, 500, yeni_metin1)
-        c.drawString(180, 470, yeni_metin2)
-        c.drawString(180, 440, yeni_metin3)
-        c.drawString(180, 410, yeni_metin4)
-        c.drawString(180, 380, yeni_metin5)
-        c.drawString(180, 350, yeni_metin6)
-
-
-        c.save()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

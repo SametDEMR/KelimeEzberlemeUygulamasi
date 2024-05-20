@@ -1,7 +1,7 @@
 from AnaButonlar import *
 from AAnaMenu import *
 class ShowHide():
-    def hepsini_gizleme(self):
+    def TumAraclariGizle(self):
         self.buton_geri_giris.hide()
         self.buton_geri_sinav.hide()
 
@@ -117,7 +117,7 @@ class ShowHide():
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def giris(self):
+    def GirisAnaMenu(self):
         self.buton_giriş.show()
         self.buton_sifreunuttum.show()
         self.buton_kayit.show()
@@ -129,7 +129,7 @@ class ShowHide():
 
         self.label_giris.show()
 
-    def kayit(self):
+    def KayitMenusu(self):
         self.buton_geri_giris.show()
 
         self.buton_kaydol.show()
@@ -141,7 +141,7 @@ class ShowHide():
 
         self.label_giris.show()
 
-    def sifre_unuttum(self):
+    def SifreUnuttumMenusu(self):
         self.buton_geri_giris.show()
 
         self.buton_sifre_getir.show()
@@ -151,19 +151,19 @@ class ShowHide():
         self.label_giris.show()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    def sinav_ana_menu(self):
+    def SinavUygulamasiAnaMenu(self):
         self.buton_sinav.show()
         self.buton_soru_ekleme.show()
         self.buton_analiz.show()
         self.buton_cikis.show()
         self.buton_ayarlar.show()
 
-    def sinav_sayfasi_once(self):
+    def SinavaBaslamaOncesi(self):
         self.buton_geri_sinav.show()
 
         self.buton_sinav_basla.show()
 
-    def sinav_sayfasi_sonra(self):
+    def SinavaBaslamaSonrasi(self):
         self.buton_sonraki_soru.show()
         self.sinav_soru.show()
 
@@ -186,7 +186,7 @@ class ShowHide():
         self.label_sinav_sayac.show()
         self.label_resim_soru.show()
 
-    def soru_ekleme(self):
+    def SoruEklemeKismi(self):
         self.buton_geri_sinav.show()
 
         self.buton_kelime_ekle_ekle.show()
@@ -201,7 +201,7 @@ class ShowHide():
         self.label_ekleme_resim.show()
         self.label_kelime_ekle.show()
 
-    def analiz(self):
+    def AnalizKismi(self):
         self.buton_geri_sinav.show()
 
         self.analiz_sayisal.hide()
@@ -210,7 +210,7 @@ class ShowHide():
 
         self.yazdir.show()
 
-    def sayisal(self):
+    def AnalizSayisal(self):
         self.analiz_geri.show()
 
         self.toplam_dogru_yazi.show()
@@ -225,7 +225,7 @@ class ShowHide():
         self.toplam_soru_sayi.show()
         self.ortalama_sayi.show()
 
-    def sozel(self):
+    def AnalizSozel(self):
         self.analiz_geri.show()
 
         self._ezber_yazi.show()
@@ -244,7 +244,7 @@ class ShowHide():
         self._2lik_yazi.show()
         self._1lik_yazi.show()
 
-    def ayarlar(self):
+    def Ayarlar(self):
         self.buton_geri_sinav.show()
 
         self.ing.show()
@@ -258,7 +258,7 @@ class ShowHide():
         self.label_ayarlar_sayi.show()
         self.label_ayarlar_dil.show()
 
-    def sinav_sonu_analiz(self):
+    def SinavSonuAnaliz(self):
         self.buton_geri_sinav.show()
 
         self.yazi_dogru.show()

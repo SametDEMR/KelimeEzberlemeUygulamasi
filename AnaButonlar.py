@@ -7,19 +7,19 @@ from AAnaMenu import *
 
 class ButonOlustur(QWidget):
     def AnaMenuButonlari(self):
-        self.buttons = []
+        self.AnaMenuButonlari = []
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.geri_giris},
-            {"bilgi": "buton_cikis", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": self.cikis},
+            {"bilgi": "buton_geri_giris", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.GirisKismiGeriButonu},
+            {"bilgi": "buton_cikis", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": self.Cikis},
 
-            {"bilgi": "buton_giriş", "text": "GİRİŞ", "position": (500, 440, 200, 40), "function": self.giris},
-            {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": self.sifre_unuttum},
-            {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": self.kayit},
-            {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.sifre_goster_gizle},
-            {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.kayit},
-            {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.sifre_unuttum},
+            {"bilgi": "buton_giriş", "text": "GİRİŞ", "position": (500, 440, 200, 40), "function": self.GirisButonunaBasildi},
+            {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (280, 500, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
+            {"bilgi": "buton_kayit", "text": "KAYIT", "position": (720, 500, 200, 40), "function": self.KayitButonunaBasildi},
+            {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.SifreGosterGizle},
+            {"bilgi": "buton_kaydol", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
+            {"bilgi": "buton_sifre_getir", "text": "ŞİFREMİ UNUTTUM", "position": (500, 450, 200, 40), "function": self.SifreUnuttumButonunaBasildi},
         ]
 
         for button_info in buttons_info:
@@ -41,7 +41,7 @@ class ButonOlustur(QWidget):
                 }
             """)
 
-            self.buttons.append(button)
+            self.AnaMenuButonlari.append(button)
             setattr(self, bilgi, button)
 
 
@@ -73,7 +73,7 @@ class ButonOlustur(QWidget):
                 }
                 """)
                 button.setCheckable(True)
-                button.clicked.connect(self.sifre_goster_gizle)
+                button.clicked.connect(self.SifreGosterGizle)
 
             if bilgi == "buton_cikis":
                 button.setStyleSheet("""
@@ -94,10 +94,10 @@ class ButonOlustur(QWidget):
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_sinav", "text": "SINAV", "position": (500, 100, 200, 40), "function": self.sinav},
-            {"bilgi": "buton_analiz", "text": "ANALİZ", "position": (500, 160, 200, 40), "function": self.analiz},
-            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 220, 200, 40), "function": self.kelime_ekleme},
-            {"bilgi": "buton_ayarlar", "text": "AYARLAR", "position": (500, 280, 200, 40), "function": self.ayarlar},
+            {"bilgi": "buton_sinav", "text": "SINAV", "position": (500, 100, 200, 40), "function": self.SinavEkraninaGit},
+            {"bilgi": "buton_analiz", "text": "ANALİZ", "position": (500, 160, 200, 40), "function": self.AnalizKismi},
+            {"bilgi": "buton_soru_ekleme", "text": "KELİME EKLEME", "position": (500, 220, 200, 40), "function": self.KelimeEklemeButonuBasildi},
+            {"bilgi": "buton_ayarlar", "text": "AYARLAR", "position": (500, 280, 200, 40), "function": self.Ayarlar},
         ]
 
         for button_info in buttons_info:
@@ -127,20 +127,20 @@ class ButonOlustur(QWidget):
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "buton_geri_sinav", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.geri_sinav},
+            {"bilgi": "buton_geri_sinav", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.SinavMenusuGeriButonu},
 
             {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": self.SoruOlustur},
             {"bilgi": "buton_sonraki_soru", "text": "SONRAKİ SORU", "position": (960, 540, 200, 40), "function": lambda: self.SoruDegistir(1)},
             {"bilgi": "buton_önceki_soru", "text": "ÖNCEKİ SORU", "position": (20, 540, 200, 40), "function": lambda: self.SoruDegistir(-1)},
-            {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": self.analiz},
+            {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": self.AnalizKismi},
 
-            {"bilgi": "buton_kelime_ekle_ekle", "text": "KELİME EKLE", "position": (500, 500, 200, 40), "function": self.kelime_ekleme},
-            {"bilgi": "buton_resim_sec", "text": "RESİM SEÇ", "position": (500, 240, 200, 40), "function": self.resim_sec},
+            {"bilgi": "buton_kelime_ekle_ekle", "text": "KELİME EKLE", "position": (500, 500, 200, 40), "function": self.KelimeEklemeButonuBasildi},
+            {"bilgi": "buton_resim_sec", "text": "RESİM SEÇ", "position": (500, 240, 200, 40), "function": self.ResimSecmeButonuBasildi},
 
-            {"bilgi": "yazdir", "text": "YAZDIR", "position": (450, 520, 300, 40), "function": self.yazdir},
-            {"bilgi": "analiz_geri", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.analiz_geri},
-            {"bilgi": "analiz_sayisal", "text": "SAYISAL ANALİZ", "position": (500, 160, 200, 40), "function": self.analiz_sayisal},
-            {"bilgi": "analiz_sozel", "text": "KELİME ANALİZ", "position": (500, 220, 200, 40), "function": self.analiz_sozel},
+            {"bilgi": "yazdir", "text": "YAZDIR", "position": (450, 520, 300, 40), "function": self.AnalizleriYazdir},
+            {"bilgi": "analiz_geri", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.AnalizKismiGeriButonu},
+            {"bilgi": "analiz_sayisal", "text": "SAYISAL ANALİZ", "position": (500, 160, 200, 40), "function": lambda: self.AnalizSayfaYonlendir("Sayisal")},
+            {"bilgi": "analiz_sozel", "text": "KELİME ANALİZ", "position": (500, 220, 200, 40), "function": lambda: self.AnalizSayfaYonlendir("Sozel")},
         ]
 
         for button_info in buttons_info:
@@ -182,11 +182,11 @@ class ButonOlustur(QWidget):
     def SinavSikButonlari(self):
         self.button_group1 = QButtonGroup()
         buttons_info = [
-            {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (400, 40, 400, 40), "function": self.cikis},
+            {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (400, 40, 400, 40), "function": self.Cikis},
 
-            {"bilgi": "A", "text": "Buton 1", "position": (250, 400, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "B", "text": "Buton 2", "position": (500, 400, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "C", "text": "Buton 3", "position": (750, 400, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "A", "text": "Buton 1", "position": (250, 400, 200, 40), "function": self.SinavSiklariniKaydet},
+            {"bilgi": "B", "text": "Buton 2", "position": (500, 400, 200, 40), "function": self.SinavSiklariniKaydet},
+            {"bilgi": "C", "text": "Buton 3", "position": (750, 400, 200, 40), "function": self.SinavSiklariniKaydet},
         ]
 
         for button_info in buttons_info:
@@ -234,7 +234,7 @@ class ButonOlustur(QWidget):
             button = QPushButton(button_info["text"], self)
             button.setGeometry(*button_info["position"])
 
-            button.clicked.connect(self.ayarlar)
+            button.clicked.connect(self.Ayarlar)
 
             button.setStyleSheet("""
                 QPushButton {
@@ -271,7 +271,7 @@ class ButonOlustur(QWidget):
             button.setCheckable(True)
             self.button_group1.addButton(button)
 
-            button.clicked.connect(self.ayarlar)
+            button.clicked.connect(self.Ayarlar)
 
             button.setStyleSheet("""
                        QPushButton {
@@ -308,7 +308,7 @@ class ButonOlustur(QWidget):
             button = QPushButton(button_info["text"], self)
             button.setGeometry(*button_info["position"])
 
-            button.clicked.connect(lambda _, pos=button.pos(): self.seslendirme(pos))
+            button.clicked.connect(lambda _, pos=button.pos(): self.SinavMetinleriniSeslendirma(pos))
 
             button.setStyleSheet("""
                 QPushButton {
