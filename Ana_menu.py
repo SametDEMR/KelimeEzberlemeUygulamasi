@@ -6,6 +6,7 @@ from Siklar import *
 from Siklik import *
 from MetinSesButon import *
 from SinavSonuAnaliz import *
+from AnalizKısmı import *
 
 from gtts import gTTS
 from playsound import playsound
@@ -24,6 +25,11 @@ class Ana_Pencere123(QWidget):
         super().__init__()
 
         self.sinav_soru_sayisi = 5
+
+        self.toplam_dogru_sayisi = 0
+        self.toplam_yanlis_sayisi = 0
+        self.toplam_bos_sayisi = 0
+        self.toplam_soru_sayisi = 0
 
         self.dogru_sayisi = 0
         self.yanlis_sayisi = 0
@@ -48,6 +54,7 @@ class Ana_Pencere123(QWidget):
         SiklarOlustur.Olustur(self)
         MetinSesButonOlustur.Olustur(self)
         SinavSonuAnaliz.Olustur(self)
+        AnalizOlustur.Olustur(self)
 
         ShowHide.hepsini_gizleme(self)
 
@@ -81,11 +88,7 @@ class Ana_Pencere123(QWidget):
         ShowHide.giris(self)
 
     def giris(self):
-        self.temizle()
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sinav_ana_menu(self)
-
-        """username = self.line_edit_kullanici_adi.text()
+        username = self.line_edit_kullanici_adi.text()
         password = self.line_edit_sifre.text()
 
         if username and password:
@@ -93,6 +96,8 @@ class Ana_Pencere123(QWidget):
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
             user = cursor.fetchone()
+
+            self.kullanici_id = user[0]
 
             if user:
                 self.temizle()
@@ -102,7 +107,7 @@ class Ana_Pencere123(QWidget):
                 self.label_giris.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
             conn.close()
         else:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")"""
+            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def sifre_unuttum(self):
         self.temizle()
@@ -190,6 +195,27 @@ class Ana_Pencere123(QWidget):
     def analiz(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.analiz(self)
+
+        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
+        kullanici_verileri = cursor.fetchone()
+
+        conn.close()
+
+        self.toplam_dogru_sayisi = kullanici_verileri[1]
+        self.toplam_yanlis_sayisi = kullanici_verileri[2]
+        self.toplam_bos_sayisi = kullanici_verileri[3]
+        self.toplam_soru_sayisi = kullanici_verileri[4]
+
+        self.toplam_dogru_sayi.setText("TOPLAM DOĞRU SAYISI : " + str(self.toplam_dogru_sayisi))
+        self.toplam_yanlis_sayi.setText("TOPLAM YANLIŞ SAYISI : " + str(self.toplam_yanlis_sayisi))
+        self.toplam_bos_sayi.setText("TOPLAM BOŞ SAYISI : " + str(self.toplam_bos_sayisi))
+        self.toplam_soru_sayi.setText("TOPLAM SORU SAYISI : " + str(self.toplam_soru_sayisi))
+        self.ortalama_sayi.setText("ORTALAMA : %" + str("{:.2f}".format((self.toplam_dogru_sayisi / self.toplam_soru_sayisi)*100)))
+
+
 
     def ayarlar(self):
         self.button_group.setExclusive(False)
@@ -464,6 +490,11 @@ class Ana_Pencere123(QWidget):
         cikti.save("dosya/ses" + str(self.sayac) + ".mp3")
         playsound("dosya/ses" + str(self.sayac) + ".mp3")
         self.sayac += 1
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    def yazdir(self):
+        print("yazdır")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

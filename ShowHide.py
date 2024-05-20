@@ -78,6 +78,14 @@ class ShowHide(QWidget):
         self.label_kelime_ekle.hide()
         self.label_resim_soru.hide()
 
+        self.yazdir.hide()
+        self.toplam_dogru_sayi.hide()
+        self.toplam_yanlis_sayi.hide()
+        self.toplam_bos_sayi.hide()
+        self.toplam_soru_sayi.hide()
+        self.ortalama_sayi.hide()
+
+
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def giris(self):
@@ -167,6 +175,13 @@ class ShowHide(QWidget):
 
     def analiz(self):
         self.buton_geri_sinav.show()
+
+        self.yazdir.show()
+        self.toplam_dogru_sayi.show()
+        self.toplam_yanlis_sayi.show()
+        self.toplam_bos_sayi.show()
+        self.toplam_soru_sayi.show()
+        self.ortalama_sayi.show()
 
     def ayarlar(self):
         self.buton_geri_sinav.show()
