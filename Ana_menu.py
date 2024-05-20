@@ -10,7 +10,7 @@ from SinavSonuAnaliz import *
 from gtts import gTTS
 from playsound import playsound
 import sqlite3
-import os, sys
+import os, sys, random
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
 from PyQt5.QtGui import QPixmap
 
@@ -25,6 +25,8 @@ class Ana_Pencere123(QWidget):
         self.sinav_soru_sayisi = 5
         self.bos_sayisi = 0
         self.sorular = [0] * 21
+        self.resimler = [0] * 21
+        self.türkçe = [0] * 21
         self.sikler = [0] * 21
         self.soru_sayaci = 1
         self.sayac = 1
@@ -46,7 +48,7 @@ class Ana_Pencere123(QWidget):
 
         ShowHide.hepsini_gizleme(self)
 
-        pixmap = QPixmap("program/kapalı2.png")
+        """pixmap = QPixmap("program/kapalı2.png")
         self.label_resim_soru.setPixmap(pixmap)
         self.label_resim_soru.setScaledContents(True)
 
@@ -60,12 +62,11 @@ class Ana_Pencere123(QWidget):
 
         pixmap = QPixmap("program/kapalı1.png")
         self.label_resim_C.setPixmap(pixmap)
-        self.label_resim_C.setScaledContents(True)
+        self.label_resim_C.setScaledContents(True)"""
 
         ShowHide.giris(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
     def kontrol(self):
         if os.path.exists("database/KullaniciBilgileri.db"):
             return True
@@ -194,17 +195,14 @@ class Ana_Pencere123(QWidget):
     def sinav(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_sayfasi_once(self)
-        print("sinav sayfası")
 
     def soru_ekleme(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.soru_ekleme(self)
-        print("soru ekleme")
 
     def analiz(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.analiz(self)
-        print("analiz")
 
     def ayarlar(self):
         self.button_group.setExclusive(False)
@@ -212,20 +210,67 @@ class Ana_Pencere123(QWidget):
         self.button_group.setExclusive(True)
         ShowHide.hepsini_gizleme(self)
         ShowHide.ayarlar(self)
-        print("ayarlar")
 
     """"""""""""""""""""""""
 
+    def soru_olustur(self):
+        conn = sqlite3.connect('database/Kelimeler.db')
+        cursor = conn.cursor()
+        cursor1 = conn.cursor()
+
+        cursor.execute('SELECT ingilizce_kelime, resim, türkçe_kelime FROM Kelimeler')
+        ingilizce_ve_resim = cursor.fetchall()
+        random_kelimeler = random.sample(ingilizce_ve_resim, 20)
+
+        self.sayac = 1
+        for random_kelime, random_resim, random_turkce in random_kelimeler:
+            self.sorular[self.sayac] = random_kelime
+            self.resimler[self.sayac] = random_resim
+            self.türkçe[self.sayac] = random_turkce
+            self.sayac += 1
+
+        conn.close()
+
+        characters = ['A', 'B', 'C']
+        random_character = random.choice(characters)
+        if random_character == characters[0]:
+            self.A.setText(self.türkçe[self.soru_sayaci])
+        if random_character == characters[1]:
+            self.B.setText(self.türkçe[self.soru_sayaci])
+        if random_character == characters[2]:
+            self.C.setText(self.türkçe[self.soru_sayaci])
+
+        self.sinav_soru.setText(self.sorular[self.soru_sayaci])
+        image = self.resimler[self.soru_sayaci]
+        pixmap = QPixmap(image)
+        self.label_resim_soru.setPixmap(pixmap)
+        self.label_resim_soru.setScaledContents(True)
+
+        print(self.resimler)
+        print(self.sorular)
+
     def soru_basla(self):
+        self.sayac = 1
         self.soru_sayaci = 1
+        self.soru_olustur()
         self.secim_kaldir()
-        self.sorular = [0] * 21
+        self.bos_sayisi = 0
         self.sikler = [0] * 21
+
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_sayfasi_sonra(self)
-        self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
+        self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
 
     def sonraki_soru(self):
+        self.label_resim_soru.setPixmap(QPixmap())
+        self.label_resim_soru.setScaledContents(False)
+        image = self.resimler[self.soru_sayaci + 1]
+        pixmap = QPixmap(image)
+        self.label_resim_soru.setPixmap(pixmap)
+        self.label_resim_soru.setScaledContents(True)
+
+        self.sinav_soru.setText(self.sorular[self.soru_sayaci + 1])
+
         if self.soru_sayaci < self.sinav_soru_sayisi:
             if str(self.sikler[self.soru_sayaci + 1]) == '0':
                 self.secim_kaldir()
@@ -241,9 +286,17 @@ class Ana_Pencere123(QWidget):
                 self.buton_önceki_soru.show()
 
             self.soru_sayaci += 1
-            self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
+            self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
 
     def onceki_soru(self):
+        self.label_resim_soru.setPixmap(QPixmap())
+        self.label_resim_soru.setScaledContents(False)
+        image = self.resimler[self.soru_sayaci - 1]
+        pixmap = QPixmap(image)
+        self.label_resim_soru.setPixmap(pixmap)
+        self.label_resim_soru.setScaledContents(True)
+
+        self.sinav_soru.setText(self.sorular[self.soru_sayaci - 1])
         if self.soru_sayaci > 1:
             if str(self.sikler[self.soru_sayaci - 1]) == '0':
                 self.secim_kaldir()
@@ -259,7 +312,7 @@ class Ana_Pencere123(QWidget):
                 self.buton_sinav_bitir.hide()
 
             self.soru_sayaci -= 1
-            self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
+            self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
 
     def soru_ekle(self):
         ingilizce = self.line_edit_kelime_ingilizce.text()
@@ -320,7 +373,6 @@ class Ana_Pencere123(QWidget):
         bilgi = sender_button.property("bilgi")
 
         self.sikler[self.soru_sayaci] = bilgi
-        self.sorular[self.soru_sayaci] = self.sinav_soru.text()
 
     def soru_sayi_degistir(self):
         sender = self.sender()

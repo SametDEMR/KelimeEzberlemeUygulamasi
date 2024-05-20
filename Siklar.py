@@ -9,11 +9,11 @@ class SiklarOlustur(QWidget):
     def Olustur(self):
         self.button_group1 = QButtonGroup()
         buttons_info = [
-            {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (400, 20, 400, 40), "function": self.cikis},
+            {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (400, 60, 400, 40), "function": self.cikis},
 
-            {"bilgi": "A", "text": "Buton 1", "position": (140, 320, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "B", "text": "Buton 2", "position": (500, 260, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "C", "text": "Buton 3", "position": (860, 320, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "A", "text": "Buton 1", "position": (140, 390, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "B", "text": "Buton 2", "position": (500, 330, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "C", "text": "Buton 3", "position": (860, 390, 200, 40), "function": self.siklari_kaydet},
         ]
 
         for button_info in buttons_info:

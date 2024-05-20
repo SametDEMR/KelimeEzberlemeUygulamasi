@@ -74,11 +74,8 @@ class ShowHide(QWidget):
         self.label_metin.hide()
         self.label_ayarlar.hide()
         self.label_ekleme_resim.hide()
-
-        """self.label_resim_soru.hide()
-        self.label_resim_A.hide()
-        self.label_resim_B.hide()
-        self.label_resim_C.hide()"""
+        self.label_kelime_ekle.hide()
+        self.label_resim_soru.hide()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -148,11 +145,8 @@ class ShowHide(QWidget):
 
         self.label_metin.show()
         self.label_sinav_sayac.show()
-
+        self.label_kelime_ekle.show()
         self.label_resim_soru.show()
-        self.label_resim_A.show()
-        self.label_resim_B.show()
-        self.label_resim_C.show()
 
     def soru_ekleme(self):
         self.buton_geri_sinav.show()
