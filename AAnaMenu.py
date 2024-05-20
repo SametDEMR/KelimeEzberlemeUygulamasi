@@ -249,201 +249,6 @@ class Ana_Pencere123(QWidget):
 
         conn.close()
 
-    ### SİNAV SORULARI İŞLEMLERİ
-    def SoruOlustur(self):
-        self.SinavSiklariSeciminiKaldir()
-        self.SinavSiklariKaydet = [[0 for j in range(2)] for i in range(25)]
-        self.Sorular = []
-        self.sinav_soru_sayaci = 1
-
-        tarih = datetime.now().strftime('%x')
-        gun, ay, yil = map(int, tarih.split('.'))
-        tarih = f"{gun}.{ay}.{yil}"
-
-        conn = sqlite3.connect('database/KullaniciBilgileri.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT kelime_id FROM KullaniciBilinen WHERE kullanici_id = ? AND tarih = ?',
-                       (self.kullanici_id, tarih,))
-        bugun_cikacak_kelimeler = cursor.fetchall()
-
-        cursor.execute('SELECT kelime_id FROM KaliciBilinen WHERE kullanici_id = ?', (self.kullanici_id,))
-        artik_cikmayacak_kelimeler = cursor.fetchall()
-        conn.commit()
-        conn.close()
-        artik_cikmayacak_kelimeler += bugun_cikacak_kelimeler
-
-        bugun_yazilacak = ["asd"] * len(bugun_cikacak_kelimeler)
-
-        self.kullan_soru_sayisi += len(bugun_cikacak_kelimeler)
-
-        conn = sqlite3.connect("database/Kelimeler.db")
-        cursor = conn.cursor()
-        for sayac in range(len(bugun_cikacak_kelimeler)):
-            cursor.execute("SELECT * FROM kelimeler WHERE kelime_id = ?", (bugun_cikacak_kelimeler[sayac][0],))
-            bugunkiler = cursor.fetchall()
-            bugun_yazilacak[sayac] = (bugunkiler[0])
-
-        if len(bugun_cikacak_kelimeler) == 0:
-            cursor.execute("SELECT * FROM kelimeler ORDER BY RANDOM() LIMIT ?", (self.kullan_soru_sayisi,))
-        else:
-            for sayac in range(len(artik_cikmayacak_kelimeler)):
-                çikmaycak = int(artik_cikmayacak_kelimeler[sayac][0])
-                cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?",
-                               (çikmaycak, self.kullan_soru_sayisi,))
-
-        rows = cursor.fetchall()
-        conn.close()
-        bugun_yazilacak += rows
-
-        for row in bugun_yazilacak:
-            data = list(row)
-            id, ingilizce_kelime, turkce_kelime, cumle_ing, cumle_tr, image_path = data
-            if self.dil == 'tr':
-                correct_answer = ingilizce_kelime
-                other_answers = [r[1] for r in bugun_yazilacak if r[0] != id]
-            else:
-                correct_answer = turkce_kelime
-                other_answers = [r[2] for r in bugun_yazilacak if r[0] != id]
-            wrong_answers = random.sample(other_answers, 2)
-
-            choices = {"A": None, "B": None, "C": None}
-            answers = [correct_answer] + wrong_answers[:2]
-            random.shuffle(answers)
-            choices["A"], choices["B"], choices["C"] = answers
-
-            if self.dil == 'tr':
-                self.SoruAciklamasi.setText("YUKARIDAKİ KELİMENİN İNGİLİZCESİ NEDİR?")
-                question = {
-                    "id": id,
-                    "image_path": image_path,
-                    "kelime": turkce_kelime,
-                    "cumle": cumle_tr,
-                    "choices": choices,
-                    "cevabı": ingilizce_kelime
-                }
-            else:
-                self.SoruAciklamasi.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
-                question = {
-                    "id": id,
-                    "image_path": image_path,
-                    "kelime": ingilizce_kelime,
-                    "cumle": cumle_ing,
-                    "choices": choices,
-                    "cevabı": turkce_kelime
-                }
-            self.Sorular.append(question)
-
-        self.SinavSayaci.setText(str(self.sinav_soru_sayaci))
-        image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
-        pixmap = QPixmap(image)
-        self.SoruResimKismi.setPixmap(pixmap)
-        self.SoruResimKismi.setScaledContents(True)
-        self.SoruKelimeYeri.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-        self.SoruCümleKismi.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
-        self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
-        self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
-        self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
-
-    def SoruDegistir(self, degistirme):
-        self.sinav_soru_sayaci += int(degistirme)
-
-        self.SinavSayaci.setText(str(self.sinav_soru_sayaci))
-        image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
-        pixmap = QPixmap(image)
-        self.SoruResimKismi.setPixmap(pixmap)
-        self.SoruResimKismi.setScaledContents(True)
-        self.SoruKelimeYeri.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-        self.SoruCümleKismi.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
-        self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
-        self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
-        self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
-
-        self.SinavSiklariSeciminiKaldir()
-        if str(self.SinavSiklariKaydet[self.sinav_soru_sayaci][0]) != '0':
-            self.button_group1.setExclusive(False)
-            getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
-            self.button_group1.setExclusive(True)
-
-        if self.sinav_soru_sayaci == self.kullan_soru_sayisi:
-            self.SonrakiSoruButonu.hide()
-            self.SinavBitirButonu.show()
-        else:
-            self.SonrakiSoruButonu.show()
-            self.SinavBitirButonu.hide()
-        if self.sinav_soru_sayaci != 1:
-            self.ÖncekiSoruButonu.show()
-        else:
-            self.ÖncekiSoruButonu.hide()
-    def SinavSiklariSeciminiKaldir(self):
-        self.button_group1.setExclusive(False)
-        self.A.setChecked(False)
-        self.B.setChecked(False)
-        self.C.setChecked(False)
-        self.button_group1.setExclusive(True)            
-
-    def SinavSiklariniKaydet(self):
-        TiklananSik = self.sender()
-        TiklananSikMetni = TiklananSik.property("bilgi")
-
-        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.SoruKelimeYeri.text()), str(getattr(self, TiklananSikMetni).text()), str(TiklananSikMetni))
-
-    def SinavMetinleriniSeslendirma(self, pos):
-        ButonPozisyonu = pos - QPoint(160, 0)
-        SeslendirilecekMetin = self.childAt(ButonPozisyonu).text()
-
-        if self.dil == 'tr':
-            if ButonPozisyonu.y() > 100:
-                language = 'en'
-            else:
-                language = 'tr'
-        else:
-            if ButonPozisyonu.y() > 100:
-                language = 'tr'
-            else:
-                language = 'en'
-
-        RandomSayi = random.randint(1,1111111)
-        cikti = gTTS(text=SeslendirilecekMetin, lang=language, slow=False)
-        cikti.save("dosya/ses" + str(RandomSayi) + ".mp3")
-        playsound("dosya/ses" + str(RandomSayi) + ".mp3")
-
-    ### SİNAV MENÜSÜ İÇ İŞLEMLERİ
-    def KelimeEklemeButonuBasildi(self):
-        ingilizce_kelime = self.SoruEklemeIngilizce.text()
-        turkce_kelime = self.SoruEklemeTurkce.text()
-        ingilizce_cumle = self.SoruEklemeIngilizceCumle.text()
-        turkce_cumle = self.SoruEklemeTurkceCumle.text()
-
-        if ingilizce_kelime and turkce_kelime and ingilizce_cumle and turkce_cumle:
-            conn = sqlite3.connect('database/Kelimeler.db')
-            cursor = conn.cursor()
-            ingilizce_lower = ingilizce_kelime.lower()
-
-            cursor.execute("SELECT * FROM Kelimeler WHERE LOWER(ingilizce_kelime) = ?", (ingilizce_lower,))
-            existing_word = cursor.fetchone()
-
-            if existing_word:
-                self.KelimeEklemeUyariMesaji.setText("Bu Kelime Zaten Mevcut. Başka Bir Kelime Deneyiniz.")
-            else:
-                if self.ResimSecmeYapilmasi == 0:
-                    self.KelimeEklemeUyariMesaji.setText("Lütfen Resim Seçiniz.")
-                else:
-                    self.ResimDosyaYolu = 'resim/' + f"{ingilizce_kelime}" + '.png'
-                    self.KaydedilecekResim = cv2.resize(self.KaydedilecekResim, (400, 400))
-                    cv2.imwrite(self.ResimDosyaYolu, self.KaydedilecekResim)
-
-                    cursor.execute(
-                        "INSERT INTO Kelimeler (ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2, resim) VALUES (?, ?, ?, ?, ?)",
-                        (ingilizce_kelime, turkce_kelime, ingilizce_cumle, turkce_cumle, self.ResimDosyaYolu))
-
-                    conn.commit()
-
-                    self.KelimeEklemeUyariMesaji.setText("Başarıyla Eklenmiştir.")
-                    self.ResimSecmeYapilmasi = 0
-        else:
-            self.KelimeEklemeUyariMesaji.setText("Lütfen Bilgileri Eksiksiz Giriniz")
-        self.GenelIslemleriSifirla()
-
     def SinavSonuAnaliz(self):
         for sayac in range(self.kullan_soru_sayisi):
             if self.SinavSiklariKaydet[sayac + 1][0] == 0:
@@ -522,45 +327,253 @@ class Ana_Pencere123(QWidget):
         self.kullan_soru_sayisi = self.sinav_soru_sayisi
 
     def AnalizleriYazdir(self):
-        file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
+        try:
+            file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
 
-        conn = sqlite3.connect('database/KullaniciBilgileri.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
-        kullanici_verileri = cursor.fetchone()
-        conn.commit()
-        conn.close()
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
+            kullanici_verileri = cursor.fetchone()
 
-        c = canvas.Canvas(file_path, pagesize=letter)
-        c.setFont("Helvetica", 16)
-        c.drawString(250, 750, "- ANALIZ -")
-        c.drawString(15, 720, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
-        c.drawString(115, 690, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
 
-        c.drawString(25, 530, "Ezberlenmis")
+            c = canvas.Canvas(file_path, pagesize=letter)
+            c.setFont("Helvetica", 16)
+            c.drawString(250, 750, "- ANALIZ -")
+            c.drawString(15, 720, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
+            c.drawString(115, 690, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
 
-        c.drawString(180, 530, self._ezber_yazi.text())
+            for i in range(6, 0, -1):
+                c.drawString(-50 + i * 95, 550, '*' * i)
 
-        yeni_metinler = []
-        for i in range(1, 7):
-            metin = getattr(self, f'_{i}lik_yazi').text()
-            yeni_metin = metin.replace("\n", "      ")
-            yeni_metinler.append(yeni_metin)
+            # Tablo adları ve ilgili koordinatları içeren bir sözlük
+            tablo_koordinatlari = {
+                f"Yildiz{i}Tablosu": (-50 + i * 95, 500) for i in range(6, 0, -1)
+            }
 
-        yıldızlar = ["★" * i for i in range(6, 0, -1)]
-        y_pos = 500
-        for yıldız, metin in zip(yıldızlar, reversed(yeni_metinler)):
-            c.drawString(25, y_pos, yıldız)
-            c.drawString(180, y_pos, self.TrIngTranslate(metin))
-            y_pos -= 30
+            # Her tablo için döngü oluşturma
+            for tablo, (x, y) in tablo_koordinatlari.items():
+                veriler = []
+                for satir in range(getattr(self, tablo).rowCount()):
+                    satir_verisi = []
+                    for sutun in range(getattr(self, tablo).columnCount()):
+                        hucre_verisi = getattr(self, tablo).item(satir, sutun).text()
+                        satir_verisi.append(hucre_verisi)
+                    veriler.append(satir_verisi)
+                y_pos = y
+                for satir in veriler:
+                    x_pos = x
+                    for hucre_verisi in satir:
+                        c.drawString(x_pos, y_pos, hucre_verisi)
+                        x_pos += 100
+                    y_pos -= 20
 
-        c.save()
+            c.save()
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(e)
 
-    def TrIngTranslate(self, metin):
-        turkce_karakterler = "çÇğĞıİöÖşŞüÜ"
-        ingilizce_karakterler = "cCgGiIoOsSuU"
-        ceviri_tablosu = str.maketrans(turkce_karakterler, ingilizce_karakterler)
-        return metin.translate(ceviri_tablosu)
+            
+
+    ### SİNAV SORULARI İŞLEMLERİ
+    def SoruOlustur(self):
+        try:
+            self.SinavSiklariSeciminiKaldir()
+            self.SinavSiklariKaydet = [[0 for j in range(2)] for i in range(25)]
+            self.Sorular = []
+            self.sinav_soru_sayaci = 1
+
+            tarih = datetime.now().strftime('%x')
+            gun, ay, yil = map(int, tarih.split('.'))
+            tarih = f"{gun}.{ay}.{yil}"
+
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT kelime_id FROM KullaniciBilinen WHERE kullanici_id = ? AND tarih = ?',
+                           (self.kullanici_id, tarih,))
+            bugun_cikacak_kelimeler = cursor.fetchall()
+
+            cursor.execute('SELECT kelime_id FROM KaliciBilinen WHERE kullanici_id = ?', (self.kullanici_id,))
+            artik_cikmayacak_kelimeler = cursor.fetchall()
+            conn.commit()
+            conn.close()
+            artik_cikmayacak_kelimeler += bugun_cikacak_kelimeler
+
+            bugun_yazilacak = ["asd"] * len(bugun_cikacak_kelimeler)
+
+            self.kullan_soru_sayisi += len(bugun_cikacak_kelimeler)
+
+            conn = sqlite3.connect("database/Kelimeler.db")
+            cursor = conn.cursor()
+            for sayac in range(len(bugun_cikacak_kelimeler)):
+                cursor.execute("SELECT * FROM kelimeler WHERE kelime_id = ?", (bugun_cikacak_kelimeler[sayac][0],))
+                bugunkiler = cursor.fetchall()
+                bugun_yazilacak[sayac] = (bugunkiler[0])
+
+            if len(bugun_cikacak_kelimeler) == 0:
+                cursor.execute("SELECT * FROM kelimeler ORDER BY RANDOM() LIMIT ?", (self.kullan_soru_sayisi,))
+            else:
+                for sayac in range(len(artik_cikmayacak_kelimeler)):
+                    çikmaycak = int(artik_cikmayacak_kelimeler[sayac][0])
+                    cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?",
+                                   (çikmaycak, self.kullan_soru_sayisi,))
+
+            rows = cursor.fetchall()
+            conn.close()
+            bugun_yazilacak += rows
+
+            for row in bugun_yazilacak:
+                data = list(row)
+                id, ingilizce_kelime, turkce_kelime, cumle_ing, cumle_tr, image_path = data
+                if self.dil == 'tr':
+                    correct_answer = ingilizce_kelime
+                    other_answers = [r[1] for r in bugun_yazilacak if r[0] != id]
+                else:
+                    correct_answer = turkce_kelime
+                    other_answers = [r[2] for r in bugun_yazilacak if r[0] != id]
+                wrong_answers = random.sample(other_answers, 2)
+
+                choices = {"A": None, "B": None, "C": None}
+                answers = [correct_answer] + wrong_answers[:2]
+                random.shuffle(answers)
+                choices["A"], choices["B"], choices["C"] = answers
+
+                if self.dil == 'tr':
+                    self.SoruAciklamasi.setText("YUKARIDAKİ KELİMENİN İNGİLİZCESİ NEDİR?")
+                    question = {
+                        "id": id,
+                        "image_path": image_path,
+                        "kelime": turkce_kelime,
+                        "cumle": cumle_tr,
+                        "choices": choices,
+                        "cevabı": ingilizce_kelime
+                    }
+                else:
+                    self.SoruAciklamasi.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
+                    question = {
+                        "id": id,
+                        "image_path": image_path,
+                        "kelime": ingilizce_kelime,
+                        "cumle": cumle_ing,
+                        "choices": choices,
+                        "cevabı": turkce_kelime
+                    }
+                self.Sorular.append(question)
+
+            self.SinavSayaci.setText(str(self.sinav_soru_sayaci))
+            image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
+            pixmap = QPixmap(image)
+            self.SoruResimKismi.setPixmap(pixmap)
+            self.SoruResimKismi.setScaledContents(True)
+            self.SoruKelimeYeri.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
+            self.SoruCümleKismi.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
+            self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
+            self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
+            self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
+
+        except Exception as e:
+            print(e)
+
+    def SoruDegistir(self, degistirme):
+        self.sinav_soru_sayaci += int(degistirme)
+
+        self.SinavSayaci.setText(str(self.sinav_soru_sayaci))
+        image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
+        pixmap = QPixmap(image)
+        self.SoruResimKismi.setPixmap(pixmap)
+        self.SoruResimKismi.setScaledContents(True)
+        self.SoruKelimeYeri.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
+        self.SoruCümleKismi.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
+        self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
+        self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
+        self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
+
+        self.SinavSiklariSeciminiKaldir()
+        if str(self.SinavSiklariKaydet[self.sinav_soru_sayaci][0]) != '0':
+            self.button_group1.setExclusive(False)
+            getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
+            self.button_group1.setExclusive(True)
+
+        if self.sinav_soru_sayaci == self.kullan_soru_sayisi:
+            self.SonrakiSoruButonu.hide()
+            self.SinavBitirButonu.show()
+        else:
+            self.SonrakiSoruButonu.show()
+            self.SinavBitirButonu.hide()
+        if self.sinav_soru_sayaci != 1:
+            self.ÖncekiSoruButonu.show()
+        else:
+            self.ÖncekiSoruButonu.hide()
+    def SinavSiklariSeciminiKaldir(self):
+        self.button_group1.setExclusive(False)
+        self.A.setChecked(False)
+        self.B.setChecked(False)
+        self.C.setChecked(False)
+        self.button_group1.setExclusive(True)            
+
+    def SinavSiklariniKaydet(self):
+        TiklananSik = self.sender()
+        TiklananSikMetni = TiklananSik.property("bilgi")
+
+        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.SoruKelimeYeri.text()), str(getattr(self, TiklananSikMetni).text()), str(TiklananSikMetni))
+
+    def SinavMetinleriniSeslendirma(self, pos):
+        ButonPozisyonu = pos - QPoint(160, 0)
+        SeslendirilecekMetin = self.childAt(ButonPozisyonu).text()
+
+        if self.dil == 'tr':
+            if ButonPozisyonu.y() > 100:
+                language = 'en'
+            else:
+                language = 'tr'
+        else:
+            if ButonPozisyonu.y() > 100:
+                language = 'tr'
+            else:
+                language = 'en'
+
+        RandomSayi = random.randint(1,1111111)
+        cikti = gTTS(text=SeslendirilecekMetin, lang=language, slow=False)
+        cikti.save("dosya/ses" + str(RandomSayi) + ".mp3")
+        playsound("dosya/ses" + str(RandomSayi) + ".mp3")
+
+
+    ### SİNAV MENÜSÜ İÇ İŞLEMLERİ
+    def KelimeEklemeButonuBasildi(self):
+        ingilizce_kelime = self.SoruEklemeIngilizce.text()
+        turkce_kelime = self.SoruEklemeTurkce.text()
+        ingilizce_cumle = self.SoruEklemeIngilizceCumle.text()
+        turkce_cumle = self.SoruEklemeTurkceCumle.text()
+
+        if ingilizce_kelime and turkce_kelime and ingilizce_cumle and turkce_cumle:
+            conn = sqlite3.connect('database/Kelimeler.db')
+            cursor = conn.cursor()
+            ingilizce_lower = ingilizce_kelime.lower()
+
+            cursor.execute("SELECT * FROM Kelimeler WHERE LOWER(ingilizce_kelime) = ?", (ingilizce_lower,))
+            existing_word = cursor.fetchone()
+
+            if existing_word:
+                self.KelimeEklemeUyariMesaji.setText("Bu Kelime Zaten Mevcut. Başka Bir Kelime Deneyiniz.")
+            else:
+                if self.ResimSecmeYapilmasi == 0:
+                    self.KelimeEklemeUyariMesaji.setText("Lütfen Resim Seçiniz.")
+                else:
+                    self.ResimDosyaYolu = 'resim/' + f"{ingilizce_kelime}" + '.png'
+                    self.KaydedilecekResim = cv2.resize(self.KaydedilecekResim, (400, 400))
+                    cv2.imwrite(self.ResimDosyaYolu, self.KaydedilecekResim)
+
+                    cursor.execute(
+                        "INSERT INTO Kelimeler (ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2, resim) VALUES (?, ?, ?, ?, ?)",
+                        (ingilizce_kelime, turkce_kelime, ingilizce_cumle, turkce_cumle, self.ResimDosyaYolu))
+
+                    conn.commit()
+
+                    self.KelimeEklemeUyariMesaji.setText("Başarıyla Eklenmiştir.")
+                    self.ResimSecmeYapilmasi = 0
+        else:
+            self.KelimeEklemeUyariMesaji.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+        self.GenelIslemleriSifirla()
 
     def ResimSecmeButonuBasildi(self):
         options = QFileDialog.Options()
