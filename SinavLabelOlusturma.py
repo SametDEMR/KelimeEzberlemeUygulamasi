@@ -2,11 +2,12 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-class Label_olusturma(QWidget):
-    def createLabels(self):
+class SinavLabelOlusturma(QWidget):
+    def Olustur(self):
         self.labels = []
         labels_info = [
-            {"bilgi": "label_aciklama", "text": "", "position": (350, 290, 500, 40)},
+            {"bilgi": "label_soru", "text": "", "position": (350, 400, 500, 40)},
+            {"bilgi": "label_sik", "text": "", "position": (600, 540, 500, 40)},
         ]
 
         for label_info in labels_info:
@@ -16,9 +17,9 @@ class Label_olusturma(QWidget):
             label.setAlignment(Qt.AlignCenter)
             label.setStyleSheet("""
                 QLabel {
-                    color: #34495e;
-                    font-family: "Times New Roman", sans-serif; /* Yazı fontu */
-                    font-size: 16px;
+                    color: #FFFFFF;
+                    font-family: "Arial", sans-serif; /* Yazı fontu */
+                    font-size: 20px;
                 }
             """)
             self.labels.append(label)

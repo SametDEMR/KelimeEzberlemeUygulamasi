@@ -5,24 +5,31 @@ from PyQt5.QtCore import *
 import locale
 import json
 
-
-from Buton_oluşturma import *
-from Text_box_oluşturma import *
-from Label_olusturma import *
-from ShowHide import *
+from GirisButonOlusturma import *
+from GirisTextBoxOlusturma import *
+from GirisLabelOlusturma import *
+from GirisShowHide import *
+from SinavButonOlusturma import *
+from SinavShowHide import *
+from SinavLabelOlusturma import *
 
 locale.setlocale(locale.LC_ALL, 'turkish')
+
 
 class Ana_Pencere123(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
+        self.setStyleSheet("background-color: #3c64c8 ")
         self.setFixedSize(1200, 600)
 
-        Text_box_olustur_Modul.createTextBox(self)
+        Giris_Text_box_Olustur.createTextBox(self)
         Label_olusturma.createLabels(self)
-        Buton_Olustur_Modul.createButtons(self)
+        Giris_Buton_Olustur.Giris_Buton(self)
+
+        Sinav_Buton_Olustur.Sinav_Buton(self)
+        SinavShowHide.hepsini_gizleme(self)
 
         ShowHide.hepsini_gizleme(self)
         ShowHide.ana_ekran_goster(self)
@@ -33,22 +40,48 @@ class Ana_Pencere123(QWidget):
         username = self.line_edit_kullanici_adi.text()
         password = self.line_edit_sifre.text()
 
-        if len(username) == 0 or len(password) == 0:
-            self.label_aciklama.setText("Lütfen Bilgileri Eksiksiz Giriniz")
-        else:
-            self.gecis_islemleri()
+        if username and password:
+            ShowHide.gecis_islemleri(self)
 
-            print("SINAV İÇERİĞİ BURAYA GELECEK")
+            SinavShowHide.ana_ekran_goster(self)
+
+        else:
+            self.label_aciklama.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def sifre_unuttum(self):
-        self.gecis_islemleri()
+        ShowHide.gecis_islemleri(self)
 
         ShowHide.sifre_unuttum_goster(self)
 
     def kayit(self):
-        self.gecis_islemleri()
+        ShowHide.gecis_islemleri(self)
 
         ShowHide.kayit_goster(self)
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    def geri2(self):
+        SinavShowHide.hepsini_gizleme(self)
+        SinavShowHide.ana_ekran_goster(self)
+
+    def sinav(self):
+        SinavShowHide.hepsini_gizleme(self)
+        SinavShowHide.sinav_sayfasi(self)
+
+        print("sinav sayfası")
+
+    def soru_ekleme(self):
+        SinavShowHide.hepsini_gizleme(self)
+        SinavShowHide.soru_ekleme_sayfasi(self)
+        print("soru ekleme")
+
+    def analiz(self):
+        SinavShowHide.hepsini_gizleme(self)
+        SinavShowHide.analiz_sayfasi(self)
+        print("analiz")
+
+    def cikis(self):
+        QApplication.quit()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -61,35 +94,45 @@ class Ana_Pencere123(QWidget):
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    def kaydol(self):
-        print("kaydol")
-
     def geri(self):
-        self.gecis_islemleri()
+        ShowHide.gecis_islemleri(self)
 
         ShowHide.ana_ekran_goster(self)
 
+    def kaydol(self):
+        isim = self.line_edit_isim.text()
+        soyisim = self.line_edit_soyisim.text()
+        mail = self.line_edit_mail.text()
+        sifre = self.line_edit_sifre.text()
+        kullanici_ad = self.line_edit_kaydol_kullanici_adi.text()
+
+        if isim and soyisim and mail and sifre and kullanici_ad:
+            self.label_aciklama.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
+        else:
+            self.label_aciklama.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+
+    def sifre_getir(self):
+        username = self.line_edit_sifre_kullanici_adi.text()
+        mail = self.line_edit_sifre_mail.text()
+
+        if len(username) == 0 or len(mail) == 0:
+            self.label_aciklama.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+        else:
+            self.label_aciklama.setText("Şifreniz = ")
+
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    
-    def gecis_islemleri(self):
-        self.line_edit_kullanici_adi.clear()
-        self.line_edit_sifre.clear()
-        self.line_edit_isim.clear()
-        self.line_edit_soyisim.clear()
-        self.line_edit_mail.clear()
-        self.line_edit_kaydol_kullanici_adi.clear()
-        self.line_edit_sifre_kullanici_adi.clear()
-        self.line_edit_sifre_mail.clear()
 
-        ShowHide.hepsini_gizleme(self)
+    def sonraki_soru(self):
+        print("sonraki soru")
 
-        caller_func = sys._getframe(1).f_code.co_name
-        if caller_func != "giris" and caller_func != "geri":
-            ShowHide.geri_goster(self)
+    def onceki_soru(self):
+        print("önceki soru")
 
+    def soruyu_ekle(self):
+        print("soru eklendi")
 
-
-
+    def buton_yazi_gonder(self, button):
+        self.label_sik.setText(button.text())
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
