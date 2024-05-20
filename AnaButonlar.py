@@ -129,7 +129,7 @@ class ButonOlustur(QWidget):
         buttons_info = [
             {"bilgi": "buton_geri_sinav", "text": "GERİ", "position": (10, 10, 200, 40), "function": self.geri_sinav},
 
-            {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": self.sonraki_soru},
+            {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": self.SoruOlustur},
             {"bilgi": "buton_sonraki_soru", "text": "SONRAKİ SORU", "position": (960, 540, 200, 40), "function": self.sonraki_soru},
             {"bilgi": "buton_önceki_soru", "text": "ÖNCEKİ SORU", "position": (20, 540, 200, 40), "function": self.onceki_soru},
             {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": self.analiz},
