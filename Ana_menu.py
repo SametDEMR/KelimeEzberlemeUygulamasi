@@ -23,13 +23,13 @@ class Ana_Pencere123(QWidget):
         super().__init__()
 
         self.sinav_soru_sayisi = 5
+        self.dogru_sayisi = 0
+        self.yanlis_sayisi = 0
         self.bos_sayisi = 0
-        self.sorular = [0] * 21
-        self.resimler = [0] * 21
-        self.türkçe = [0] * 21
+        self.soru_sayaci = 0
+        self.soru_kalip = [[0 for j in range(5)] for i in range(21)]
+        self.soru_sik2 = [[0 for j in range(3)] for i in range(21)]
         self.sikler = [0] * 21
-        self.soru_sayaci = 1
-        self.sayac = 1
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
         self.setStyleSheet("background-color: #3c64c8 ")
@@ -47,22 +47,6 @@ class Ana_Pencere123(QWidget):
         SinavSonuAnaliz.Olustur(self)
 
         ShowHide.hepsini_gizleme(self)
-
-        """pixmap = QPixmap("program/kapalı2.png")
-        self.label_resim_soru.setPixmap(pixmap)
-        self.label_resim_soru.setScaledContents(True)
-
-        pixmap = QPixmap("program/açık1.png")
-        self.label_resim_A.setPixmap(pixmap)
-        self.label_resim_A.setScaledContents(True)
-
-        pixmap = QPixmap("program/açık2.png")
-        self.label_resim_B.setPixmap(pixmap)
-        self.label_resim_B.setScaledContents(True)
-
-        pixmap = QPixmap("program/kapalı1.png")
-        self.label_resim_C.setPixmap(pixmap)
-        self.label_resim_C.setScaledContents(True)"""
 
         ShowHide.giris(self)
 
@@ -213,117 +197,141 @@ class Ana_Pencere123(QWidget):
 
     """"""""""""""""""""""""
 
-    def soru_olustur(self):
-        conn = sqlite3.connect('database/Kelimeler.db')
-        cursor = conn.cursor()
-        cursor1 = conn.cursor()
+    def sonraki_soru(self):
+        if self.soru_sayaci == 0:
+            ShowHide.hepsini_gizleme(self)
+            ShowHide.sinav_sayfasi_sonra(self)
 
-        cursor.execute('SELECT ingilizce_kelime, resim, türkçe_kelime FROM Kelimeler')
-        ingilizce_ve_resim = cursor.fetchall()
-        random_kelimeler = random.sample(ingilizce_ve_resim, 20)
+            conn = sqlite3.connect('database/Kelimeler.db')
+            cursor = conn.cursor()
 
-        self.sayac = 1
-        for random_kelime, random_resim, random_turkce in random_kelimeler:
-            self.sorular[self.sayac] = random_kelime
-            self.resimler[self.sayac] = random_resim
-            self.türkçe[self.sayac] = random_turkce
-            self.sayac += 1
+            cursor.execute('SELECT resim, ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2 FROM Kelimeler')
+            soru_kalip = cursor.fetchall()
+            random_kalip = random.sample(soru_kalip, 20)
 
-        conn.close()
+            self.sayac = 1
+            for random_resim, random_ingilizce, random_turkce, random_cümle1, random_cümle2 in random_kalip:
+                self.soru_kalip[self.sayac][0] = random_resim
+                self.soru_kalip[self.sayac][1] = random_ingilizce
+                self.soru_kalip[self.sayac][2] = random_turkce
+                self.soru_kalip[self.sayac][3] = random_cümle1
+                self.soru_kalip[self.sayac][4] = random_cümle2
+                self.sayac += 1
+
+            conn.close()
+
+        self.soru_sayaci += 1
+        self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
+
+        self.cümle_soru.setText(f"{self.soru_kalip[self.soru_sayaci][3]}")
 
         characters = ['A', 'B', 'C']
         random_character = random.choice(characters)
-        if random_character == characters[0]:
-            self.A.setText(self.türkçe[self.soru_sayaci])
-        if random_character == characters[1]:
-            self.B.setText(self.türkçe[self.soru_sayaci])
-        if random_character == characters[2]:
-            self.C.setText(self.türkçe[self.soru_sayaci])
+        random_sayi1 = random.randint(1, 20)
+        random_sayi2 = random.randint(1, 20)
 
-        self.sinav_soru.setText(self.sorular[self.soru_sayaci])
-        image = self.resimler[self.soru_sayaci]
+        while self.soru_kalip[random_sayi1][2] == self.soru_kalip[random_sayi2][2]:
+            while self.soru_kalip[random_sayi2][2] == self.soru_kalip[self.soru_sayaci][2]:
+                random_sayi2 = random.randint(1, 20)
+
+        if str(self.soru_sik2[self.soru_sayaci][0]) == '0':
+            if random_character == characters[0]:
+                self.A.setText(self.soru_kalip[self.soru_sayaci][2])
+                self.B.setText(self.soru_kalip[random_sayi1][2])
+                self.C.setText(self.soru_kalip[random_sayi2][2])
+
+                self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[self.soru_sayaci][2]
+                self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[random_sayi1][2]
+                self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[random_sayi2][2]
+
+            if random_character == characters[1]:
+                self.A.setText(self.soru_kalip[random_sayi1][2])
+                self.B.setText(self.soru_kalip[self.soru_sayaci][2])
+                self.C.setText(self.soru_kalip[random_sayi2][2])
+
+                self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[random_sayi1][2]
+                self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[self.soru_sayaci][2]
+                self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[random_sayi2][2]
+
+            if random_character == characters[2]:
+                self.A.setText(self.soru_kalip[random_sayi1][2])
+                self.B.setText(self.soru_kalip[random_sayi2][2])
+                self.C.setText(self.soru_kalip[self.soru_sayaci][2])
+
+                self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[random_sayi1][2]
+                self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[random_sayi2][2]
+                self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[self.soru_sayaci][2]
+        else:
+            self.A.setText(self.soru_sik2[self.soru_sayaci][0])
+            self.B.setText(self.soru_sik2[self.soru_sayaci][1])
+            self.C.setText(self.soru_sik2[self.soru_sayaci][2])
+
+
+        self.sinav_soru.setText(self.soru_kalip[self.soru_sayaci][1])
+        image = self.soru_kalip[self.soru_sayaci][0]
         pixmap = QPixmap(image)
         self.label_resim_soru.setPixmap(pixmap)
         self.label_resim_soru.setScaledContents(True)
 
-        print(self.resimler)
-        print(self.sorular)
-
-    def soru_basla(self):
-        self.sayac = 1
-        self.soru_sayaci = 1
-        self.soru_olustur()
-        self.secim_kaldir()
-        self.bos_sayisi = 0
-        self.sikler = [0] * 21
-
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sinav_sayfasi_sonra(self)
-        self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
-
-    def sonraki_soru(self):
-        self.label_resim_soru.setPixmap(QPixmap())
-        self.label_resim_soru.setScaledContents(False)
-        image = self.resimler[self.soru_sayaci + 1]
-        pixmap = QPixmap(image)
-        self.label_resim_soru.setPixmap(pixmap)
-        self.label_resim_soru.setScaledContents(True)
-
-        self.sinav_soru.setText(self.sorular[self.soru_sayaci + 1])
-
-        if self.soru_sayaci < self.sinav_soru_sayisi:
-            if str(self.sikler[self.soru_sayaci + 1]) == '0':
-                self.secim_kaldir()
-            else:
-                attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci + 1]))
-                attribute_to_set.setChecked(True)
-
-            if self.soru_sayaci + 1 == self.sinav_soru_sayisi:
-                self.buton_sonraki_soru.hide()
-                self.buton_sinav_bitir.show()
-
-            if self.soru_sayaci > 0:
-                self.buton_önceki_soru.show()
-
-            self.soru_sayaci += 1
-            self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
+        """sonraki önceki buton gösterme gizleme metni yazma"""
+        if str(self.sikler[self.soru_sayaci]) == '0':
+            self.secim_kaldir()
+        else:
+            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci]))
+            attribute_to_set.setChecked(True)
+        if self.soru_sayaci == self.sinav_soru_sayisi:
+            self.buton_sonraki_soru.hide()
+            self.buton_sinav_bitir.show()
+        if self.soru_sayaci > 1:
+            self.buton_önceki_soru.show()
+        """sonraki önceki buton gösterme gizleme metni yazma"""
 
     def onceki_soru(self):
+        self.soru_sayaci -= 1
+        self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
+        self.soru_sik2[self.soru_sayaci + 1][0] = self.A.text()
+        self.soru_sik2[self.soru_sayaci + 1 ][1] = self.B.text()
+        self.soru_sik2[self.soru_sayaci + 1][2] = self.C.text()
+
+        self.cümle_soru.setText(f"{self.soru_kalip[self.soru_sayaci][3]}")
+
+        self.A.setText(self.soru_sik2[self.soru_sayaci][0])
+        self.B.setText(self.soru_sik2[self.soru_sayaci][1])
+        self.C.setText(self.soru_sik2[self.soru_sayaci][2])
+
         self.label_resim_soru.setPixmap(QPixmap())
         self.label_resim_soru.setScaledContents(False)
-        image = self.resimler[self.soru_sayaci - 1]
+        image = self.soru_kalip[self.soru_sayaci][0]
         pixmap = QPixmap(image)
         self.label_resim_soru.setPixmap(pixmap)
         self.label_resim_soru.setScaledContents(True)
 
-        self.sinav_soru.setText(self.sorular[self.soru_sayaci - 1])
-        if self.soru_sayaci > 1:
-            if str(self.sikler[self.soru_sayaci - 1]) == '0':
-                self.secim_kaldir()
-            else:
-                attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci - 1]))
-                attribute_to_set.setChecked(True)
+        self.sinav_soru.setText(self.soru_kalip[self.soru_sayaci][1])
 
-            if self.soru_sayaci == 2:
-                self.buton_önceki_soru.hide()
 
-            if self.soru_sayaci - 1 < self.sinav_soru_sayisi:
-                self.buton_sonraki_soru.show()
-                self.buton_sinav_bitir.hide()
-
-            self.soru_sayaci -= 1
-            self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
+        """sonraki önceki buton gösterme gizleme metni yazma"""
+        if str(self.sikler[self.soru_sayaci]) == '0':
+            self.secim_kaldir()
+        else:
+            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci]))
+            attribute_to_set.setChecked(True)
+        if self.soru_sayaci == 1:
+            self.buton_önceki_soru.hide()
+        if self.soru_sayaci < self.sinav_soru_sayisi:
+            self.buton_sonraki_soru.show()
+            self.buton_sinav_bitir.hide()
+        """sonraki önceki buton gösterme gizleme metni yazma"""
 
     def soru_ekle(self):
         ingilizce = self.line_edit_kelime_ingilizce.text()
         turkce = self.line_edit_kelime_turkcesi.text()
-        cumle1 = self.line_edit_cümle1.text()
-        cumle2 = self.line_edit_cümle2.text()
+        cumle1 = self.line_edit_ingilizce_cümle.text()
+        cumle2 = self.line_edit_türkçe_cümle.text()
 
         if ingilizce and turkce and cumle1 and cumle2:
-            self.label_sinav_sayac.setText("Başarıyla eklenmiştir.")
+            self.label_kelime_ekle.setText("Başarıyla eklenmiştir.")
         else:
-            self.label_sinav_sayac.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+            self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def resim_sec(self):
         options = QFileDialog.Options()
@@ -338,11 +346,19 @@ class Ana_Pencere123(QWidget):
         ShowHide.sinav_sonu_analiz(self)
         self.temizle()
 
-        for bos_sayac in range(self.sinav_soru_sayisi):
-            if str(self.sikler[bos_sayac + 1]) == '0':
+        for sayac in range(self.sinav_soru_sayisi):
+            if str(self.sikler[sayac + 1]) == '0':
                 self.bos_sayisi += 1
 
+            if self.sikler[sayac] != self.soru_kalip[sayac][2]:
+                self.dogru_sayisi += 1
+            else:
+                self.yanlis_sayisi += 1
+
+        self.yazi_dogru_sayi.setText(str(self.dogru_sayisi))
+        self.yazi_yanlis_sayi.setText(str(self.yanlis_sayisi))
         self.yazi_bos_sayi.setText(str(self.bos_sayisi))
+
 
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

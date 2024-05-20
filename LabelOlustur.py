@@ -8,13 +8,13 @@ class LabelOlustur(QWidget):
         labels_info = [
             {"bilgi": "label_giris", "text": "", "position": (200, 400, 800, 40)},
             {"bilgi": "label_sinav_sayac", "text": "", "position": (350, 540, 500, 40)},
-            {"bilgi": "label_kelime_ekle", "text": "", "position": (350, 540, 500, 40)},
+            {"bilgi": "label_kelime_ekle", "text": "", "position": (350, 460, 500, 40)},
 
-            {"bilgi": "label_metin", "text": "Yukarıda Verilen Kelimenin Türkçesi Nedir?", "position": (300, 220, 600, 40)},
+            {"bilgi": "label_metin", "text": "Yukarıda Verilen Kelimenin Türkçesi Nedir?", "position": (300, 270, 600, 40)},
             {"bilgi": "label_ayarlar", "text": "SORU SAYISINI DEĞİŞTİRİNİZ", "position": (300, 200, 600, 40)},
 
             {"bilgi": "label_ekleme_resim", "text": "", "position": (550, 300, 100, 100)},
-            {"bilgi": "label_resim_soru", "text": "", "position": (550, 115, 100, 100)},
+            {"bilgi": "label_resim_soru", "text": "", "position": (550, 160, 100, 100)},
         ]
 
         for label_info in labels_info:

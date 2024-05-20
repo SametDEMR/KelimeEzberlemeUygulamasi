@@ -32,7 +32,7 @@ class ButonOlustur(QWidget):
             {"bilgi": "buton_cikis", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": self.cikis},
 
 
-            {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": self.soru_basla},
+            {"bilgi": "buton_sinav_basla", "text": "SINAVA BAŞLA", "position": (500, 280, 200, 40), "function": self.sonraki_soru},
             {"bilgi": "buton_sonraki_soru", "text": "SONRAKİ SORU", "position": (960, 540, 200, 40), "function": self.sonraki_soru},
             {"bilgi": "buton_önceki_soru", "text": "ÖNCEKİ SORU", "position": (20, 540, 200, 40), "function": self.onceki_soru},
             {"bilgi": "buton_sinav_bitir", "text": "SINAVI BİTİR", "position": (960, 540, 200, 40), "function": self.sinav_sonu_analiz},

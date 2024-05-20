@@ -50,6 +50,7 @@ class ShowHide(QWidget):
         self.ses_B.hide()
         self.ses_C.hide()
 
+        self.cümle_soru.hide()
         self.cümle_1.hide()
         self.cümle_2.hide()
         self.cümle_3.hide()
@@ -66,8 +67,8 @@ class ShowHide(QWidget):
 
         self.line_edit_kelime_ingilizce.hide()
         self.line_edit_kelime_turkcesi.hide()
-        self.line_edit_cümle1.hide()
-        self.line_edit_cümle2.hide()
+        self.line_edit_ingilizce_cümle.hide()
+        self.line_edit_türkçe_cümle.hide()
 
         self.label_giris.hide()
         self.label_sinav_sayac.hide()
@@ -139,6 +140,8 @@ class ShowHide(QWidget):
         self.ses_A.show()
         self.ses_B.show()
         self.ses_C.show()
+
+        self.cümle_soru.show()
         self.cümle_1.show()
         self.cümle_2.show()
         self.cümle_3.show()
@@ -155,8 +158,8 @@ class ShowHide(QWidget):
 
         self.line_edit_kelime_ingilizce.show()
         self.line_edit_kelime_turkcesi.show()
-        self.line_edit_cümle1.show()
-        self.line_edit_cümle2.show()
+        self.line_edit_ingilizce_cümle.show()
+        self.line_edit_türkçe_cümle.show()
 
         self.buton_resim_sec.show()
 
