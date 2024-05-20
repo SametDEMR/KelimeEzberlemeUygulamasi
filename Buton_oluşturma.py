@@ -9,7 +9,7 @@ class Buton_Olustur_Modul(QWidget):
     def createButtons(self):
         self.buttons = []
         buttons_info = [
-            {"bilgi": "buton_giriş", "text": "GİRİŞ", "position": (500, 340, 200, 40), "function": self.login},
+            {"bilgi": "buton_giriş", "text": "GİRİŞ", "position": (500, 340, 200, 40), "function": self.giris},
             {"bilgi": "buton_sifreunuttum", "text": "ŞİFREMİ UNUTTUM", "position": (380, 400, 200, 40), "function": self.sifre_unuttum},
             {"bilgi": "buton_kayit", "text": "KAYIT", "position": (620, 400, 200, 40), "function": self.kayit},
             {"bilgi": "buton_sifre_goster", "text": "", "position": (710, 240, 40, 40), "function": self.sifre_goster_gizle},

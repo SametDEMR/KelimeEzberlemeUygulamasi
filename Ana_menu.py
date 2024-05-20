@@ -20,41 +20,37 @@ class Ana_Pencere123(QWidget):
         self.setWindowTitle("Kelime Ezberleme Modülü")
         self.setFixedSize(1200, 600)
 
-        """self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)"""
-
-        """self.background_label = QLabel(self)
-        self.background_label.setGeometry(0, 0, 1200, 600)  # Pencere boyutlarına uygun boyutta ayarla
-        self.background_label.setPixmap(QPixmap('resim.png'))
-        self.background_label.setScaledContents(True)"""
-
         Text_box_olustur_Modul.createTextBox(self)
         Label_olusturma.createLabels(self)
         Buton_Olustur_Modul.createButtons(self)
+
         ShowHide.hepsini_gizleme(self)
         ShowHide.ana_ekran_goster(self)
 
-    def login(self):
-        self.line_edit_içi_sil()
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    def giris(self):
         username = self.line_edit_kullanici_adi.text()
         password = self.line_edit_sifre.text()
 
         if len(username) == 0 or len(password) == 0:
             self.label_aciklama.setText("Lütfen Bilgileri Eksiksiz Giriniz")
         else:
-            ShowHide.hepsini_gizleme(self)
+            self.gecis_islemleri()
+
             print("SINAV İÇERİĞİ BURAYA GELECEK")
 
-
     def sifre_unuttum(self):
-        self.line_edit_içi_sil()
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.geri_goster(self)
+        self.gecis_islemleri()
+
+        ShowHide.sifre_unuttum_goster(self)
 
     def kayit(self):
-        self.line_edit_içi_sil()
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.geri_goster(self)
+        self.gecis_islemleri()
+
         ShowHide.kayit_goster(self)
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def sifre_goster_gizle(self):
         sender = self.sender()
@@ -63,22 +59,36 @@ class Ana_Pencere123(QWidget):
         else:
             self.line_edit_sifre.setEchoMode(QLineEdit.Password)
 
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    def kaydol(self):
+        print("kaydol")
+
     def geri(self):
-        self.line_edit_içi_sil()
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.geri_gizle(self)
+        self.gecis_islemleri()
+
         ShowHide.ana_ekran_goster(self)
 
-    def line_edit_içi_sil(self):
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    
+    def gecis_islemleri(self):
         self.line_edit_kullanici_adi.clear()
         self.line_edit_sifre.clear()
         self.line_edit_isim.clear()
         self.line_edit_soyisim.clear()
         self.line_edit_mail.clear()
+        self.line_edit_kaydol_kullanici_adi.clear()
+        self.line_edit_sifre_kullanici_adi.clear()
+        self.line_edit_sifre_mail.clear()
 
-    def kaydol(self):
+        ShowHide.hepsini_gizleme(self)
 
-        print("kaydol")
+        caller_func = sys._getframe(1).f_code.co_name
+        if caller_func != "giris" and caller_func != "geri":
+            ShowHide.geri_goster(self)
+
+
+
 
 
 if __name__ == '__main__':

@@ -14,6 +14,10 @@ class Text_box_olustur_Modul(QWidget):
             {"bilgi": "line_edit_isim", "placeholder": "İsim", "position": (450, 60, 200, 40)},
             {"bilgi": "line_edit_soyisim", "placeholder": "Soyisim", "position": (450, 120, 200, 40)},
             {"bilgi": "line_edit_mail", "placeholder": "Mail", "position": (450, 180, 200, 40)},
+            {"bilgi": "line_edit_kaydol_kullanici_adi", "placeholder": "Kullanıcı Adı", "position": (450, 300, 200, 40)},
+
+            {"bilgi": "line_edit_sifre_kullanici_adi", "placeholder": "Kullanıcı Adı", "position": (450, 160, 200, 40)},
+            {"bilgi": "line_edit_sifre_mail", "placeholder": "Mail", "position": (450, 220, 200, 40)},
         ]
 
         for edit_info in line_edit_info:
