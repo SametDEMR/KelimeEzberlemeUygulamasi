@@ -1,20 +1,13 @@
 from AnaButonlar import *
-from TextBoxOlustur import *
+from MetinselAraclar import *
 from ShowHide import *
-from LabelOlustur import *
-from Siklar import *
-from Siklik import *
-from MetinSesButon import *
-from AnalizKısımları import *
-from DilDeğiştir import *
+from Analizler import *
 
 from gtts import gTTS
 from playsound import playsound
-import sqlite3
-import os, sys, random
+import os, sys, random, sqlite3, cv2
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
 from PyQt5.QtGui import QPixmap
-import cv2
 from datetime import datetime
 from tkinter import filedialog
 from reportlab.lib.pagesizes import letter
@@ -33,15 +26,6 @@ class Ana_Pencere123(QWidget):
         self.onceki_soru_sayisi = 0
         self.dil = 'ing'
 
-        self.bilinen_kelimeler = {
-            1: [],
-            2: [],
-            3: [],
-            4: [],
-            5: [],
-            6: []
-        }
-
         self.sifirla()
         self.kontrol()
 
@@ -50,17 +34,22 @@ class Ana_Pencere123(QWidget):
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setFixedSize(1200, 600)
 
-        LabelOlustur.Olustur(self)
-        TextBoxOlustur.Olustur(self)
-        ButonOlustur.Olustur(self)
-        SiklikOlustur.Olustur(self)
-        SiklarOlustur.Olustur(self)
-        SinavSonuAnaliz.Olustur(self)
-        MetinSesButonOlustur.Olustur(self)
-        DilButonOlustur.Olustur(self)
+        MetinselAraclar.Metinler(self)
+        MetinselAraclar.KelimeEkleme(self)
+        MetinselAraclar.GirisKismi(self)
+
+        ButonOlustur.AnaMenuButonlari(self)
+        ButonOlustur.SinavAnaButonlari(self)
+        ButonOlustur.SinavIcButonlari(self)
+        ButonOlustur.SinavSikButonlari(self)
+        ButonOlustur.SoruSayisiButonlari(self)
+        ButonOlustur.Seslendirme(self)
+        ButonOlustur.DilDegistir(self)
+
+        Analizler.SinavSonuSayfasi(self)
+        Analizler.AnalizSayfasi(self)
 
         ShowHide.hepsini_gizleme(self)
-
         ShowHide.giris(self)
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -83,6 +72,15 @@ class Ana_Pencere123(QWidget):
             conn.close()
 
     def sifirla(self):
+        self.bilinen_kelimeler = {
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: []
+        }
+
         self.toplam_dogru_sayisi = 0
         self.toplam_yanlis_sayisi = 0
         self.toplam_bos_sayisi = 0
@@ -93,7 +91,7 @@ class Ana_Pencere123(QWidget):
         self.bos_sayisi = 0
         self.soru_sayaci = 0
 
-        self.soru_kalip = [[0 for j in range(5)] for i in range(50)]
+        self.soru_kalip = [[0 for j in range(6)] for i in range(50)]
         self.soru_siklari = [[0 for j in range(6)] for i in range(50)]
         self.sikler_kayit = [[0 for j in range(4)] for i in range(50)]
 
@@ -489,7 +487,7 @@ class Ana_Pencere123(QWidget):
 
             self.sayac = 1
             if self.dil == 'tr':
-                self.label_metin.setText("Yukarıda Verilen Kelimenin İNGİLİZCESİ Nedir?")
+                self.label_soru_metin.setText("Yukarıda Verilen Kelimenin İNGİLİZCESİ Nedir?")
                 for random_resim, random_ingilizce, random_turkce, random_cümle1, random_cümle2 in kelime_bilgileri:
                     self.soru_kalip[self.sayac][0] = random_resim
                     self.soru_kalip[self.sayac][1] = random_turkce
@@ -498,7 +496,7 @@ class Ana_Pencere123(QWidget):
                     self.soru_kalip[self.sayac][4] = random_cümle1
                     self.sayac += 1
             else:
-                self.label_metin.setText("Yukarıda Verilen Kelimenin TÜRKÇESİ Nedir?")
+                self.label_soru_metin.setText("Yukarıda Verilen Kelimenin TÜRKÇESİ Nedir?")
                 for random_resim, random_ingilizce, random_turkce, random_cümle1, random_cümle2 in kelime_bilgileri:
                     self.soru_kalip[self.sayac][0] = random_resim
                     self.soru_kalip[self.sayac][1] = random_ingilizce
@@ -646,8 +644,6 @@ class Ana_Pencere123(QWidget):
         cikti.save("dosya/ses" + str(self.sayac) + ".mp3")
         playsound("dosya/ses" + str(self.sayac) + ".mp3")
         self.sayac += 1
-
-    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def yazdir(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])

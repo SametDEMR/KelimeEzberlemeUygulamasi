@@ -1,5 +1,6 @@
 from AnaButonlar import *
-class ShowHide(QWidget):
+from AAnaMenu import *
+class ShowHide():
     def hepsini_gizleme(self):
         self.buton_geri_giris.hide()
         self.buton_geri_sinav.hide()
@@ -73,7 +74,7 @@ class ShowHide(QWidget):
 
         self.label_giris.hide()
         self.label_sinav_sayac.hide()
-        self.label_metin.hide()
+        self.label_soru_metin.hide()
         self.label_ayarlar_sayi.hide()
         self.label_ayarlar_dil.hide()
 
@@ -166,7 +167,7 @@ class ShowHide(QWidget):
         self.buton_sonraki_soru.show()
         self.sinav_soru.show()
 
-        self.label_metin.show()
+        self.label_soru_metin.show()
 
         self.ses_soru.show()
 
@@ -181,7 +182,7 @@ class ShowHide(QWidget):
 
         self.cümle_soru.show()
 
-        self.label_metin.show()
+        self.label_soru_metin.show()
         self.label_sinav_sayac.show()
         self.label_resim_soru.show()
 
