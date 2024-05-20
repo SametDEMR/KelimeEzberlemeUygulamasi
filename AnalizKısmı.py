@@ -15,7 +15,7 @@ class AnalizOlustur(QWidget):
             {"bilgi": "toplam_yanlis_sayi", "text": "TOPLAM YANLIŞ SAYISI : ", "position": (450, 100, 300, 40)},
             {"bilgi": "toplam_bos_sayi", "text": "TOPLAM BOŞ SAYISI : ", "position": (770, 100, 300, 40)},
             {"bilgi": "toplam_soru_sayi", "text": "TOPLAM SORU SAYISI : ", "position": (290, 160, 300, 40)},
-            {"bilgi": "ortalama_sayi", "text": "ORTALAMA : ", "position": (640, 160, 300, 40)},
+            {"bilgi": "ortalama_sayi", "text": "ORTALAMA : ", "position": (610, 160, 300, 40)},
 
         ]
 

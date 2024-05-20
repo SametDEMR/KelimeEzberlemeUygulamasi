@@ -31,14 +31,7 @@ class Ana_Pencere123(QWidget):
         self.toplam_bos_sayisi = 0
         self.toplam_soru_sayisi = 0
 
-        self.dogru_sayisi = 0
-        self.yanlis_sayisi = 0
-        self.bos_sayisi = 0
-
-        self.soru_sayaci = 0
-        self.soru_kalip = [[0 for j in range(5)] for i in range(21)]
-        self.soru_sik2 = [[0 for j in range(6)] for i in range(21)]
-        self.sikler = [[0 for j in range(2)] for i in range(21)]
+        self.sifirla()
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
         self.setStyleSheet("background-color: #3c64c8 ")
@@ -79,6 +72,15 @@ class Ana_Pencere123(QWidget):
             conn.commit()
             conn.close()
 
+    def sifirla(self):
+        self.dogru_sayisi = 0
+        self.yanlis_sayisi = 0
+        self.bos_sayisi = 0
+        self.soru_sayaci = 0
+        self.soru_kalip = [[0 for j in range(5)] for i in range(21)]
+        self.soru_sik2 = [[0 for j in range(6)] for i in range(21)]
+        self.sikler = [[0 for j in range(2)] for i in range(21)]
+
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def geri_giris(self):
@@ -94,10 +96,14 @@ class Ana_Pencere123(QWidget):
         if username and password:
             conn = sqlite3.connect("database/KullaniciBilgileri.db")
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
-            user = cursor.fetchone()
+            cursor1 = conn.cursor()
 
-            self.kullanici_id = user[0]
+            cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
+            cursor1.execute("SELECT id FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
+
+            self.kullanici_id = cursor1.fetchone()[0]
+            user = cursor.fetchone()
+            conn.close()
 
             if user:
                 self.temizle()
@@ -105,7 +111,6 @@ class Ana_Pencere123(QWidget):
                 ShowHide.sinav_ana_menu(self)
             else:
                 self.label_giris.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
-            conn.close()
         else:
             self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
@@ -144,6 +149,8 @@ class Ana_Pencere123(QWidget):
             self.label_giris.setText("Bu Kullanıcı Adı Zaten Kullanımda. Farklı Bir Kullanıcı Adı Giriniz.")
         else:
             cursor.execute("INSERT INTO kullanicilar (isim, soyisim, kullaniciadi, sifre) VALUES (?, ?, ?, ?)",(isim, soyisim, kullaniciadi, sifre))
+            cursor.execute("INSERT INTO Kullaniciİstatistik (dogru_cevaplar, yanlis_cevaplar, bos_cevaplar, toplam_sorular) VALUES (0, 0, 0, 0)")
+
             conn.commit()
             conn.close()
 
@@ -198,24 +205,24 @@ class Ana_Pencere123(QWidget):
 
         conn = sqlite3.connect('database/KullaniciBilgileri.db')
         cursor = conn.cursor()
-
         cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
         kullanici_verileri = cursor.fetchone()
-
+        conn.commit()
         conn.close()
 
-        self.toplam_dogru_sayisi = kullanici_verileri[1]
-        self.toplam_yanlis_sayisi = kullanici_verileri[2]
-        self.toplam_bos_sayisi = kullanici_verileri[3]
-        self.toplam_soru_sayisi = kullanici_verileri[4]
+        """self.toplam_dogru_sayisi += kullanici_verileri[1]
+        self.toplam_yanlis_sayisi += kullanici_verileri[2]
+        self.toplam_bos_sayisi += kullanici_verileri[3]
+        self.toplam_soru_sayisi += kullanici_verileri[4]"""
 
         self.toplam_dogru_sayi.setText("TOPLAM DOĞRU SAYISI : " + str(self.toplam_dogru_sayisi))
         self.toplam_yanlis_sayi.setText("TOPLAM YANLIŞ SAYISI : " + str(self.toplam_yanlis_sayisi))
         self.toplam_bos_sayi.setText("TOPLAM BOŞ SAYISI : " + str(self.toplam_bos_sayisi))
         self.toplam_soru_sayi.setText("TOPLAM SORU SAYISI : " + str(self.toplam_soru_sayisi))
-        self.ortalama_sayi.setText("ORTALAMA : %" + str("{:.2f}".format((self.toplam_dogru_sayisi / self.toplam_soru_sayisi)*100)))
-
-
+        if self.toplam_dogru_sayisi == 0:
+            self.ortalama_sayi.setText("ORTALAMA : %00.00")
+        else:
+            self.ortalama_sayi.setText("ORTALAMA : %" + str("{:.2f}".format((self.toplam_dogru_sayisi / self.toplam_soru_sayisi)*100)))
 
     def ayarlar(self):
         self.button_group.setExclusive(False)
@@ -259,25 +266,20 @@ class Ana_Pencere123(QWidget):
 
         options_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
         text_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
-        random_index = random.randint(0, 2)
+
+        while str(self.soru_kalip[options_indices[0]][2]) == str(self.soru_kalip[options_indices[1]][2]) == str(self.soru_kalip[options_indices[2]][2]):
+            random_sayi1 = random.randint(1, 20)
+            random_sayi2 = random.randint(1, 20)
+            options_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
+            text_indices = [self.soru_sayaci, random_sayi1, random_sayi2]
 
         if str(self.soru_sik2[self.soru_sayaci][0]) == '0':
-            random_indices = [0, 1, 2]
-            random_indices.remove(random_index)
-            random_indices.insert(0, random_index)
-
-            options_texts = [self.soru_kalip[options_indices[i]][2] for i in random_indices]
-            while len(set(options_texts)) != 3:
-                random_index = random.randint(0, 2)
-                options_texts[random_index] = self.soru_kalip[random_sayi1 + random_index][2]
-
-            self.A.setText(options_texts[0])
-            self.B.setText(options_texts[1])
-            self.C.setText(options_texts[2])
-            self.cümle_1.setText(self.soru_kalip[text_indices[random_indices[0]]][4])
-            self.cümle_2.setText(self.soru_kalip[text_indices[random_indices[1]]][4])
-            self.cümle_3.setText(self.soru_kalip[text_indices[random_indices[2]]][4])
-
+            self.A.setText(self.soru_kalip[options_indices[0]][2])
+            self.B.setText(self.soru_kalip[options_indices[1]][2])
+            self.C.setText(self.soru_kalip[options_indices[2]][2])
+            self.cümle_1.setText(self.soru_kalip[text_indices[0]][4])
+            self.cümle_2.setText(self.soru_kalip[text_indices[1]][4])
+            self.cümle_3.setText(self.soru_kalip[text_indices[2]][4])
         else:
             self.A.setText(self.soru_sik2[self.soru_sayaci][0])
             self.B.setText(self.soru_sik2[self.soru_sayaci][1])
@@ -304,8 +306,20 @@ class Ana_Pencere123(QWidget):
         if str(self.sikler[self.soru_sayaci][0]) == '0':
             self.secim_kaldir()
         else:
-            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci][0]))
-            attribute_to_set.setChecked(True)
+            self.button_group1.setExclusive(False)
+            if self.A.text() == str(self.sikler[self.soru_sayaci][0]):
+                self.A.setChecked(True)
+                self.B.setChecked(False)
+                self.C.setChecked(False)
+            if self.B.text() == str(self.sikler[self.soru_sayaci][0]):
+                self.A.setChecked(False)
+                self.B.setChecked(True)
+                self.C.setChecked(False)
+            if self.C.text() == str(self.sikler[self.soru_sayaci][0]):
+                self.A.setChecked(False)
+                self.B.setChecked(False)
+                self.C.setChecked(True)
+            self.button_group1.setExclusive(True)
         if self.soru_sayaci == self.sinav_soru_sayisi:
             self.buton_sonraki_soru.hide()
             self.buton_sinav_bitir.show()
@@ -344,8 +358,20 @@ class Ana_Pencere123(QWidget):
         if str(self.sikler[self.soru_sayaci][0]) == '0':
             self.secim_kaldir()
         else:
-            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci][0]))
-            attribute_to_set.setChecked(True)
+            self.button_group1.setExclusive(False)
+            if self.A.text() == str(self.sikler[self.soru_sayaci][0]):
+                self.A.setChecked(True)
+                self.B.setChecked(False)
+                self.C.setChecked(False)
+            if self.B.text() == str(self.sikler[self.soru_sayaci][0]):
+                self.A.setChecked(False)
+                self.B.setChecked(True)
+                self.C.setChecked(False)
+            if self.C.text() == str(self.sikler[self.soru_sayaci][0]):
+                self.A.setChecked(False)
+                self.B.setChecked(False)
+                self.C.setChecked(True)
+            self.button_group1.setExclusive(True)
         if self.soru_sayaci == 1:
             self.buton_önceki_soru.hide()
         if self.soru_sayaci < self.sinav_soru_sayisi:
@@ -418,14 +444,23 @@ class Ana_Pencere123(QWidget):
         self.yazi_yanlis_sayi.setText(str(self.yanlis_sayisi))
         self.yazi_bos_sayi.setText(str(self.bos_sayisi))
 
-        self.dogru_sayisi = 0
-        self.yanlis_sayisi = 0
-        self.bos_sayisi = 0
+        self.toplam_dogru_sayisi += int(self.dogru_sayisi)
+        self.toplam_yanlis_sayisi += int(self.yanlis_sayisi)
+        self.toplam_bos_sayisi += int(self.bos_sayisi)
+        self.toplam_soru_sayisi +=int(self.sinav_soru_sayisi)
 
-        self.soru_sayaci = 0
-        self.soru_kalip = [[0 for j in range(5)] for i in range(21)]
-        self.soru_sik2 = [[0 for j in range(6)] for i in range(21)]
-        self.sikler = [[0 for j in range(2)] for i in range(21)]
+        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+        cursor = conn.cursor()
+        cursor.execute('''UPDATE Kullaniciİstatistik 
+                              SET dogru_cevaplar = ?, yanlis_cevaplar = ?, bos_cevaplar = ?, toplam_sorular = ?
+                              WHERE kullanici_id = ?''',
+                           (self.toplam_dogru_sayisi, self.toplam_yanlis_sayisi,
+                            self.toplam_bos_sayisi, self.toplam_soru_sayisi, self.kullanici_id))
+
+        conn.commit()
+        conn.close()
+
+        self.sifirla()
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
