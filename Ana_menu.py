@@ -96,16 +96,12 @@ class Ana_Pencere123(QWidget):
         if username and password:
             conn = sqlite3.connect("database/KullaniciBilgileri.db")
             cursor = conn.cursor()
-            cursor1 = conn.cursor()
-
             cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
-            cursor1.execute("SELECT id FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
-
-            self.kullanici_id = cursor1.fetchone()[0]
             user = cursor.fetchone()
             conn.close()
 
             if user:
+                self.kullanici_id = user[0]
                 self.temizle()
                 ShowHide.hepsini_gizleme(self)
                 ShowHide.sinav_ana_menu(self)
@@ -210,10 +206,10 @@ class Ana_Pencere123(QWidget):
         conn.commit()
         conn.close()
 
-        """self.toplam_dogru_sayisi += kullanici_verileri[1]
+        self.toplam_dogru_sayisi += kullanici_verileri[1]
         self.toplam_yanlis_sayisi += kullanici_verileri[2]
         self.toplam_bos_sayisi += kullanici_verileri[3]
-        self.toplam_soru_sayisi += kullanici_verileri[4]"""
+        self.toplam_soru_sayisi += kullanici_verileri[4]
 
         self.toplam_dogru_sayi.setText("TOPLAM DOĞRU SAYISI : " + str(self.toplam_dogru_sayisi))
         self.toplam_yanlis_sayi.setText("TOPLAM YANLIŞ SAYISI : " + str(self.toplam_yanlis_sayisi))
