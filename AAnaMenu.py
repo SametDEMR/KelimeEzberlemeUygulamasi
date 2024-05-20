@@ -271,207 +271,252 @@ class Ana_Pencere123(QWidget):
                 self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def analiz(self):
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.sinav_sonu_analiz(self)
+        if self.tiklama == 0:
+            ShowHide.hepsini_gizleme(self)
+            ShowHide.analiz(self)
 
-        for sayac in range(self.kullan_soru_sayisi):
-            if self.SinavSiklariKaydet[sayac][0] == 0:
-                self.test_bos_sayisi += 1
-            elif self.SinavSiklariKaydet[sayac][1] == self.Sorular[sayac]["cevabı"]:
-                self.test_dogru_sayisi += 1
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
+            kullanici_verileri = cursor.fetchone()
+            conn.commit()
+            conn.close()
 
-                conn = sqlite3.connect('database/KullaniciBilgileri.db')
-                cursor = conn.cursor()
-                cursor.execute(
-                    'SELECT bilinen, tarih, kelime_id, kelime FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime = ?',
-                    (self.kullanici_id, self.Sorular[sayac]["kelime"],))
-                islem = cursor.fetchone()
+            self.toplam_dogru_sayi.setText("" + str(kullanici_verileri[1]))
+            self.toplam_yanlis_sayi.setText("" + str(kullanici_verileri[2]))
+            self.toplam_bos_sayi.setText("" + str(kullanici_verileri[3]))
+            self.toplam_soru_sayi.setText("" + str(kullanici_verileri[4]))
 
-                if islem:
-                    bilinen = islem[0]
-                    bilinen += 1
-                    if bilinen == 7:
-                        cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",
-                                       (self.kullanici_id, islem[2], islem[2]))
-
-                        cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
-                                       (self.kullanici_id, islem[2], islem[3]))
-                    else:
-                        tarih = islem[1]
-                        gun, ay, yil = map(int, tarih.split('.'))
-
-                        gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
-                        ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
-                        yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
-                        gun += gun_ekle.get(bilinen, 0)
-                        ay += ay_ekle.get(bilinen, 0)
-                        yil += yil_ekle.get(bilinen, 0)
-
-                        yeni_tarih = f"{gun}.{ay}.{yil}"
-                        cursor.execute(
-                            'UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
-                            (bilinen, yeni_tarih, self.kullanici_id, islem[3]))
-
-                else:
-                    tarih = datetime.now().strftime('%x')
-                    gun, ay, yil = map(int, tarih.split('.'))
-                    yeni_tarih = f"{gun + 1}.{ay}.{yil}"
-                    cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
-                                   (self.kullanici_id, self.Sorular[sayac]["id"], 1, self.Sorular[sayac]["kelime"],
-                                    yeni_tarih))
-                conn.commit()
-                conn.close()
-
+            if kullanici_verileri[1] == 0:
+                self.ortalama_sayi.setText("ORTALAMA : %00.00")
             else:
-                self.test_yanlis_sayisi += 1
+                self.ortalama_sayi.setText(
+                    "%" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4]) * 100)))
 
-        self.yazi_dogru_sayi.setText(str(self.test_dogru_sayisi))
-        self.yazi_yanlis_sayi.setText(str(self.test_yanlis_sayisi))
-        self.yazi_bos_sayi.setText(str(self.test_bos_sayisi))
-        self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
-        
-        self.kullan_soru_sayisi = self.sinav_soru_sayisi
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT kelime, bilinen FROM KullaniciBilinen WHERE kullanici_id = ?;',
+                           (self.kullanici_id,))
+            kullanici_bilinen = cursor.fetchall()
+
+            bilinen_sozluk = {1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+
+            for kelime, bilinen in kullanici_bilinen:
+                if bilinen in bilinen_sozluk:
+                    bilinen_sozluk[bilinen].append(kelime)
+
+            for bilinen_seviye, kelime_listesi in bilinen_sozluk.items():
+                label = getattr(self, f"_{bilinen_seviye}lik_yazi", None)
+                label.setText("\n".join(kelime_listesi))
+
+            cursor.execute('SELECT kelime FROM KaliciBilinen WHERE kullanici_id = ?;', (self.kullanici_id,))
+            kalici_bilinen = cursor.fetchall()
+
+            if kalici_bilinen:
+                metin = "      ".join(k[0] for k in kalici_bilinen)
+                self._ezber_yazi.setText(metin)
+
+            conn.close()
+
+        else:
+            ShowHide.hepsini_gizleme(self)
+            ShowHide.sinav_sonu_analiz(self)
+
+            for sayac in range(self.kullan_soru_sayisi):
+                if self.SinavSiklariKaydet[sayac][0] == 0:
+                    self.test_bos_sayisi += 1
+                elif str(self.SinavSiklariKaydet[sayac][1]) == str(self.Sorular[sayac]["cevabı"]):
+                    self.test_dogru_sayisi += 1
+
+                    conn = sqlite3.connect('database/KullaniciBilgileri.db')
+                    cursor = conn.cursor()
+                    cursor.execute(
+                        'SELECT bilinen, tarih, kelime_id, kelime FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime = ?',
+                        (self.kullanici_id, self.Sorular[sayac]["kelime"],))
+                    islem = cursor.fetchone()
+
+                    if islem:
+                        bilinen = islem[0]
+                        bilinen += 1
+                        if bilinen == 7:
+                            cursor.execute("INSERT INTO KaliciBilinen VALUES (?, ?, ?)",
+                                           (self.kullanici_id, islem[2], islem[4]))
+
+                            cursor.execute('DELETE FROM KullaniciBilinen WHERE kullanici_id = ? AND kelime_id = ?',
+                                           (self.kullanici_id, islem[2], islem[3]))
+                        else:
+                            tarih = islem[1]
+
+                            gun_ekle = {1: 1, 2: 3, 3: 7, 4: 0, 5: 0, 6: 0}
+                            ay_ekle = {1: 0, 2: 0, 3: 0, 4: 1, 5: 6, 6: 0}
+                            yil_ekle = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1}
+                            gun, ay, yil = map(int, tarih.split('.'))
+                            gun += gun_ekle.get(bilinen, 0)
+                            ay += ay_ekle.get(bilinen, 0)
+                            yil += yil_ekle.get(bilinen, 0)
+
+                            while gun > 30:
+                                gun -= 30
+                                ay += 1
+                            while ay > 12:
+                                ay -= 12
+                                yil += 1
+
+                            yeni_tarih = (f"{gun}.{ay}.{yil}")
+                            cursor.execute(
+                                'UPDATE KullaniciBilinen SET bilinen = ?, tarih = ? WHERE kullanici_id = ? AND kelime_id = ?',
+                                (bilinen, yeni_tarih, self.kullanici_id, islem[2]))
+
+                    else:
+                        tarih = datetime.now().strftime('%x')
+                        gun, ay, yil = map(int, tarih.split('.'))
+                        yeni_tarih = f"{gun + 1}.{ay}.{yil}"
+                        cursor.execute('INSERT INTO KullaniciBilinen VALUES (?, ?, ?, ?, ?)',
+                                       (self.kullanici_id, self.Sorular[sayac]["id"], 1, self.Sorular[sayac]["kelime"],
+                                        yeni_tarih))
+                    conn.commit()
+                    conn.close()
+                else:
+                    self.test_yanlis_sayisi += 1
+
+            conn = sqlite3.connect('database/KullaniciBilgileri.db')
+            cursor = conn.cursor()
+            cursor.execute('''UPDATE Kullaniciİstatistik 
+                    SET dogru_cevaplar = dogru_cevaplar + ?, yanlis_cevaplar = yanlis_cevaplar + ?, bos_cevaplar = bos_cevaplar + ?, toplam_sorular = toplam_sorular + ?
+                    WHERE kullanici_id = ?''', (
+            self.test_dogru_sayisi, self.test_yanlis_sayisi, self.test_bos_sayisi, self.sinav_soru_sayaci,
+            self.kullanici_id))
+
+            conn.commit()
+            conn.close()
+
+            self.yazi_dogru_sayi.setText(str(self.test_dogru_sayisi))
+            self.yazi_yanlis_sayi.setText(str(self.test_yanlis_sayisi))
+            self.yazi_bos_sayi.setText(str(self.test_bos_sayisi))
+            self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
+
+            self.kullan_soru_sayisi = self.sinav_soru_sayisi
 
     def ayarlar(self):
-        try:
-            if self.tiklama == 0:
-                self.button_group3.setExclusive(False)
-                self.__dict__[f"{self.dil}"].setChecked(True)
-                self.button_group3.setExclusive(True)
+        if self.tiklama == 0:
+            self.button_group3.setExclusive(False)
+            self.__dict__[f"{self.dil}"].setChecked(True)
+            self.button_group3.setExclusive(True)
 
-                self.button_group2.setExclusive(False)
-                self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
-                self.button_group2.setExclusive(True)
+            self.button_group2.setExclusive(False)
+            self.__dict__[f"_{self.kullan_soru_sayisi}"].setChecked(True)
+            self.button_group2.setExclusive(True)
 
-                ShowHide.hepsini_gizleme(self)
-                ShowHide.ayarlar(self)
-                self.tiklama += 1
+            ShowHide.hepsini_gizleme(self)
+            ShowHide.ayarlar(self)
+            self.tiklama += 1
+        else:
+            sender = self.sender()
+
+            if len(sender.text()) < 3:
+                self.sinav_soru_sayisi = int(sender.text())
+                self.kullan_soru_sayisi = self.sinav_soru_sayisi
+                self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
             else:
-                sender = self.sender()
-
-                if len(sender.text()) < 3:
-                    self.sinav_soru_sayisi = int(sender.text())
-                    self.kullan_soru_sayisi = self.sinav_soru_sayisi
-                    self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
-                else:
-                    bilgi = sender.property("bilgi")
-                    self.dil = str(bilgi)
-        except Exception as e:
-            print(e)
+                bilgi = sender.property("bilgi")
+                self.dil = str(bilgi)
 
     """"""""""""""""""""""""
 
     def SoruOlustur(self):
+        self.tiklama = 1
         self.Sorular = []
         self.sinav_soru_sayaci = 1
-        try:
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.sinav_sayfasi_sonra(self)
+        ShowHide.hepsini_gizleme(self)
+        ShowHide.sinav_sayfasi_sonra(self)
 
-            tarih = datetime.now().strftime('%x')
-            gun, ay, yil = map(int, tarih.split('.'))
-            tarih = f"{gun}.{ay}.{yil}"
+        tarih = datetime.now().strftime('%x')
+        gun, ay, yil = map(int, tarih.split('.'))
+        tarih = f"{gun}.{ay}.{yil}"
 
-            conn = sqlite3.connect('database/KullaniciBilgileri.db')
-            cursor = conn.cursor()
-            cursor.execute('SELECT kelime_id FROM KullaniciBilinen WHERE kullanici_id = ? AND tarih = ?',
-                           (self.kullanici_id, tarih,))
-            bugun_cikacak_kelimeler = cursor.fetchall()
+        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT kelime_id FROM KullaniciBilinen WHERE kullanici_id = ? AND tarih = ?',
+                       (self.kullanici_id, tarih,))
+        bugun_cikacak_kelimeler = cursor.fetchall()
 
-            cursor.execute('SELECT kelime_id FROM KaliciBilinen WHERE kullanici_id = ?', (self.kullanici_id,))
-            artik_cikmayacak_kelimeler = cursor.fetchall()
-            conn.commit()
-            conn.close()
-            artik_cikmayacak_kelimeler += bugun_cikacak_kelimeler
+        cursor.execute('SELECT kelime_id FROM KaliciBilinen WHERE kullanici_id = ?', (self.kullanici_id,))
+        artik_cikmayacak_kelimeler = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        artik_cikmayacak_kelimeler += bugun_cikacak_kelimeler
 
-            bugun_yazilacak = ["asd"] * len(bugun_cikacak_kelimeler)
+        bugun_yazilacak = ["asd"] * len(bugun_cikacak_kelimeler)
 
-            self.kullan_soru_sayisi += len(bugun_cikacak_kelimeler)
+        self.kullan_soru_sayisi += len(bugun_cikacak_kelimeler)
 
-            conn = sqlite3.connect("database/Kelimeler.db")
-            cursor = conn.cursor()
-            for sayac in range(len(bugun_cikacak_kelimeler)):
-                cursor.execute("SELECT * FROM kelimeler WHERE kelime_id = ?", (bugun_cikacak_kelimeler[sayac][0],))
-                bugunkiler = cursor.fetchall()
-                bugun_yazilacak[sayac] = (bugunkiler[0])
+        conn = sqlite3.connect("database/Kelimeler.db")
+        cursor = conn.cursor()
+        for sayac in range(len(bugun_cikacak_kelimeler)):
+            cursor.execute("SELECT * FROM kelimeler WHERE kelime_id = ?", (bugun_cikacak_kelimeler[sayac][0],))
+            bugunkiler = cursor.fetchall()
+            bugun_yazilacak[sayac] = (bugunkiler[0])
 
-            if len(bugun_cikacak_kelimeler) == 0:
-                cursor.execute("SELECT * FROM kelimeler ORDER BY RANDOM() LIMIT ?", (self.kullan_soru_sayisi,))
+        if len(bugun_cikacak_kelimeler) == 0:
+            cursor.execute("SELECT * FROM kelimeler ORDER BY RANDOM() LIMIT ?", (self.kullan_soru_sayisi,))
+        else:
+            for sayac in range(len(artik_cikmayacak_kelimeler)):
+                çikmaycak = int(artik_cikmayacak_kelimeler[sayac][0])
+                cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?",
+                               (çikmaycak, self.kullan_soru_sayisi,))
+
+        rows = cursor.fetchall()
+        conn.close()
+        bugun_yazilacak += rows
+
+        for row in bugun_yazilacak:
+            data = list(row)
+            id, ingilizce, turkce, cumle_ing, cumle_tr, image_path = data
+            if self.dil == 'tr':
+                correct_answer = ingilizce
+                other_answers = [r[1] for r in bugun_yazilacak if r[0] != id]
             else:
-                for sayac in range(len(artik_cikmayacak_kelimeler)):
-                    çikmaycak = int(artik_cikmayacak_kelimeler[sayac][0])
-                    cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?", (çikmaycak, self.kullan_soru_sayisi,))
+                correct_answer = turkce
+                other_answers = [r[2] for r in bugun_yazilacak if r[0] != id]
+            wrong_answers = random.sample(other_answers, 2)
 
-            rows = cursor.fetchall()
-            conn.close()
-            bugun_yazilacak += rows
+            choices = {"A": None, "B": None, "C": None}
+            answers = [correct_answer] + wrong_answers[:2]
+            random.shuffle(answers)
+            choices["A"], choices["B"], choices["C"] = answers
 
-            for row in bugun_yazilacak:
-                data = list(row)
-                id, ingilizce, turkce, cumle_ing, cumle_tr, image_path = data
-                if self.dil == 'tr':
-                    correct_answer = ingilizce
-                    other_answers = [r[1] for r in bugun_yazilacak if r[0] != id]
-                else:
-                    correct_answer = turkce
-                    other_answers = [r[2] for r in bugun_yazilacak if r[0] != id]
-                wrong_answers = random.sample(other_answers, 2)
-                random_number = random.randint(1, 3)
+            if self.dil == 'tr':
+                self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN İNGİLİZCESİ NEDİR?")
+                question = {
+                    "id": id,
+                    "image_path": image_path,
+                    "kelime": turkce,
+                    "cumle": cumle_tr,
+                    "choices": choices,
+                    "cevabı": ingilizce
+                }
+            else:
+                self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
+                question = {
+                    "id": id,
+                    "image_path": image_path,
+                    "kelime": ingilizce,
+                    "cumle": cumle_ing,
+                    "choices": choices,
+                    "cevabı": turkce
+                }
+            self.Sorular.append(question)
 
-                choices = {}
-                if random_number == 1:
-                    choices = {
-                        "A": correct_answer,
-                        "B": wrong_answers[0],
-                        "C": wrong_answers[1]
-                    }
-                elif random_number == 2:
-                    choices = {
-                        "A": wrong_answers[0],
-                        "B": correct_answer,
-                        "C": wrong_answers[1]
-                    }
-                else:
-                    choices = {
-                        "A": wrong_answers[0],
-                        "B": wrong_answers[1],
-                        "C": correct_answer
-                    }
-
-                if self.dil == 'tr':
-                    self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN İNGİLİZCESİ NEDİR?")
-                    question = {
-                        "id": id,
-                        "image_path": image_path,
-                        "kelime": turkce,
-                        "cumle": cumle_tr,
-                        "choices": choices,
-                        "cevabı": ingilizce
-                    }
-                else:
-                    self.label_soru_metin.setText("YUKARIDAKİ KELİMENİN TÜRKÇESİ NEDİR?")
-                    question = {
-                        "id": id,
-                        "image_path": image_path,
-                        "kelime": ingilizce,
-                        "cumle": cumle_ing,
-                        "choices": choices,
-                        "cevabı": turkce
-                    }
-                self.Sorular.append(question)
-
-            self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
-            image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
-            pixmap = QPixmap(image)
-            self.label_resim_soru.setPixmap(pixmap)
-            self.label_resim_soru.setScaledContents(True)
-            self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-            self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
-            self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
-            self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
-            self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
-        except Exception as e:
-            print("Hata:", e)
+        self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
+        image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
+        pixmap = QPixmap(image)
+        self.label_resim_soru.setPixmap(pixmap)
+        self.label_resim_soru.setScaledContents(True)
+        self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
+        self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
+        self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
+        self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
+        self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
 
     def SoruDegistir(self, degistirme):
         self.sinav_soru_sayaci += int(degistirme)
@@ -526,7 +571,7 @@ class Ana_Pencere123(QWidget):
         sender_button = self.sender()
         bilgi = sender_button.property("bilgi")
 
-        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.sinav_soru.text()), str(getattr(self, bilgi).text()), str(bilgi))
+        self.SinavSiklariKaydet[self.sinav_soru_sayaci - 1] = (str(self.sinav_soru.text()), str(getattr(self, bilgi).text()), str(bilgi))
 
     def seslendirme(self, pos):
         corrected_pos = pos - QPoint(160, 0)

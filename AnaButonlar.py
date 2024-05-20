@@ -179,8 +179,6 @@ class ButonOlustur(QWidget):
                     }
                 """)
 
-
-
     def SinavSikButonlari(self):
         self.button_group1 = QButtonGroup()
         buttons_info = [
@@ -222,8 +220,6 @@ class ButonOlustur(QWidget):
             if bilgi == "sinav_soru":
                 self.sinav_soru.setEnabled(False)
 
-
-
     def SoruSayisiButonlari(self):
         self.button_group2 = QButtonGroup()
         buttons_info = [
@@ -260,7 +256,6 @@ class ButonOlustur(QWidget):
             self.button_group2.addButton(button)
 
             setattr(self, bilgi, button)
-
     def DilDegistir(self):
         self.button_group3 = QButtonGroup()
         buttons_info = [
@@ -295,9 +290,6 @@ class ButonOlustur(QWidget):
                    """)
 
             setattr(self, bilgi, button)
-
-
-
     def Seslendirme(self):
         self.buttons = []
         self.selected_button = None
