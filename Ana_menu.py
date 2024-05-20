@@ -48,7 +48,7 @@ class Ana_Pencere123(QWidget):
         self.kontrol()
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
-        self.setStyleSheet("background-color: #3c64c8 ")
+        self.setStyleSheet("background-color: #1E468F")
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setFixedSize(1200, 600)
 
@@ -300,15 +300,15 @@ class Ana_Pencere123(QWidget):
             conn.commit()
             conn.close()
 
-            self.toplam_dogru_sayi.setText("TOPLAM DOĞRU SAYISI : " + str(kullanici_verileri[1]))
-            self.toplam_yanlis_sayi.setText("TOPLAM YANLIŞ SAYISI : " + str(kullanici_verileri[2]))
-            self.toplam_bos_sayi.setText("TOPLAM BOŞ SAYISI : " + str(kullanici_verileri[3]))
-            self.toplam_soru_sayi.setText("TOPLAM SORU SAYISI : " + str(kullanici_verileri[4]))
+            self.toplam_dogru_sayi.setText("" + str(kullanici_verileri[1]))
+            self.toplam_yanlis_sayi.setText("" + str(kullanici_verileri[2]))
+            self.toplam_bos_sayi.setText("" + str(kullanici_verileri[3]))
+            self.toplam_soru_sayi.setText("" + str(kullanici_verileri[4]))
 
             if kullanici_verileri[1] == 0:
                 self.ortalama_sayi.setText("ORTALAMA : %00.00")
             else:
-                self.ortalama_sayi.setText("ORTALAMA : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
+                self.ortalama_sayi.setText("%" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
 
 
 
@@ -684,6 +684,9 @@ class Ana_Pencere123(QWidget):
         c.drawString(25, 410, "★★★")
         c.drawString(25, 380, "★★")
         c.drawString(25, 350, "★")
+
+        c.drawString(180, 530, self._ezber_yazi.text())
+
 
         metin1 = self._1lik_yazi.text()
         yeni_metin1 = metin1.replace("\n", "      ")

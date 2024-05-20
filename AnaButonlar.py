@@ -55,10 +55,10 @@ class ButonOlustur(QWidget):
 
             button.setStyleSheet("""
                 QPushButton {
-                    background-color: #FFA500;
+                    background-color: #FFB347;
                     border-radius: 20px;
-                    color: #FFFFFF;
-                    font-size: 16px;
+                    color: #333333;
+                    font-size: 20px;
                     padding: 0px 0px;
                 }
                 QPushButton:hover {
@@ -73,7 +73,7 @@ class ButonOlustur(QWidget):
             if bilgi == "buton_sifre_goster":
                 button.setStyleSheet("""
                     QPushButton {
-                        border: 2px solid #FFA500;
+                        border: 2px solid #FFB347;
                         border-radius: 20px;
                         padding: 10px 20px;
                         background-image: url('program/kapalı1.png');
@@ -105,8 +105,8 @@ class ButonOlustur(QWidget):
                     QPushButton {
                         background-color: #FF0000;
                         border-radius: 20px;
-                        color: #FFFFFF;
-                        font-size: 16px;
+                        color: #333333;
+                        font-size: 20px;
                         padding: 0px 0px;
                     }
                     QPushButton:hover {

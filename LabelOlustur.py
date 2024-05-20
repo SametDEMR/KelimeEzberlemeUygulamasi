@@ -31,7 +31,7 @@ class LabelOlustur(QWidget):
                 QLabel {
                     color: #FFFFFF;
                     font-family: "Arial", sans-serif; /* Yazı fontu */
-                    font-size: 25px;
+                    font-size: 30px;
                 }
             """)
 
@@ -42,7 +42,7 @@ class LabelOlustur(QWidget):
                     QLabel {
                         color: #FFFFFF;
                         font-family: "Arial", sans-serif; /* Yazı fontu */
-                        font-size: 25px;
+                        font-size: 30px;
                         border: 3px solid #FFA500;
                         border-radius: 20px;
                     }

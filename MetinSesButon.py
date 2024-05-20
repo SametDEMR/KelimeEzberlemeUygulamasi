@@ -28,7 +28,7 @@ class MetinSesButonOlustur(QWidget):
 
             button.setStyleSheet("""
                 QPushButton {
-                    border: 2px solid #FFA500;
+                    border: 2px solid #FFB347;
                     border-radius: 20px;
                     padding: 10px 20px;
                     background-image: url('program/ses1.png');

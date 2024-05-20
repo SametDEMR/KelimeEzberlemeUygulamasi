@@ -21,14 +21,14 @@ class SiklikOlustur(QWidget):
 
             button.setStyleSheet("""
                 QPushButton {
-                    background-color: #FFA500;
+                    background-color: #FFB347;
                     border-radius: 20px;
-                    color: #FFFFFF;
+                    color: #333333;
                     font-size: 20px;
                     padding: 0px 0px;
                 }
                 QPushButton:checked {
-                    background-color: #666666;
+                    background-color: #FF6600;
                 }
                 QPushButton:hover {
                     background-color: #FF6600;

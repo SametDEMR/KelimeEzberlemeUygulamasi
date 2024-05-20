@@ -82,6 +82,12 @@ class ShowHide(QWidget):
         self.label_resim_soru.hide()
 
         self.yazdir.hide()
+
+        self.toplam_dogru_yazi.hide()
+        self.toplam_yanlis_yazi.hide()
+        self.toplam_bos_yazi.hide()
+        self.toplam_soru_yazi.hide()
+        self.ortalama_yazi.hide()
         self.toplam_dogru_sayi.hide()
         self.toplam_yanlis_sayi.hide()
         self.toplam_bos_sayi.hide()
@@ -205,7 +211,12 @@ class ShowHide(QWidget):
 
     def sayisal(self):
         self.analiz_geri.show()
-        self.yazdir.show()
+
+        self.toplam_dogru_yazi.show()
+        self.toplam_yanlis_yazi.show()
+        self.toplam_bos_yazi.show()
+        self.toplam_soru_yazi.show()
+        self.ortalama_yazi.show()
 
         self.toplam_dogru_sayi.show()
         self.toplam_yanlis_sayi.show()
@@ -215,7 +226,6 @@ class ShowHide(QWidget):
 
     def sozel(self):
         self.analiz_geri.show()
-        self.yazdir.show()
 
         self._ezber_yazi.show()
         self._ezber.show()

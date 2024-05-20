@@ -31,15 +31,15 @@ class TextBoxOlustur(QWidget):
             line_edit.setGeometry(*edit_info["position"])
 
             palette = line_edit.palette()
-            palette.setColor(QPalette.PlaceholderText, QColor("#FFFFFF"))
+            palette.setColor(QPalette.PlaceholderText, QColor("#333333"))
             line_edit.setPalette(palette)
 
             line_edit.setStyleSheet("""
             QLineEdit {
-                color: white; /* Metin rengi */
+                color: #333333;
                 border-radius: 20px;
                 padding: 0 15px;
-                background-color: #FFA500; /* Saydam beyaz */
+                background-color: #FFB347;
             }
             """)
 

@@ -21,29 +21,36 @@ class SinavSonuAnaliz(QWidget):
             {"bilgi": "yazi_bos_sayi", "text": "BOŞ", "position": (620, 310, 200, 40)},
             {"bilgi": "yazi_toplam_sayi", "text": str(self.sinav_soru_sayisi), "position": (860, 310, 200, 40)},
 
-            {"bilgi": "toplam_dogru_sayi", "text": "TOPLAM DOĞRU SAYISI : ", "position": (130, 60, 300, 40)},
-            {"bilgi": "toplam_yanlis_sayi", "text": "TOPLAM YANLIŞ SAYISI : ", "position": (450, 60, 300, 40)},
-            {"bilgi": "toplam_bos_sayi", "text": "TOPLAM BOŞ SAYISI : ", "position": (770, 60, 300, 40)},
-            {"bilgi": "toplam_soru_sayi", "text": "TOPLAM SORU SAYISI : ", "position": (290, 120, 300, 40)},
-            {"bilgi": "ortalama_sayi", "text": "ORTALAMA : ", "position": (610, 120, 300, 40)},
+
+            {"bilgi": "toplam_dogru_yazi", "text": "TOPLAM DOĞRU SAYISI", "position": (130, 214, 300, 40)},
+            {"bilgi": "toplam_yanlis_yazi", "text": "TOPLAM YANLIŞ SAYISI", "position": (450, 214, 300, 40)},
+            {"bilgi": "toplam_bos_yazi", "text": "TOPLAM BOŞ SAYISI", "position": (770, 214, 300, 40)},
+            {"bilgi": "toplam_soru_yazi", "text": "TOPLAM SORU SAYISI", "position": (290, 310, 300, 40)},
+            {"bilgi": "ortalama_yazi", "text": "ORTALAMA", "position": (610, 310, 300, 40)},
+
+            {"bilgi": "toplam_dogru_sayi", "text": "", "position": (130, 250, 300, 40)},
+            {"bilgi": "toplam_yanlis_sayi", "text": "", "position": (450, 250, 300, 40)},
+            {"bilgi": "toplam_bos_sayi", "text": "", "position": (770, 250, 300, 40)},
+            {"bilgi": "toplam_soru_sayi", "text": "", "position": (290, 346, 300, 40)},
+            {"bilgi": "ortalama_sayi", "text": "", "position": (610, 346, 300, 40)},
 
 
-            {"bilgi": "_6lik", "text": "★★★★★★", "position": (10, 64, 180, 40)},
-            {"bilgi": "_5lik", "text": "★★★★★", "position": (210, 64, 180, 40)},
-            {"bilgi": "_4lik", "text": "★★★★", "position": (410, 64, 180, 40)},
-            {"bilgi": "_3lik", "text": "★★★", "position": (610, 64, 180, 40)},
-            {"bilgi": "_2lik", "text": "★★", "position": (810, 64, 180, 40)},
-            {"bilgi": "_1lik", "text": "★", "position": (1010, 64, 180, 40)},
+            {"bilgi": "_6lik", "text": "★★★★★★", "position": (10, 94, 180, 40)},
+            {"bilgi": "_5lik", "text": "★★★★★", "position": (210, 94, 180, 40)},
+            {"bilgi": "_4lik", "text": "★★★★", "position": (410, 94, 180, 40)},
+            {"bilgi": "_3lik", "text": "★★★", "position": (610, 94, 180, 40)},
+            {"bilgi": "_2lik", "text": "★★", "position": (810, 94, 180, 40)},
+            {"bilgi": "_1lik", "text": "★", "position": (1010, 94, 180, 40)},
 
-            {"bilgi": "_6lik_yazi", "text": "", "position": (10, 100, 180, 200)},
-            {"bilgi": "_5lik_yazi", "text": "", "position": (210, 100, 180, 200)},
-            {"bilgi": "_4lik_yazi", "text": "", "position": (410, 100, 180, 200)},
-            {"bilgi": "_3lik_yazi", "text": "", "position": (610, 100, 180, 200)},
-            {"bilgi": "_2lik_yazi", "text": "", "position": (810, 100, 180, 200)},
-            {"bilgi": "_1lik_yazi", "text": "", "position": (1010, 100, 180, 200)},
+            {"bilgi": "_6lik_yazi", "text": "", "position": (10, 130, 180, 200)},
+            {"bilgi": "_5lik_yazi", "text": "", "position": (210, 130, 180, 200)},
+            {"bilgi": "_4lik_yazi", "text": "", "position": (410, 130, 180, 200)},
+            {"bilgi": "_3lik_yazi", "text": "", "position": (610, 130, 180, 200)},
+            {"bilgi": "_2lik_yazi", "text": "", "position": (810, 130, 180, 200)},
+            {"bilgi": "_1lik_yazi", "text": "", "position": (1010, 130, 180, 200)},
 
-            {"bilgi": "_ezber_yazi", "text": "", "position": (100, 320, 1000, 180)},
-            {"bilgi": "_ezber", "text": "EZBERLENMİŞ", "position": (100, 320, 1000, 40)},
+            {"bilgi": "_ezber_yazi", "text": "", "position": (100, 350, 1000, 180)},
+            {"bilgi": "_ezber", "text": "EZBERLENMİŞ", "position": (100, 350, 1000, 40)},
 
         ]
 
@@ -57,11 +64,11 @@ class SinavSonuAnaliz(QWidget):
 
             button.setStyleSheet("""
                 QPushButton {
-                    background-color: #3c64c8;
-                    border: 4px solid #FFA500;
+                    background-color: #1E468F;
+                    border: 4px solid #FFB347;
                     border-radius: 20px;
                     color: #FFFFFF;
-                    font-size: 20px;
+                    font-size: 25px;
                 }
             """)
 
