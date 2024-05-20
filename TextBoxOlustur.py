@@ -4,8 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QFont, QPalette, QColor
 
 
-class Giris_Text_box_Olustur(QWidget):
-    def createTextBox(self):
+class TextBoxOlustur(QWidget):
+    def Olustur(self):
         self.line_edits = []
         line_edit_info = [
             {"bilgi": "line_edit_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 180, 200, 40)},
@@ -14,10 +14,16 @@ class Giris_Text_box_Olustur(QWidget):
             {"bilgi": "line_edit_isim", "placeholder": "İSİM", "position": (450, 60, 200, 40)},
             {"bilgi": "line_edit_soyisim", "placeholder": "SOYİSİM", "position": (450, 120, 200, 40)},
             {"bilgi": "line_edit_mail", "placeholder": "MAİL", "position": (450, 180, 200, 40)},
-            {"bilgi": "line_edit_kaydol_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 300, 200, 40)},
+            {"bilgi": "line_edit_kaydol_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 240, 200, 40)},
+            {"bilgi": "line_edit_kaydol_sifre", "placeholder": "ŞİFRE", "position": (450, 300, 200, 40)},
 
             {"bilgi": "line_edit_sifre_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 180, 200, 40)},
             {"bilgi": "line_edit_sifre_mail", "placeholder": "MAİL", "position": (450, 240, 200, 40)},
+
+            {"bilgi": "line_edit_kelime_ingilizce", "placeholder": "KELİMENİN İNGİLİZCESİ", "position": (450, 60, 200, 40)},
+            {"bilgi": "line_edit_kelime_turkcesi", "placeholder": "KELİMENİN TÜRKÇESİ", "position": (450, 120, 200, 40)},
+            {"bilgi": "line_edit_cümle1", "placeholder": "CÜMLE", "position": (450, 180, 200, 40)},
+            {"bilgi": "line_edit_cümle2", "placeholder": "CÜMLE", "position": (450, 240, 200, 40)},
         ]
 
         for edit_info in line_edit_info:
@@ -26,7 +32,6 @@ class Giris_Text_box_Olustur(QWidget):
             line_edit.setPlaceholderText(edit_info["placeholder"])
             line_edit.setGeometry(*edit_info["position"])
 
-            # Set placeholder text color to white
             palette = line_edit.palette()
             palette.setColor(QPalette.PlaceholderText, QColor("#FFFFFF"))
             line_edit.setPalette(palette)
