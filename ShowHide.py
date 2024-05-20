@@ -66,7 +66,7 @@ class ShowHide(QWidget):
         self.line_edit_sifre_kullanici_adi.hide()
 
         self.line_edit_kelime_ingilizce.hide()
-        self.line_edit_kelime_turkcesi.hide()
+        self.line_edit_kelime_turkce.hide()
         self.line_edit_ingilizce_cümle.hide()
         self.line_edit_türkçe_cümle.hide()
 
@@ -148,7 +148,6 @@ class ShowHide(QWidget):
 
         self.label_metin.show()
         self.label_sinav_sayac.show()
-        self.label_kelime_ekle.show()
         self.label_resim_soru.show()
 
     def soru_ekleme(self):
@@ -157,7 +156,7 @@ class ShowHide(QWidget):
         self.buton_kelime_ekle_ekle.show()
 
         self.line_edit_kelime_ingilizce.show()
-        self.line_edit_kelime_turkcesi.show()
+        self.line_edit_kelime_turkce.show()
         self.line_edit_ingilizce_cümle.show()
         self.line_edit_türkçe_cümle.show()
 

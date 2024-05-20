@@ -19,7 +19,7 @@ class TextBoxOlustur(QWidget):
             {"bilgi": "line_edit_sifre_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 240, 200, 40)},
 
             {"bilgi": "line_edit_kelime_ingilizce", "placeholder": "KELİMENİN İNGİLİZCESİ", "position": (450, 60, 200, 40)},
-            {"bilgi": "line_edit_kelime_turkcesi", "placeholder": "KELİMENİN TÜRKÇESİ", "position": (450, 120, 200, 40)},
+            {"bilgi": "line_edit_kelime_turkce", "placeholder": "KELİMENİN TÜRKÇESİ", "position": (450, 120, 200, 40)},
             {"bilgi": "line_edit_ingilizce_cümle", "placeholder": "İNGİLİZCE CÜMLE", "position": (290, 180, 200, 40)},
             {"bilgi": "line_edit_türkçe_cümle", "placeholder": "TÜRKÇE CÜMLE", "position": (610, 180, 200, 40)},
         ]

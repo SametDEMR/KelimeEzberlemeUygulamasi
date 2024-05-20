@@ -13,6 +13,7 @@ import sqlite3
 import os, sys, random
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
 from PyQt5.QtGui import QPixmap
+import cv2
 
 
 locale.setlocale(locale.LC_ALL, 'turkish')
@@ -23,13 +24,15 @@ class Ana_Pencere123(QWidget):
         super().__init__()
 
         self.sinav_soru_sayisi = 5
+
         self.dogru_sayisi = 0
         self.yanlis_sayisi = 0
         self.bos_sayisi = 0
+
         self.soru_sayaci = 0
         self.soru_kalip = [[0 for j in range(5)] for i in range(21)]
-        self.soru_sik2 = [[0 for j in range(3)] for i in range(21)]
-        self.sikler = [0] * 21
+        self.soru_sik2 = [[0 for j in range(6)] for i in range(21)]
+        self.sikler = [[0 for j in range(2)] for i in range(21)]
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
         self.setStyleSheet("background-color: #3c64c8 ")
@@ -221,7 +224,7 @@ class Ana_Pencere123(QWidget):
             conn.close()
 
         self.soru_sayaci += 1
-        self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
+        self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
 
         self.cümle_soru.setText(f"{self.soru_kalip[self.soru_sayaci][3]}")
 
@@ -230,42 +233,64 @@ class Ana_Pencere123(QWidget):
         random_sayi1 = random.randint(1, 20)
         random_sayi2 = random.randint(1, 20)
 
-        while self.soru_kalip[random_sayi1][2] == self.soru_kalip[random_sayi2][2]:
-            while self.soru_kalip[random_sayi2][2] == self.soru_kalip[self.soru_sayaci][2]:
-                random_sayi2 = random.randint(1, 20)
+
+        while str(self.soru_kalip[random_sayi1][2]) == str(self.soru_kalip[random_sayi2][2]) == str(self.soru_kalip[self.soru_sayaci][2]):
+            random_sayi1 = random.randint(1, 20)
+            random_sayi2 = random.randint(1, 20)
 
         if str(self.soru_sik2[self.soru_sayaci][0]) == '0':
             if random_character == characters[0]:
                 self.A.setText(self.soru_kalip[self.soru_sayaci][2])
                 self.B.setText(self.soru_kalip[random_sayi1][2])
                 self.C.setText(self.soru_kalip[random_sayi2][2])
+                self.cümle_1.setText(f"{self.soru_kalip[self.soru_sayaci][4]}")
+                self.cümle_2.setText(f"{self.soru_kalip[random_sayi1][4]}")
+                self.cümle_3.setText(f"{self.soru_kalip[random_sayi2][4]}")
 
                 self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[self.soru_sayaci][2]
                 self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[random_sayi1][2]
                 self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[random_sayi2][2]
+                self.soru_sik2[self.soru_sayaci][3] = self.soru_kalip[self.soru_sayaci][4]
+                self.soru_sik2[self.soru_sayaci][4] = self.soru_kalip[random_sayi1][4]
+                self.soru_sik2[self.soru_sayaci][5] = self.soru_kalip[random_sayi2][4]
 
             if random_character == characters[1]:
                 self.A.setText(self.soru_kalip[random_sayi1][2])
                 self.B.setText(self.soru_kalip[self.soru_sayaci][2])
                 self.C.setText(self.soru_kalip[random_sayi2][2])
+                self.cümle_1.setText(f"{self.soru_kalip[random_sayi1][4]}")
+                self.cümle_2.setText(f"{self.soru_kalip[self.soru_sayaci][4]}")
+                self.cümle_3.setText(f"{self.soru_kalip[random_sayi2][4]}")
 
                 self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[random_sayi1][2]
                 self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[self.soru_sayaci][2]
                 self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[random_sayi2][2]
+                self.soru_sik2[self.soru_sayaci][3] = self.soru_kalip[random_sayi1][4]
+                self.soru_sik2[self.soru_sayaci][4] = self.soru_kalip[self.soru_sayaci][4]
+                self.soru_sik2[self.soru_sayaci][5] = self.soru_kalip[random_sayi2][4]
 
             if random_character == characters[2]:
                 self.A.setText(self.soru_kalip[random_sayi1][2])
                 self.B.setText(self.soru_kalip[random_sayi2][2])
                 self.C.setText(self.soru_kalip[self.soru_sayaci][2])
+                self.cümle_1.setText(f"{self.soru_kalip[random_sayi1][4]}")
+                self.cümle_2.setText(f"{self.soru_kalip[random_sayi2][4]}")
+                self.cümle_3.setText(f"{self.soru_kalip[self.soru_sayaci][4]}")
 
                 self.soru_sik2[self.soru_sayaci][0] = self.soru_kalip[random_sayi1][2]
                 self.soru_sik2[self.soru_sayaci][1] = self.soru_kalip[random_sayi2][2]
                 self.soru_sik2[self.soru_sayaci][2] = self.soru_kalip[self.soru_sayaci][2]
+                self.soru_sik2[self.soru_sayaci][3] = self.soru_kalip[random_sayi1][4]
+                self.soru_sik2[self.soru_sayaci][4] = self.soru_kalip[random_sayi2][4]
+                self.soru_sik2[self.soru_sayaci][5] = self.soru_kalip[self.soru_sayaci][4]
+
         else:
             self.A.setText(self.soru_sik2[self.soru_sayaci][0])
             self.B.setText(self.soru_sik2[self.soru_sayaci][1])
             self.C.setText(self.soru_sik2[self.soru_sayaci][2])
-
+            self.cümle_1.setText(self.soru_sik2[self.soru_sayaci][3])
+            self.cümle_2.setText(self.soru_sik2[self.soru_sayaci][4])
+            self.cümle_3.setText(self.soru_sik2[self.soru_sayaci][5])
 
         self.sinav_soru.setText(self.soru_kalip[self.soru_sayaci][1])
         image = self.soru_kalip[self.soru_sayaci][0]
@@ -274,10 +299,10 @@ class Ana_Pencere123(QWidget):
         self.label_resim_soru.setScaledContents(True)
 
         """sonraki önceki buton gösterme gizleme metni yazma"""
-        if str(self.sikler[self.soru_sayaci]) == '0':
+        if str(self.sikler[self.soru_sayaci][0]) == '0':
             self.secim_kaldir()
         else:
-            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci]))
+            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci][0]))
             attribute_to_set.setChecked(True)
         if self.soru_sayaci == self.sinav_soru_sayisi:
             self.buton_sonraki_soru.hide()
@@ -288,9 +313,10 @@ class Ana_Pencere123(QWidget):
 
     def onceki_soru(self):
         self.soru_sayaci -= 1
-        self.label_kelime_ekle.setText(f"{self.soru_sayaci}")
+        self.label_sinav_sayac.setText(f"{self.soru_sayaci}")
+
         self.soru_sik2[self.soru_sayaci + 1][0] = self.A.text()
-        self.soru_sik2[self.soru_sayaci + 1 ][1] = self.B.text()
+        self.soru_sik2[self.soru_sayaci + 1][1] = self.B.text()
         self.soru_sik2[self.soru_sayaci + 1][2] = self.C.text()
 
         self.cümle_soru.setText(f"{self.soru_kalip[self.soru_sayaci][3]}")
@@ -298,6 +324,9 @@ class Ana_Pencere123(QWidget):
         self.A.setText(self.soru_sik2[self.soru_sayaci][0])
         self.B.setText(self.soru_sik2[self.soru_sayaci][1])
         self.C.setText(self.soru_sik2[self.soru_sayaci][2])
+        self.cümle_1.setText(self.soru_sik2[self.soru_sayaci][3])
+        self.cümle_2.setText(self.soru_sik2[self.soru_sayaci][4])
+        self.cümle_3.setText(self.soru_sik2[self.soru_sayaci][5])
 
         self.label_resim_soru.setPixmap(QPixmap())
         self.label_resim_soru.setScaledContents(False)
@@ -310,10 +339,10 @@ class Ana_Pencere123(QWidget):
 
 
         """sonraki önceki buton gösterme gizleme metni yazma"""
-        if str(self.sikler[self.soru_sayaci]) == '0':
+        if str(self.sikler[self.soru_sayaci][0]) == '0':
             self.secim_kaldir()
         else:
-            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci]))
+            attribute_to_set = getattr(self, str(self.sikler[self.soru_sayaci][0]))
             attribute_to_set.setChecked(True)
         if self.soru_sayaci == 1:
             self.buton_önceki_soru.hide()
@@ -322,20 +351,46 @@ class Ana_Pencere123(QWidget):
             self.buton_sinav_bitir.hide()
         """sonraki önceki buton gösterme gizleme metni yazma"""
 
-    def soru_ekle(self):
+    def kelime_ekle(self):
         ingilizce = self.line_edit_kelime_ingilizce.text()
-        turkce = self.line_edit_kelime_turkcesi.text()
+        turkce = self.line_edit_kelime_turkce.text()
         cumle1 = self.line_edit_ingilizce_cümle.text()
         cumle2 = self.line_edit_türkçe_cümle.text()
 
         if ingilizce and turkce and cumle1 and cumle2:
-            self.label_kelime_ekle.setText("Başarıyla eklenmiştir.")
+            try:
+                conn = sqlite3.connect('database/Kelimeler.db')
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM Kelimeler WHERE ingilizce_kelime = ?", (ingilizce,))
+                existing_word = cursor.fetchone()
+
+                if existing_word:
+                    self.label_kelime_ekle.setText("Bu Kelime Zaten Mevcut. Başka Bir Kelime Deneyiniz.")
+                else:
+                    self.resim_dosya_yolu = 'resim/' + f"{ingilizce}" + '.png'
+                    self.resim = cv2.resize(self.resim, (100, 100))
+                    cv2.imwrite(self.resim_dosya_yolu, self.resim)
+
+                    cursor.execute(
+                        "INSERT INTO Kelimeler (ingilizce_kelime, türkçe_kelime, cümle_1, cümle_2, resim) VALUES (?, ?, ?, ?, ?)",
+                        (ingilizce, turkce, cumle1, cumle2, self.resim_dosya_yolu))
+
+                    conn.commit()
+
+                    self.label_kelime_ekle.setText("Başarıyla Eklenmiştir.")
+                    self.temizle()
+
+                conn.close()
+            except Exception as e:
+                print("Hata:", e)
+                self.label_kelime_ekle.setText("Bir hata oluştu, lütfen tekrar deneyin.")
         else:
             self.label_kelime_ekle.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def resim_sec(self):
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getOpenFileName(self, "Resim Seç", "","Resim Dosyaları (*.jpg *.png *.jpeg *.bmp *.gif)", options=options)
+        self.resim = cv2.imread(file_name)
         if file_name:
             pixmap = QPixmap(file_name)
             self.label_ekleme_resim.setPixmap(pixmap.scaled(self.label_ekleme_resim.size(), aspectRatioMode=True))
@@ -347,25 +402,36 @@ class Ana_Pencere123(QWidget):
         self.temizle()
 
         for sayac in range(self.sinav_soru_sayisi):
-            if str(self.sikler[sayac + 1]) == '0':
+            if str(self.sikler[sayac + 1][0]) == '0':
                 self.bos_sayisi += 1
-
-            if self.sikler[sayac] != self.soru_kalip[sayac][2]:
-                self.dogru_sayisi += 1
             else:
-                self.yanlis_sayisi += 1
+                if str(self.sikler[sayac + 1][0]) == str(self.soru_kalip[sayac + 1][2]):
+                    self.dogru_sayisi += 1
+                else:
+                    self.yanlis_sayisi += 1
+
+            sayac += 1
 
         self.yazi_dogru_sayi.setText(str(self.dogru_sayisi))
         self.yazi_yanlis_sayi.setText(str(self.yanlis_sayisi))
         self.yazi_bos_sayi.setText(str(self.bos_sayisi))
 
+        self.dogru_sayisi = 0
+        self.yanlis_sayisi = 0
+        self.bos_sayisi = 0
 
+        self.soru_sayaci = 0
+        self.soru_kalip = [[0 for j in range(5)] for i in range(21)]
+        self.soru_sik2 = [[0 for j in range(6)] for i in range(21)]
+        self.sikler = [[0 for j in range(2)] for i in range(21)]
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def temizle(self):
         self.label_giris.setText("")
         self.label_sinav_sayac.setText("")
+        self.yazi_dogru_sayi.setText("")
+        self.yazi_yanlis_sayi.setText("")
         self.label_ekleme_resim.setPixmap(QPixmap())
         self.label_ekleme_resim.setScaledContents(False)
 
@@ -376,6 +442,11 @@ class Ana_Pencere123(QWidget):
         self.line_edit_kaydol_kullanici_adi.clear()
         self.line_edit_kaydol_sifre.clear()
         self.line_edit_sifre_kullanici_adi.clear()
+
+        self.line_edit_kelime_ingilizce.clear()
+        self.line_edit_kelime_turkce.clear()
+        self.line_edit_ingilizce_cümle.clear()
+        self.line_edit_türkçe_cümle.clear()
 
     def secim_kaldir(self):
         self.button_group1.setExclusive(False)
@@ -388,7 +459,16 @@ class Ana_Pencere123(QWidget):
         sender_button = self.sender()
         bilgi = sender_button.property("bilgi")
 
-        self.sikler[self.soru_sayaci] = bilgi
+        self.sikler[self.soru_sayaci][0] = bilgi
+
+        if self.sikler[self.soru_sayaci][0] == "A":
+            self.sikler[self.soru_sayaci][0] = str(self.A.text())
+
+        if self.sikler[self.soru_sayaci][0] == "B":
+            self.sikler[self.soru_sayaci][0] = str(self.B.text())
+
+        if self.sikler[self.soru_sayaci][0] == "C":
+            self.sikler[self.soru_sayaci][0] = str(self.C.text())
 
     def soru_sayi_degistir(self):
         sender = self.sender()
@@ -408,9 +488,6 @@ class Ana_Pencere123(QWidget):
         cikti.save("dosya/ses" + str(self.sayac) + ".mp3")
         playsound("dosya/ses" + str(self.sayac) + ".mp3")
         self.sayac += 1
-
-
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
