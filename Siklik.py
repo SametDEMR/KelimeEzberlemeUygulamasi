@@ -17,7 +17,7 @@ class SiklikOlustur(QWidget):
             button = QPushButton(button_info["text"], self)
             button.setGeometry(*button_info["position"])
 
-            button.clicked.connect(self.ayarlar_degistir)
+            button.clicked.connect(self.ayarlar)
 
             button.setStyleSheet("""
                 QPushButton {

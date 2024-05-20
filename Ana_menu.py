@@ -16,6 +16,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
 from PyQt5.QtGui import QPixmap
 import cv2
 from datetime import datetime
+from tkinter import filedialog
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 
 locale.setlocale(locale.LC_ALL, 'turkish')
@@ -399,14 +402,25 @@ class Ana_Pencere123(QWidget):
             self.sifirla()
 
     def ayarlar(self):
-        self.button_group3.setExclusive(False)
-        self.__dict__[f"{self.dil}"].setChecked(True)
-        self.button_group3.setExclusive(True)
-        self.button_group.setExclusive(False)
-        self.__dict__[f"_{self.sinav_soru_sayisi}"].setChecked(True)
-        self.button_group.setExclusive(True)
-        ShowHide.hepsini_gizleme(self)
-        ShowHide.ayarlar(self)
+        if self.tiklama == 0:
+            self.button_group3.setExclusive(False)
+            self.__dict__[f"{self.dil}"].setChecked(True)
+            self.button_group3.setExclusive(True)
+            self.button_group.setExclusive(False)
+            self.__dict__[f"_{self.sinav_soru_sayisi}"].setChecked(True)
+            self.button_group.setExclusive(True)
+            ShowHide.hepsini_gizleme(self)
+            ShowHide.ayarlar(self)
+            self.tiklama +=1
+        else:
+            sender = self.sender()
+
+            if len(sender.text()) < 3:
+                self.sinav_soru_sayisi = int(sender.text())
+                self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
+            else:
+                bilgi = sender.property("bilgi")
+                self.dil = str(bilgi)
 
     """"""""""""""""""""""""
 
@@ -594,16 +608,6 @@ class Ana_Pencere123(QWidget):
 
         print(işlemler[0][0])
 
-    def ayarlar_degistir(self):
-        sender = self.sender()
-
-        if len(sender.text()) < 3:
-            self.sinav_soru_sayisi = int(sender.text())
-            self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
-        else:
-            bilgi = sender.property("bilgi")
-            self.dil = str(bilgi)
-
     def seslendirme(self, pos):
         corrected_pos = pos - QPoint(160, 0)
         buton_metni = self.childAt(corrected_pos).text()
@@ -627,7 +631,36 @@ class Ana_Pencere123(QWidget):
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def yazdir(self):
-        print("yazdır")
+        file_path = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")])
+
+
+        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Kullaniciİstatistik WHERE kullanici_id = ?;', (self.kullanici_id,))
+        kullanici_verileri = cursor.fetchone()
+        conn.commit()
+        conn.close()
+
+        c = canvas.Canvas(file_path, pagesize=letter)
+        c.
+
+        c.drawString(306, 630, "- ANALİZ -")
+
+        c.setFont("Helvetica", 16)
+        c.drawString(15, 750, "Toplam Dogru Sayisi : " + str(kullanici_verileri[1]) + "    Toplam Yanlis Sayisi : " + str(kullanici_verileri[2]) + "    Toplam Bos Sayisi : " + str(kullanici_verileri[3]))
+        c.drawString(115, 720, "Toplam Soru Sayisi : " + str(kullanici_verileri[4]) + "    Ortalama : %" + str("{:.2f}".format((kullanici_verileri[1] / kullanici_verileri[4])*100)))
+
+        c.drawString(25, 630, "★★★★★★")
+
+        c.drawString(25, 630, "★★★★★★")
+        c.drawString(225,630, "★★★★★")
+        c.drawString(425,630, "★★★★")
+        c.drawString(25, 400, "★★★")
+        c.drawString(225,400, "★★")
+        c.drawString(425,400, "★")
+
+        c.save()
+        print("Belge başarıyla oluşturuldu ve kaydedildi:", file_path)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

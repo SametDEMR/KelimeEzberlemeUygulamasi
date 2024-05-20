@@ -18,7 +18,7 @@ class DilButonOlustur(QWidget):
             button.setCheckable(True)
             self.button_group1.addButton(button)
 
-            button.clicked.connect(self.ayarlar_degistir)
+            button.clicked.connect(self.ayarlar)
 
             button.setStyleSheet("""
                        QPushButton {
