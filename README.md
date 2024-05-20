@@ -33,3 +33,9 @@
 
 ## Kullanım Amacı
 Bu uygulama, dil öğrenen kullanıcıların kelime ezberlemesini kolaylaştırmak ve öğrenme süreçlerini takip etmelerine yardımcı olmak için tasarlanmıştır. Kullanıcılar, kelime bilgilerini sınavlar aracılığıyla test edebilir, öğrenme süreçlerini analiz edebilir ve başarılarını takip edebilirler. Uygulama ayrıca sesli ve görsel destek sunarak kelime ezberleme sürecini daha etkili hale getirir.
+
+
+![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiAnaMenu.png)
+![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiSinav1.png)
+![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiSinav2.png)
+![Kelime Ezberleme Modülü](KelimeEzberlemeUygulamasiAnaliz.png)
