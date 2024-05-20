@@ -322,6 +322,7 @@ class Ana_Pencere123(QWidget):
             self.yazi_dogru_sayi.setText(str(self.test_dogru_sayisi))
             self.yazi_yanlis_sayi.setText(str(self.test_yanlis_sayisi))
             self.yazi_bos_sayi.setText(str(self.test_bos_sayisi))
+            self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayaci))
         except Exception as e:
             print(e)
 
@@ -330,18 +331,17 @@ class Ana_Pencere123(QWidget):
             self.button_group3.setExclusive(False)
             self.__dict__[f"{self.dil}"].setChecked(True)
             self.button_group3.setExclusive(True)
-            self.button_group.setExclusive(False)
+            self.button_group2.setExclusive(False)
             self.__dict__[f"_{self.sinav_soru_sayisi}"].setChecked(True)
-            self.button_group.setExclusive(True)
+            self.button_group2.setExclusive(True)
             ShowHide.hepsini_gizleme(self)
             ShowHide.ayarlar(self)
-            self.tiklama +=1
+            self.tiklama += 1
         else:
             sender = self.sender()
 
             if len(sender.text()) < 3:
                 self.sinav_soru_sayisi = int(sender.text())
-                self.yedek_sinav_soru_sayisi = self.sinav_soru_sayisi
                 self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
             else:
                 bilgi = sender.property("bilgi")
@@ -386,15 +386,11 @@ class Ana_Pencere123(QWidget):
             else:
                 for sayac in range(len(artik_cikmayacak_kelimeler)):
                     çikmaycak = int(artik_cikmayacak_kelimeler[sayac][0])
-                    print(çikmaycak)
                     cursor.execute("SELECT * FROM kelimeler WHERE NOT kelime_id = ? ORDER BY RANDOM() LIMIT ?", (çikmaycak, self.sinav_soru_sayisi + 1,))
 
             rows = cursor.fetchall()
             conn.close()
-
             bugun_yazilacak += rows
-
-            print(bugun_yazilacak)
 
             self.Sorular = []
             for row in bugun_yazilacak:
@@ -457,7 +453,7 @@ class Ana_Pencere123(QWidget):
             self.label_resim_soru.setPixmap(pixmap)
             self.label_resim_soru.setScaledContents(True)
             self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-            self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci + 1]['cumle'])
+            self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
             self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
             self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
             self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
@@ -465,31 +461,38 @@ class Ana_Pencere123(QWidget):
             print("Hata:", e)
 
     def sonraki_soru(self):
-        self.sinav_soru_sayaci += 1
+        try:
+            self.sinav_soru_sayaci += 1
 
-        self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
-        image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
-        pixmap = QPixmap(image)
-        self.label_resim_soru.setPixmap(pixmap)
-        self.label_resim_soru.setScaledContents(True)
-        self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-        self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci + 1]['cumle'])
-        self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
-        self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
-        self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
+            self.label_sinav_sayac.setText(str(self.sinav_soru_sayaci))
+            image = self.Sorular[self.sinav_soru_sayaci - 1]['image_path']
+            pixmap = QPixmap(image)
+            self.label_resim_soru.setPixmap(pixmap)
+            self.label_resim_soru.setScaledContents(True)
+            self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
+            self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
+            self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
+            self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
+            self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
 
-        if self.sinav_soru_sayaci == self.sinav_soru_sayisi:
-            self.buton_sonraki_soru.hide()
-            self.buton_sinav_bitir.show()
-        else:
-            self.buton_sonraki_soru.show()
-            self.buton_sinav_bitir.hide()
-        if self.sinav_soru_sayaci != 1:
-            self.buton_önceki_soru.show()
-        else:
-            self.buton_önceki_soru.hide()
+            self.secim_kaldir()
+            if str(self.SinavSiklariKaydet[self.sinav_soru_sayaci][0]) != '0':
+                self.button_group1.setExclusive(False)
+                getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
+                self.button_group1.setExclusive(True)
 
-        self.secim_kaldir()
+            if self.sinav_soru_sayaci == self.sinav_soru_sayisi:
+                self.buton_sonraki_soru.hide()
+                self.buton_sinav_bitir.show()
+            else:
+                self.buton_sonraki_soru.show()
+                self.buton_sinav_bitir.hide()
+            if self.sinav_soru_sayaci != 1:
+                self.buton_önceki_soru.show()
+            else:
+                self.buton_önceki_soru.hide()
+        except Exception as e:
+            print(e)
 
     def onceki_soru(self):
         self.sinav_soru_sayaci -= 1
@@ -500,10 +503,16 @@ class Ana_Pencere123(QWidget):
         self.label_resim_soru.setPixmap(pixmap)
         self.label_resim_soru.setScaledContents(True)
         self.sinav_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['kelime'])
-        self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci + 1]['cumle'])
+        self.cümle_soru.setText(self.Sorular[self.sinav_soru_sayaci - 1]['cumle'])
         self.A.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['A'])
         self.B.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['B'])
         self.C.setText(self.Sorular[self.sinav_soru_sayaci - 1]['choices']['C'])
+
+        self.secim_kaldir()
+        if str(self.SinavSiklariKaydet[self.sinav_soru_sayaci][0]) != '0':
+            self.button_group1.setExclusive(False)
+            getattr(self, self.SinavSiklariKaydet[self.sinav_soru_sayaci][2]).setChecked(True)
+            self.button_group1.setExclusive(True)
 
         if self.sinav_soru_sayaci == self.sinav_soru_sayisi:
             self.buton_sonraki_soru.hide()
@@ -516,8 +525,6 @@ class Ana_Pencere123(QWidget):
             self.buton_önceki_soru.hide()
         else:
             self.buton_önceki_soru.show()
-
-        self.secim_kaldir()
 
     def resim_sec(self):
         options = QFileDialog.Options()
@@ -541,8 +548,7 @@ class Ana_Pencere123(QWidget):
         sender_button = self.sender()
         bilgi = sender_button.property("bilgi")
 
-        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (
-        str(self.sinav_soru.text()), str(getattr(self, bilgi).text()))
+        self.SinavSiklariKaydet[self.sinav_soru_sayaci] = (str(self.sinav_soru.text()), str(getattr(self, bilgi).text()), str(bilgi))
 
     def seslendirme(self, pos):
         corrected_pos = pos - QPoint(160, 0)
