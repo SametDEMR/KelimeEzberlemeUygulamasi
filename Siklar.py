@@ -7,13 +7,14 @@ import json
 
 class SiklarOlustur(QWidget):
     def Olustur(self):
-        self.button_group = QButtonGroup()
+        self.button_group1 = QButtonGroup()
         buttons_info = [
-            {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (500, 150, 200, 40), "function": self.cikis},
-            {"bilgi": "A", "text": "Buton 1", "position": (140, 350, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "B", "text": "Buton 2", "position": (380, 350, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "C", "text": "Buton 3", "position": (620, 350, 200, 40), "function": self.siklari_kaydet},
-            {"bilgi": "D", "text": "Buton 4", "position": (860, 350, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "sinav_soru", "text": "SORU YERİ", "position": (400, 20, 400, 40), "function": self.cikis},
+
+            {"bilgi": "A", "text": "Buton 1", "position": (140, 140, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "B", "text": "Buton 2", "position": (140, 380, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "C", "text": "Buton 3", "position": (860, 140, 200, 40), "function": self.siklari_kaydet},
+            {"bilgi": "D", "text": "Buton 4", "position": (860, 380, 200, 40), "function": self.siklari_kaydet},
         ]
 
         for button_info in buttons_info:
@@ -22,7 +23,7 @@ class SiklarOlustur(QWidget):
             button.setProperty("bilgi", bilgi)
             button.setGeometry(*button_info["position"])
             button.setCheckable(True)
-            self.button_group.addButton(button)
+            self.button_group1.addButton(button)
 
             button.clicked.connect(button_info["function"])
 

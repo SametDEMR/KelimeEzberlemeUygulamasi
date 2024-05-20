@@ -11,11 +11,12 @@ class MetinSesButonOlustur(QWidget):
         self.selected_button = None
 
         buttons_info = [
-            {"bilgi": "ses_soru", "text": "", "position": (660, 150, 40, 40)},
-            {"bilgi": "ses_A", "text": "", "position": (300, 350, 40, 40)},
-            {"bilgi": "ses_B", "text": "", "position": (540, 350, 40, 40)},
-            {"bilgi": "ses_C", "text": "", "position": (780, 350, 40, 40)},
-            {"bilgi": "ses_D", "text": "", "position": (1020, 350, 40, 40)},
+            {"bilgi": "ses_soru", "text": "", "position": (760, 20, 40, 40)},
+
+            {"bilgi": "ses_A", "text": "", "position": (300, 140, 40, 40)},
+            {"bilgi": "ses_B", "text": "", "position": (300, 380, 40, 40)},
+            {"bilgi": "ses_C", "text": "", "position": (1020, 140, 40, 40)},
+            {"bilgi": "ses_D", "text": "", "position": (1020, 380, 40, 40)},
         ]
 
         for button_info in buttons_info:
@@ -30,12 +31,12 @@ class MetinSesButonOlustur(QWidget):
                     border: 2px solid #FFA500;
                     border-radius: 20px;
                     padding: 10px 20px;
-                    background-image: url('resim/ses1.png');
+                    background-image: url('program/ses1.png');
                     background-repeat: no-repeat;
                     background-position: center;
                     }
                 QPushButton:hover {
-                        background-image: url('resim/ses2.png');
+                        background-image: url('program/ses2.png');
                         background-repeat: no-repeat;
                         background-position: center;
                     }

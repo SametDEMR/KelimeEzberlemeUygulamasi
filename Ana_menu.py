@@ -9,7 +9,10 @@ from SinavSonuAnaliz import *
 
 from gtts import gTTS
 from playsound import playsound
-
+import sqlite3
+import os, sys
+from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
+from PyQt5.QtGui import QPixmap
 
 
 locale.setlocale(locale.LC_ALL, 'turkish')
@@ -20,7 +23,7 @@ class Ana_Pencere123(QWidget):
         super().__init__()
 
         self.sinav_soru_sayisi = 5
-
+        self.bos_sayisi = 0
         self.sorular = [0] * 21
         self.sikler = [0] * 21
         self.soru_sayaci = 1
@@ -28,8 +31,10 @@ class Ana_Pencere123(QWidget):
 
         self.setWindowTitle("Kelime Ezberleme Modülü")
         self.setStyleSheet("background-color: #3c64c8 ")
-        """self.setWindowFlag(Qt.FramelessWindowHint)"""
+        self.setWindowFlag(Qt.FramelessWindowHint)
         self.setFixedSize(1200, 600)
+
+        self.kontrol()
 
         LabelOlustur.Olustur(self)
         TextBoxOlustur.Olustur(self)
@@ -45,6 +50,26 @@ class Ana_Pencere123(QWidget):
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+    def kontrol(self):
+        if os.path.exists("database/KullaniciBilgileri.db"):
+            return True
+        else:
+            conn = sqlite3.connect("database/KullaniciBilgileri.db")
+            cursor = conn.cursor()
+
+            cursor.execute('''CREATE TABLE kullanicilar (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                isim TEXT NOT NULL,
+                                soyisim TEXT NOT NULL,
+                                kullaniciadi TEXT UNIQUE NOT NULL,
+                                sifre CHAR(50) NOT NULL
+                              )''')
+
+            conn.commit()
+            conn.close()
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
     def geri_giris(self):
         self.temizle()
         ShowHide.hepsini_gizleme(self)
@@ -52,15 +77,27 @@ class Ana_Pencere123(QWidget):
         ShowHide.giris(self)
 
     def giris(self):
-        username = self.line_edit_kullanici_adi.text()
+        self.temizle()
+        ShowHide.hepsini_gizleme(self)
+        ShowHide.sinav_ana_menu(self)
+        """username = self.line_edit_kullanici_adi.text()
         password = self.line_edit_sifre.text()
 
         if username and password:
-            self.temizle()
-            ShowHide.hepsini_gizleme(self)
-            ShowHide.sinav_ana_menu(self)
+            conn = sqlite3.connect("database/KullaniciBilgileri.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi = ? AND sifre = ?", (username, password))
+            user = cursor.fetchone()
+
+            if user:
+                self.temizle()
+                ShowHide.hepsini_gizleme(self)
+                ShowHide.sinav_ana_menu(self)
+            else:
+                self.label_giris.setText("Kullanıcı Adı Veya Şifre Yanlış. Tekrar Deneyiniz.")
+            conn.close()
         else:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")"""
 
     def sifre_unuttum(self):
         self.temizle()
@@ -84,21 +121,43 @@ class Ana_Pencere123(QWidget):
     def kaydol(self):
         isim = self.line_edit_isim.text()
         soyisim = self.line_edit_soyisim.text()
-        mail = self.line_edit_mail.text()
-        sifre = self.line_edit_sifre.text()
-        kullanici_ad = self.line_edit_kaydol_kullanici_adi.text()
+        kullaniciadi = self.line_edit_kaydol_kullanici_adi.text()
+        sifre = self.line_edit_kaydol_sifre.text()
 
-        if isim and soyisim and mail and sifre and kullanici_ad:
-            self.label_giris.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
+        conn = sqlite3.connect('database/KullaniciBilgileri.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM kullanicilar WHERE kullaniciadi=?", (kullaniciadi,))
+        kullanici = cursor.fetchone()
+
+        if kullanici:
+            self.label_giris.setText("Bu Kullanıcı Adı Zaten Kullanımda. Farklı Bir Kullanıcı Adı Giriniz.")
         else:
-            self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
+            cursor.execute("INSERT INTO kullanicilar (isim, soyisim, kullaniciadi, sifre) VALUES (?, ?, ?, ?)",(isim, soyisim, kullaniciadi, sifre))
+            conn.commit()
+            conn.close()
+
+            if isim and soyisim and sifre and kullaniciadi:
+                self.temizle()
+                self.label_giris.setText("Kayıt İşlemi Başarılı! Giriş İçin Ana Menüye Dönünüz.")
+            else:
+                self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
     def sifre_getir(self):
         username = self.line_edit_sifre_kullanici_adi.text()
-        mail = self.line_edit_sifre_mail.text()
 
-        if username and mail:
-            self.label_giris.setText("Şifreniz = ")
+        if username:
+            conn = sqlite3.connect("database/KullaniciBilgileri.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT sifre FROM kullanicilar WHERE kullaniciadi = ?", (username,))
+            row = cursor.fetchone()
+
+            if row:
+                self.label_giris.setText("Şifreniz = \" " + row[0] + " \"")
+            else:
+                self.label_giris.setText("Kullanıcı Bulunamadı. Tekrar Deneyiniz.")
+
+            conn.close()
         else:
             self.label_giris.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
@@ -196,34 +255,49 @@ class Ana_Pencere123(QWidget):
         else:
             self.label_sinav.setText("Lütfen Bilgileri Eksiksiz Giriniz")
 
+    def resim_sec(self):
+        options = QFileDialog.Options()
+        file_name, _ = QFileDialog.getOpenFileName(self, "Resim Seç", "","Resim Dosyaları (*.jpg *.png *.jpeg *.bmp *.gif)", options=options)
+        if file_name:
+            pixmap = QPixmap(file_name)
+            self.label_resim.setPixmap(pixmap.scaled(self.label_resim.size(), aspectRatioMode=True))
+            self.label_resim.setScaledContents(True)
+
     def sinav_sonu_analiz(self):
         ShowHide.hepsini_gizleme(self)
         ShowHide.sinav_sonu_analiz(self)
         self.temizle()
+
+        for bos_sayac in range(self.sinav_soru_sayisi):
+            if str(self.sikler[bos_sayac + 1]) == '0':
+                self.bos_sayisi += 1
+
+        self.yazi_bos_sayi.setText(str(self.bos_sayisi))
+
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def temizle(self):
         self.label_giris.setText("")
         self.label_sinav.setText("")
+        self.label_resim.setPixmap(QPixmap())
+        self.label_resim.setScaledContents(False)
 
         self.line_edit_kullanici_adi.clear()
         self.line_edit_sifre.clear()
         self.line_edit_isim.clear()
         self.line_edit_soyisim.clear()
-        self.line_edit_mail.clear()
         self.line_edit_kaydol_kullanici_adi.clear()
         self.line_edit_kaydol_sifre.clear()
         self.line_edit_sifre_kullanici_adi.clear()
-        self.line_edit_sifre_mail.clear()
 
     def secim_kaldir(self):
-        self.button_group.setExclusive(False)
+        self.button_group1.setExclusive(False)
         self.A.setChecked(False)
         self.B.setChecked(False)
         self.C.setChecked(False)
         self.D.setChecked(False)
-        self.button_group.setExclusive(True)
+        self.button_group1.setExclusive(True)
 
     def siklari_kaydet(self):
         sender_button = self.sender()
@@ -232,19 +306,16 @@ class Ana_Pencere123(QWidget):
         self.sikler[self.soru_sayaci] = bilgi
         self.sorular[self.soru_sayaci] = self.sinav_soru.text()
 
-        print(self.sikler)
-        print(self.sorular)
-
     def soru_sayi_degistir(self):
         sender = self.sender()
         self.sinav_soru_sayisi = int(sender.text())
-        self.toplam_sayi.setText(str(self.sinav_soru_sayisi))
+        self.yazi_toplam_sayi.setText(str(self.sinav_soru_sayisi))
 
     def seslendirme(self, pos):
         corrected_pos = pos - QPoint(160, 0)
         buton_metni = self.childAt(corrected_pos).text()
 
-        if corrected_pos.y() > 200:
+        if corrected_pos.y() > 100:
             language = 'tr'
         else:
             language = 'en'

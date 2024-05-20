@@ -11,19 +11,17 @@ class TextBoxOlustur(QWidget):
             {"bilgi": "line_edit_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 180, 200, 40)},
             {"bilgi": "line_edit_sifre", "placeholder": "ŞİFRE", "position": (450, 240, 200, 40)},
 
-            {"bilgi": "line_edit_isim", "placeholder": "İSİM", "position": (450, 60, 200, 40)},
-            {"bilgi": "line_edit_soyisim", "placeholder": "SOYİSİM", "position": (450, 120, 200, 40)},
-            {"bilgi": "line_edit_mail", "placeholder": "MAİL", "position": (450, 180, 200, 40)},
+            {"bilgi": "line_edit_isim", "placeholder": "İSİM", "position": (450, 120, 200, 40)},
+            {"bilgi": "line_edit_soyisim", "placeholder": "SOYİSİM", "position": (450, 180, 200, 40)},
             {"bilgi": "line_edit_kaydol_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 240, 200, 40)},
             {"bilgi": "line_edit_kaydol_sifre", "placeholder": "ŞİFRE", "position": (450, 300, 200, 40)},
 
-            {"bilgi": "line_edit_sifre_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 180, 200, 40)},
-            {"bilgi": "line_edit_sifre_mail", "placeholder": "MAİL", "position": (450, 240, 200, 40)},
+            {"bilgi": "line_edit_sifre_kullanici_adi", "placeholder": "KULLANICI ADI", "position": (450, 240, 200, 40)},
 
             {"bilgi": "line_edit_kelime_ingilizce", "placeholder": "KELİMENİN İNGİLİZCESİ", "position": (450, 60, 200, 40)},
             {"bilgi": "line_edit_kelime_turkcesi", "placeholder": "KELİMENİN TÜRKÇESİ", "position": (450, 120, 200, 40)},
-            {"bilgi": "line_edit_cümle1", "placeholder": "CÜMLE", "position": (450, 180, 200, 40)},
-            {"bilgi": "line_edit_cümle2", "placeholder": "CÜMLE", "position": (450, 240, 200, 40)},
+            {"bilgi": "line_edit_cümle1", "placeholder": "CÜMLE 1", "position": (450, 180, 200, 40)},
+            {"bilgi": "line_edit_cümle2", "placeholder": "CÜMLE 2", "position": (450, 240, 200, 40)},
         ]
 
         for edit_info in line_edit_info:
