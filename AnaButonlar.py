@@ -10,6 +10,7 @@ class ButonOlustur(QWidget):
         self.AnaMenuButonlari = []
         self.selected_button = None
 
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "CikisButonu", "text": "ÇIKIŞ", "position": (500, 500, 200, 40), "function": self.Cikis},
 
@@ -25,6 +26,7 @@ class ButonOlustur(QWidget):
             button.setGeometry(*button_info["position"])
             button.clicked.connect(button_info["function"])
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #FFB347;
@@ -41,7 +43,7 @@ class ButonOlustur(QWidget):
             self.AnaMenuButonlari.append(button)
             setattr(self, bilgi, button)
 
-
+            #BUTONDA RESİM OLDUĞU İÇİN CSS KISMI ONA GÖRE AYARLANDI
             if bilgi == "SifreGosterGizleButonu":
                 button.setStyleSheet("""
                     QPushButton {
@@ -72,6 +74,7 @@ class ButonOlustur(QWidget):
                 button.setCheckable(True)
                 button.clicked.connect(lambda: self.SifreGosterGizle)
 
+            #ÇIKIŞ BUTONUNUN AYIRT EDİLMESİ İÇİN RENGİ DEĞİŞTİRİLMİŞTİR
             if bilgi == "CikisButonu":
                 button.setStyleSheet("""
                     QPushButton {
@@ -90,6 +93,7 @@ class ButonOlustur(QWidget):
         self.AnaMenuButonlari = []
         self.selected_button = None
 
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "GirisSayfasiGeriGitme", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("GirisAnaMenu")},
             {"bilgi": "KaydolButonu", "text": "KAYDOL", "position": (500, 440, 200, 40), "function": self.KayitButonunaBasildi},
@@ -102,6 +106,7 @@ class ButonOlustur(QWidget):
             button.setGeometry(*button_info["position"])
             button.clicked.connect(button_info["function"])
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #FFB347;
@@ -122,6 +127,7 @@ class ButonOlustur(QWidget):
         self.buttons = []
         self.selected_button = None
 
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "SinavSayfasiButonu", "text": "SINAV", "position": (500, 100, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavaBaslamaOncesi")},
             {"bilgi": "AnalizSayfasiButonu", "text": "ANALİZ", "position": (500, 160, 200, 40), "function": lambda: self.SayfalaraYonlendir("AnalizSayfasi")},
@@ -136,6 +142,7 @@ class ButonOlustur(QWidget):
             button.setGeometry(*button_info["position"])
             button.clicked.connect(button_info["function"])
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #FFB347;
@@ -156,6 +163,7 @@ class ButonOlustur(QWidget):
         self.buttons = []
         self.selected_button = None
 
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "SinavAnaMenuGeriGitme", "text": "GERİ", "position": (10, 10, 200, 40), "function": lambda: self.SayfalaraYonlendir("SinavUygulamasiAnaMenu")},
 
@@ -176,6 +184,7 @@ class ButonOlustur(QWidget):
             button.setGeometry(*button_info["position"])
             button.clicked.connect(button_info["function"])
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #FFB347;
@@ -192,6 +201,7 @@ class ButonOlustur(QWidget):
             self.buttons.append(button)
             setattr(self, bilgi, button)
 
+            #SINAVIN BİTTİĞİNİ BELİRTEN BUTONUN RENGİ AYIRT EDİLMESİ İÇİN DEĞİŞTİRİLDİ
             if bilgi == "SinavBitirButonu":
                 button.setStyleSheet("""
                     QPushButton {
@@ -207,7 +217,9 @@ class ButonOlustur(QWidget):
                 """)
 
     def SinavSikButonlari(self):
-        self.button_group1 = QButtonGroup()
+        self.SinavSiklariGrup = QButtonGroup()
+
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "SoruKelimeYeri", "text": "SORU YERİ", "position": (400, 40, 400, 40)},
 
@@ -222,11 +234,13 @@ class ButonOlustur(QWidget):
             button.setProperty("bilgi", bilgi)
             button.setGeometry(*button_info["position"])
             button.setCheckable(True)
-            self.button_group1.addButton(button)
+            self.SinavSiklariGrup.addButton(button)
 
-            if bilgi != "sinav_soru":
+            #BASILAN BUTONUN ŞIKKINI KAYDETMEK İÇİN SORU KISMINDAKİLER HARİCİNİ YÖNLENDİRİR
+            if bilgi != "SoruKelimeYeri":
                 button.clicked.connect(self.SinavSiklariniKaydet)
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #FFB347;
@@ -245,11 +259,14 @@ class ButonOlustur(QWidget):
 
             setattr(self, bilgi, button)
 
-            if bilgi == "sinav_soru":
-                self.sinav_soru.setEnabled(False)
+            #SINAV SORUSU METNİNİN OLDUĞU BUTONUN SEÇİLMESİ KALDIRILDI
+            if bilgi == "SoruKelimeYeri":
+                self.SoruKelimeYeri.setEnabled(False)
 
     def AyarlarSoruSayisiSecmeButonlari(self):
-        self.button_group2 = QButtonGroup()
+        self.AyarlarSoruSayisi = QButtonGroup()
+
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "_5", "text": "5", "position": (140, 450, 200, 40)},
             {"bilgi": "_10", "text": "10", "position": (380, 450, 200, 40)},
@@ -264,6 +281,7 @@ class ButonOlustur(QWidget):
 
             button.clicked.connect(self.Ayarlar)
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #FFB347;
@@ -281,11 +299,13 @@ class ButonOlustur(QWidget):
             """)
 
             button.setCheckable(True)
-            self.button_group2.addButton(button)
+            self.AyarlarSoruSayisi.addButton(button)
 
             setattr(self, bilgi, button)
     def SoruDilDegistirButonlari(self):
-        self.button_group3 = QButtonGroup()
+        self.AyarlarDilDegistir = QButtonGroup()
+
+        # BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "ing", "text": "İNGİLİZCE", "position": (370, 200, 200, 40)},
             {"bilgi": "tr", "text": "TÜRKÇE", "position": (610, 200, 200, 40)},
@@ -297,10 +317,11 @@ class ButonOlustur(QWidget):
             button.setProperty("bilgi", bilgi)
             button.setGeometry(*button_info["position"])
             button.setCheckable(True)
-            self.button_group1.addButton(button)
+            self.SinavSiklariGrup.addButton(button)
 
             button.clicked.connect(self.Ayarlar)
 
+            # CSS EKLENDİ
             button.setStyleSheet("""
                        QPushButton {
                            background-color: #FFB347;
@@ -322,6 +343,7 @@ class ButonOlustur(QWidget):
         self.buttons = []
         self.selected_button = None
 
+        #BUTONLAR OLUŞTURULUYOR
         buttons_info = [
             {"bilgi": "SoruKelimeMetniSeslendirme", "text": "", "position": (760, 40, 40, 40)},
             {"bilgi": "SoruCumleMetniSeslendirme", "text": "", "position": (910, 100, 40, 40)},
@@ -338,6 +360,7 @@ class ButonOlustur(QWidget):
 
             button.clicked.connect(lambda _, pos=button.pos(): self.SinavMetinleriniSeslendirma(pos))
 
+            # CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     border: 2px solid #FFB347;

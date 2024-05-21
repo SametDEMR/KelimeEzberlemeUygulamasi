@@ -2,6 +2,7 @@ from AnaButonlar import *
 from AAnaMenu import *
 class ShowHide():
     def TumAraclariGizle(self):
+        #TÜM BUTON/LİNE-EDİT/LABEL/TABLO GİZLENİR
         self.GirisSayfasiGeriGitme.hide()
         self.SinavAnaMenuGeriGitme.hide()
 
@@ -110,6 +111,7 @@ class ShowHide():
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     def GirisAnaMenu(self):
+        #GİRİŞ KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.GirisButonu.show()
         self.SifremiUnuttumButonu.show()
         self.KayitOlmaButonu.show()
@@ -122,6 +124,7 @@ class ShowHide():
         self.GirisKismiUyariMesaji.show()
 
     def KayitMenusu(self):
+        #KAYIT KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.GirisSayfasiGeriGitme.show()
 
         self.KaydolButonu.show()
@@ -134,6 +137,7 @@ class ShowHide():
         self.GirisKismiUyariMesaji.show()
 
     def SifreUnuttumMenusu(self):
+        #ŞİFRE UNUTTUM KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.GirisSayfasiGeriGitme.show()
 
         self.SifremiGetirButonu.show()
@@ -144,6 +148,7 @@ class ShowHide():
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     def SinavUygulamasiAnaMenu(self):
+        #SİNAV ANA MENÜ KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavSayfasiButonu.show()
         self.SoruEklemeSayfasiButonu.show()
         self.KelimelerSayfasiButonu.show()
@@ -152,11 +157,13 @@ class ShowHide():
         self.AyarlarSayfasiButonu.show()
 
     def SinavaBaslamaOncesi(self):
+        #SINAVA BAŞLAMADAN ÖNCE GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavAnaMenuGeriGitme.show()
 
         self.SinavaBaslaButonu.show()
 
     def SinavaBaslamaSonrasi(self):
+        #SINAVA BAŞLAMADIKTAN SONRA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SonrakiSoruButonu.show()
         self.SoruKelimeYeri.show()
 
@@ -180,6 +187,7 @@ class ShowHide():
         self.SoruResimKismi.show()
 
     def SoruEklemeKismi(self):
+        #SORU EKLEME KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavAnaMenuGeriGitme.show()
 
         self.KelimeyiEkleButonu.show()
@@ -195,6 +203,7 @@ class ShowHide():
         self.KelimeEklemeUyariMesaji.show()
 
     def AnalizSayfasi(self):
+        #ANALİZ KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavAnaMenuGeriGitme.show()
 
         self.AnalizleriYazdir.show()
@@ -220,6 +229,7 @@ class ShowHide():
         self.EzberlenmisTablosu.show()
 
     def Ayarlar(self):
+        #AYARLAR KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavAnaMenuGeriGitme.show()
 
         self.ing.show()
@@ -234,6 +244,7 @@ class ShowHide():
         self.AyarlarDilKismi.show()
 
     def SinavSonuAnaliz(self):
+        #SINAV SONU ANALİZİNDE GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavAnaMenuGeriGitme.show()
 
         self.yazi_dogru.show()
@@ -246,5 +257,6 @@ class ShowHide():
         self.yazi_toplam_sayi.show()
 
     def Kelimeler(self):
+        #TÜM KELİMELER KISMINDA GÖZÜKECEK BUTON/LİNE-EDİT/LABEL/TABLO GÖSTERİLİR
         self.SinavAnaMenuGeriGitme.show()
         self.KelimelerTablosu.show()

@@ -10,6 +10,8 @@ from AAnaMenu import *
 class Analizler(QWidget):
     def SinavSonuAnalizSayfasi(self):
         self.button_group = QButtonGroup()
+
+        #ANALİZ YERLERİ OLUŞTURULDU
         buttons_info = [
             {"bilgi": "yazi_dogru", "text": "DOĞRU", "position": (140, 250, 200, 40)},
             {"bilgi": "yazi_yanlis", "text": "YANLIŞ", "position": (380, 250, 200, 40)},
@@ -31,6 +33,7 @@ class Analizler(QWidget):
 
             button.setEnabled(False)
 
+            # CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #1E468F;
@@ -45,6 +48,8 @@ class Analizler(QWidget):
 
     def AnaAnalizSayfasi(self):
         self.button_group = QButtonGroup()
+
+        #ANALİZ YERLERİ OLUŞTURULDU
         buttons_info = [
             {"bilgi": "toplam_dogru_yazi", "text": "TOPLAM DOĞRU SAYISI", "position": (130, 70, 300, 40)},
             {"bilgi": "toplam_yanlis_yazi", "text": "TOPLAM YANLIŞ SAYISI", "position": (450, 70, 300, 40)},
@@ -67,6 +72,7 @@ class Analizler(QWidget):
 
             button.setEnabled(False)
 
+            #CSS EKLENDİ
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #1E468F;
